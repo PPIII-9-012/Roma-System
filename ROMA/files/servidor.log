@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "C:\Users\Mateo Martinez\Desktop\files\backend.py", line 93, in <module>
+    login()
+  File "C:\Users\Mateo Martinez\Desktop\files\backend.py", line 33, in login
+    print("\u2705 Login Infoauto OK")
+  File "C:\Users\Mateo Martinez\AppData\Local\Programs\Python\Python312\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2705' in position 0: character maps to <undefined>

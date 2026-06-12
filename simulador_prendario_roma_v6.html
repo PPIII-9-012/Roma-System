@@ -1,0 +1,706 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+.w{font-family:'Barlow',sans-serif;background:var(--color-background-tertiary);padding:1.25rem 1rem 2rem}
+.hdr{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:0.5px solid var(--color-border-tertiary)}
+.logo{background:#8B1A1A;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:700;padding:7px 13px;border-radius:var(--border-radius-md);letter-spacing:.5px;flex-shrink:0}
+.hdr h1{font-family:'Barlow Condensed',sans-serif;font-size:21px;font-weight:700;color:var(--color-text-primary);line-height:1.2}
+.hdr p{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.mod{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:1rem;overflow:hidden}
+.mhd{display:flex;align-items:center;gap:9px;padding:.85rem 1.1rem;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+.mn{background:#8B1A1A;color:#fff;font-size:10px;font-weight:700;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mhd h2{font-size:13px;font-weight:600;color:var(--color-text-primary)}
+.mb{padding:1.1rem}
+.sl{font-size:10px;font-weight:700;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.8px;margin-bottom:.65rem;padding-bottom:5px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:.75rem}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:.75rem}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:.75rem}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:.75rem}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg label{font-size:11px;color:var(--color-text-secondary);font-weight:500}
+.fg input,.fg select{font-family:'Barlow',sans-serif;font-size:13px;padding:7px 9px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);width:100%;transition:border-color .15s}
+.fg input:focus,.fg select:focus{outline:none;border-color:#8B1A1A;box-shadow:0 0 0 2px rgba(139,26,26,.1)}
+.fg input.err{border-color:var(--color-border-danger);box-shadow:0 0 0 2px rgba(220,53,69,.1)}
+.fg input[readonly]{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.fg select:disabled{opacity:.4;pointer-events:none}
+.sub{font-size:10px;color:var(--color-text-tertiary);margin-top:2px}
+.hint{font-size:10px;font-weight:600;margin-top:3px;padding:3px 7px;border-radius:var(--border-radius-md);display:inline-block}
+.h-ok{background:var(--color-background-success);color:var(--color-text-success)}
+.h-warn{background:var(--color-background-danger);color:var(--color-text-danger)}
+.h-neu{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.h-alrt{background:var(--color-background-warning);color:var(--color-text-warning)}
+.spin{animation:sp .8s linear infinite;display:inline-block}
+@keyframes sp{to{transform:rotate(360deg)}}
+.rev-load{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--color-text-tertiary);margin-top:3px}
+.comp-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:1rem}
+.cc{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary);cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.cc:hover{border-color:var(--color-border-secondary)}
+.cc.sel{border:2px solid #8B1A1A;box-shadow:0 0 0 3px rgba(139,26,26,.08)}
+.cc.dimmed{opacity:.4;filter:grayscale(.8)}
+.cc-hd{padding:8px 10px;background:var(--color-background-secondary);border-bottom:0.5px solid var(--color-border-tertiary);text-align:center}
+.cc-hd .ct{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--color-text-primary)}
+.cc-hd .cs{font-size:10px;color:var(--color-text-secondary)}
+.feat-badge{font-size:9px;background:#8B1A1A;color:#fff;padding:2px 6px;border-radius:var(--border-radius-md);display:inline-block;margin-bottom:3px}
+.sel-badge{font-size:9px;background:var(--color-background-success);color:var(--color-text-success);padding:2px 6px;border-radius:var(--border-radius-md);display:inline-block;margin-bottom:3px}
+.cc-body{padding:10px}
+.crow{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);gap:4px}
+.crow:last-child{border-bottom:none}
+.crow .cl{font-size:10px;color:var(--color-text-secondary);line-height:1.3;flex:1}
+.crow .cv{font-size:13px;font-weight:600;font-family:'Barlow Condensed',sans-serif;color:var(--color-text-primary);text-align:right}
+.crow .cv.big{font-size:18px;color:#8B1A1A}
+.rbadge{padding:8px 12px;border-radius:var(--border-radius-md);font-size:12px;font-weight:600;display:flex;align-items:center;gap:7px;margin-bottom:1rem}
+.r-ok{background:var(--color-background-success);color:var(--color-text-success);border:0.5px solid var(--color-border-success)}
+.r-alrt{background:var(--color-background-warning);color:var(--color-text-warning);border:0.5px solid var(--color-border-warning)}
+.r-neu{background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-tertiary)}
+.plan-sel-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:1rem;font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:8px}
+.plan-sel-box.active{background:var(--color-background-success);color:var(--color-text-success);border-color:var(--color-border-success)}
+.rtbl{width:100%;font-size:13px;border-collapse:collapse}
+.rtbl td{padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.rtbl tr:last-child td{border-bottom:none}
+.rtbl td:last-child{text-align:right;font-weight:600;font-family:'Barlow Condensed',sans-serif;font-size:14px}
+.rtot{margin-top:.7rem;padding:11px 14px;background:#8B1A1A;border-radius:var(--border-radius-md);display:flex;justify-content:space-between;align-items:center}
+.rtot span:first-child{font-size:12px;font-weight:600;color:rgba(255,255,255,.8)}
+.rtot span:last-child{font-size:22px;font-weight:700;color:#fff;font-family:'Barlow Condensed',sans-serif}
+.bwa{width:100%;margin-top:1rem;padding:11px;background:#25D366;border:none;border-radius:var(--border-radius-md);font-family:'Barlow',sans-serif;font-size:13px;font-weight:700;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s}
+.bwa:hover{opacity:.88}
+.bwa:disabled{opacity:.4;cursor:not-allowed}
+</style>
+
+<div class="w">
+<h2 class="sr-only">Simulador prendario Roma Automotores — PSA Finance Junio 2026</h2>
+
+<div class="hdr">
+  <div class="logo">ROMA</div>
+  <div>
+    <h1>Simulador prendario</h1>
+    <p>Roma Automotores · PSA Finance — Tabla Junio 2026</p>
+  </div>
+</div>
+
+<!-- MÓDULO 1 -->
+<div class="mod">
+  <div class="mhd"><div class="mn">1</div><h2>Ingreso de datos</h2></div>
+  <div class="mb">
+
+    <div class="sl">Datos del cliente</div>
+    <div class="g3" style="margin-bottom:1.1rem">
+      <div class="fg"><label>Nombre y apellido</label><input type="text" id="nombre" placeholder="Ej: Juan Pérez"></div>
+      <div class="fg"><label>DNI</label><input type="text" id="dni" placeholder="Ej: 30.123.456"></div>
+      <div class="fg">
+        <label>Ingresos mensuales ($)</label>
+        <input type="number" id="sueldo" placeholder="Ej: 800000" oninput="calc()">
+        <span class="sub">Dato declarativo</span>
+      </div>
+    </div>
+
+    <div class="sl">Vehículo usado — permuta</div>
+    <!-- Orden estricto: Marca → Modelo → Submodelo → Año -->
+    <div class="g4" style="margin-bottom:.75rem">
+      <div class="fg">
+        <label>Marca</label>
+        <select id="u-marca" onchange="onUMarca()">
+          <option value="">— Marca —</option>
+          <option>Chevrolet</option><option>Citroën</option><option>Fiat</option>
+          <option>Ford</option><option>Honda</option><option>Nissan</option>
+          <option>Peugeot</option><option>Renault</option><option>Toyota</option>
+          <option>Volkswagen</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Modelo</label>
+        <select id="u-modelo" onchange="onUModelo()" disabled>
+          <option value="">— Modelo —</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Submodelo / versión</label>
+        <select id="u-sub" onchange="onUSub()" disabled>
+          <option value="">— Versión —</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Año</label>
+        <select id="u-anio" onchange="onUAnio()" disabled>
+          <option value="">— Año —</option>
+        </select>
+      </div>
+    </div>
+    <div class="g2" style="margin-bottom:1.1rem">
+      <div class="fg">
+        <label>Precio de revista — Infoauto ($)</label>
+        <input type="number" id="u-revista" placeholder="Se completa al elegir año" readonly>
+        <div class="rev-load" id="rev-load" style="display:none">
+          <i class="ti ti-loader spin" aria-hidden="true"></i> Consultando Infoauto...
+        </div>
+        <span class="hint h-neu" id="ltv-hint">LTV: —</span>
+      </div>
+      <div class="fg">
+        <label>Precio de toma real — agencia ($)</label>
+        <input type="number" id="u-toma" placeholder="Dejar vacío si no hay permuta" oninput="calc()">
+        <span class="sub">Editable — vacío = sin permuta</span>
+      </div>
+    </div>
+
+    <div class="sl">Vehículo nuevo — stock Roma</div>
+    <div class="g4" style="margin-bottom:.75rem">
+      <div class="fg">
+        <label>Marca</label>
+        <select id="n-marca" onchange="onNMarca()">
+          <option value="">— Marca —</option>
+          <option>Chevrolet</option><option>Citroën</option><option>Fiat</option>
+          <option>Peugeot</option><option>Renault</option><option>Volkswagen</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Modelo</label>
+        <select id="n-modelo" onchange="onNModelo()" disabled><option value="">— Modelo —</option></select>
+      </div>
+      <div class="fg">
+        <label>Submodelo / versión</label>
+        <select id="n-sub" onchange="onNSub()" disabled><option value="">— Versión —</option></select>
+      </div>
+      <div class="fg">
+        <label>Año</label>
+        <select id="n-anio" onchange="onNAnio()" disabled><option value="">— Año —</option></select>
+      </div>
+    </div>
+    <div class="g2" style="margin-bottom:0">
+      <div class="fg">
+        <label>Precio de lista ($)</label>
+        <input type="number" id="n-precio" placeholder="Se completa al elegir versión" readonly>
+      </div>
+      <div class="fg">
+        <label>Gastos de transferencia / papeles ($)</label>
+        <input type="number" id="gastos" placeholder="Se completa al elegir versión" oninput="calc()">
+        <span class="sub">Editable</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MÓDULO 2 -->
+<div class="mod">
+  <div class="mhd"><div class="mn">2</div><h2>Monto a financiar</h2></div>
+  <div class="mb">
+    <div class="g2" style="margin-bottom:0">
+      <div class="fg">
+        <label>Monto a solicitar ($)</label>
+        <input type="number" id="monto" placeholder="Ej: 8.000.000" oninput="calc()">
+        <span class="hint h-neu" id="max-hint">Máximo permitido: —</span>
+      </div>
+      <div class="fg">
+        <label>Límite de plazo por antigüedad del usado</label>
+        <div id="plazo-info" style="padding:7px 9px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);font-size:12px;color:var(--color-text-secondary);background:var(--color-background-secondary);line-height:1.5">
+          Se determina al ingresar el año del usado
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MÓDULO 3 -->
+<div class="mod">
+  <div class="mhd"><div class="mn">3</div><h2>Comparativa de opciones — seleccioná un plan</h2></div>
+  <div class="mb">
+
+    <div id="rbadge" class="rbadge r-neu">
+      <i class="ti ti-clock" id="rico" aria-hidden="true"></i>
+      <span id="rtxt">Completar datos para ver el análisis de riesgo</span>
+    </div>
+
+    <div class="comp-grid">
+      <!-- Tarjeta 12 meses -->
+      <div class="cc" id="card-12" onclick="selectPlan(12)">
+        <div class="cc-hd">
+          <div id="badge-12"></div>
+          <div class="ct">12 meses</div>
+          <div class="cs">TNA 71.90% · Quebranto 10%</div>
+        </div>
+        <div class="cc-body">
+          <div class="crow"><span class="cl">Cuota pura</span><span class="cv big" id="c12-cuota">—</span></div>
+          <div class="crow"><span class="cl">Quebranto c/IVA</span><span class="cv" id="c12-qb">—</span></div>
+          <div class="crow"><span class="cl">1ra cuota total</span><span class="cv" id="c12-tot">—</span></div>
+          <div class="crow"><span class="cl">% ingresos</span><span class="cv" id="c12-pct">—</span></div>
+        </div>
+      </div>
+      <!-- Tarjeta 24 meses -->
+      <div class="cc" id="card-24" onclick="selectPlan(24)">
+        <div class="cc-hd">
+          <div id="badge-24"><span class="feat-badge">Más elegida</span></div>
+          <div class="ct">24 meses</div>
+          <div class="cs">TNA 76.94% · Quebranto 2.5%</div>
+        </div>
+        <div class="cc-body">
+          <div class="crow"><span class="cl">Cuota pura</span><span class="cv big" id="c24-cuota">—</span></div>
+          <div class="crow"><span class="cl">Quebranto c/IVA</span><span class="cv" id="c24-qb">—</span></div>
+          <div class="crow"><span class="cl">1ra cuota total</span><span class="cv" id="c24-tot">—</span></div>
+          <div class="crow"><span class="cl">% ingresos</span><span class="cv" id="c24-pct">—</span></div>
+        </div>
+      </div>
+      <!-- Tarjeta UVA -->
+      <div class="cc" id="card-uva" onclick="selectPlan('uva')">
+        <div class="cc-hd">
+          <div id="badge-uva"></div>
+          <div class="ct">Plan UVA — 36 meses</div>
+          <div class="cs" id="uva-sub">Cargando valor UVA...</div>
+        </div>
+        <div class="cc-body">
+          <div class="crow"><span class="cl">Cuota en UVA</span><span class="cv big" id="cuva-uva">—</span></div>
+          <div class="crow"><span class="cl">En pesos hoy</span><span class="cv" id="cuva-pesos">—</span></div>
+          <div class="crow"><span class="cl">TNA</span><span class="cv">24.9%</span></div>
+          <div class="crow"><span class="cl">% ingresos</span><span class="cv" id="cuva-pct">—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Plan seleccionado -->
+    <div class="plan-sel-box" id="plan-sel-box">
+      <i class="ti ti-hand-click" aria-hidden="true"></i>
+      <span id="plan-sel-txt">Hacé clic en una tarjeta para seleccionar el plan</span>
+    </div>
+
+    <div class="sl">Resumen de operación</div>
+    <table class="rtbl">
+      <tr><td style="color:var(--color-text-secondary)">Precio de lista del vehículo nuevo</td><td id="r-lista">—</td></tr>
+      <tr><td style="color:var(--color-text-secondary)">+ Gastos de transferencia / papeles</td><td id="r-gastos">—</td></tr>
+      <tr><td style="color:var(--color-text-secondary);font-weight:600">Total a pagar</td><td id="r-total" style="font-weight:700">—</td></tr>
+      <tr id="row-toma"><td style="color:var(--color-text-success)">− Precio de toma real (agencia)</td><td id="r-toma" style="color:var(--color-text-success)">—</td></tr>
+      <tr><td style="color:var(--color-text-success)">− Préstamo solicitado</td><td id="r-prest" style="color:var(--color-text-success)">—</td></tr>
+      <tr id="row-cuota-sel" style="display:none"><td style="color:var(--color-text-secondary)">Cuota del plan elegido</td><td id="r-cuota-sel">—</td></tr>
+    </table>
+    <div class="rtot">
+      <span>Efectivo neto a entregar en salón</span>
+      <span id="r-efect">—</span>
+    </div>
+
+    <button class="bwa" id="btn-wa" onclick="compartirWA()" disabled>
+      <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
+      Compartir cotización por WhatsApp
+    </button>
+
+  </div>
+</div>
+</div>
+
+<script>
+const TRANSR = 0.0757;
+
+const TABLA = {
+  12: {tna:71.90, coef:124.96, qb:10.00},
+  24: {tna:76.94, coef:86.85,  qb:2.50},
+  36: {tna:78.93, coef:75.90,  qb:1.00},
+  48: {tna:79.92, coef:72.11,  qb:0.00},
+  60: {tna:80.91, coef:70.83,  qb:0.00},
+};
+
+const STOCK_USADO = {
+  Chevrolet:{
+    Onix:     {LS:['2019','2020','2021'], LT:['2018','2019','2020','2021'], LTZ:['2017','2018','2019']},
+    Cruze:    {LS:['2016','2017','2018'], LT:['2017','2018','2019'], LTZ:['2016','2017','2018']},
+    Tracker:  {LS:['2019','2020','2021'], LT:['2018','2019','2020'], Premier:['2019','2020','2021']},
+  },
+  Citroën:{
+    C3:       {Live:['2018','2019','2020'], Feel:['2018','2019','2020','2021'], Shine:['2019','2020','2021']},
+    Berlingo: {'Furgón':['2016','2017','2018'], 'Multispace':['2016','2017']},
+  },
+  Fiat:{
+    Cronos:   {Drive:['2019','2020','2021'], Precision:['2019','2020'], Like:['2020','2021']},
+    Argo:     {Drive:['2018','2019','2020'], HGT:['2019','2020']},
+    Toro:     {Freedom:['2017','2018','2019'], Ranch:['2018','2019']},
+  },
+  Ford:{
+    Focus:    {SE:['2016','2017'], SEL:['2016','2017'], Titanium:['2016','2017']},
+    EcoSport: {'1.6 S':['2016','2017'], '2.0 SE':['2017','2018'], '2.0 Titanium':['2017','2018']},
+    Ranger:   {'XLS 2.2':['2017','2018'], 'XLT 3.2':['2016','2017','2018']},
+  },
+  Honda:{
+    'HR-V':   {LX:['2017','2018','2019'], EX:['2017','2018','2019']},
+    City:     {EXL:['2016','2017','2018'], Si:['2016','2017']},
+  },
+  Nissan:{
+    March:    {Sense:['2016','2017','2018'], Advance:['2017','2018']},
+    Kicks:    {Sense:['2018','2019','2020'], Advance:['2018','2019','2020'], Exclusive:['2019','2020']},
+  },
+  Peugeot:{
+    '208':    {Active:['2018','2019','2020'], Allure:['2018','2019','2020'], 'GT Line':['2019','2020']},
+    '308':    {Active:['2016','2017'], Allure:['2016','2017','2018'], GT:['2017','2018']},
+    '2008':   {Active:['2019','2020'], Allure:['2019','2020'], 'GT Line':['2020','2021']},
+  },
+  Renault:{
+    Kwid:     {Life:['2018','2019','2020'], Zen:['2018','2019','2020','2021'], Iconic:['2019','2020','2021']},
+    Sandero:  {Life:['2016','2017','2018'], Zen:['2017','2018','2019'], Stepway:['2016','2017','2018']},
+    Duster:   {Zen:['2017','2018','2019'], Intens:['2017','2018','2019']},
+  },
+  Toyota:{
+    Etios:    {X:['2016','2017','2018'], XS:['2016','2017','2018'], Platinum:['2016','2017']},
+    Corolla:  {LE:['2017','2018','2019'], SEG:['2016','2017','2018','2019'], XEI:['2017','2018','2019']},
+    Yaris:    {XS:['2018','2019','2020'], S:['2018','2019','2020']},
+  },
+  Volkswagen:{
+    Gol:      {Trend:['2016','2017','2018'], Comfortline:['2016','2017','2018'], Highline:['2016','2017']},
+    Polo:     {Trendline:['2018','2019','2020','2021'], Comfortline:['2018','2019','2020','2021'], Highline:['2019','2020','2021']},
+    Vento:    {Trendline:['2016','2017','2018'], Comfortline:['2016','2017','2018'], Highline:['2017','2018']},
+  },
+};
+
+const STOCK_NUEVO = {
+  Chevrolet:{
+    Tracker:  {'1.2 Turbo AT LS':{'2025':32000000}, '1.2 Turbo AT LT':{'2025':35000000}, '1.2 Turbo AT RS':{'2025':38500000}},
+    Onix:     {'1.0 Turbo Joy':{'2025':22000000}, '1.0 Turbo LT':{'2025':25000000}, '1.0 Turbo LTZ':{'2025':27500000}},
+  },
+  Citroën:{
+    C3:       {'1.2 Feel':{'2024':19500000}, '1.2 Shine':{'2024':22000000}},
+    Berlingo: {'Van Furgón':{'2024':21000000}, 'Van Multispace':{'2024':24000000}},
+  },
+  Fiat:{
+    Cronos:   {'1.3 Like':{'2025':21000000}, '1.3 Drive':{'2025':23500000}, '1.3 Precision':{'2025':26000000}},
+    Pulse:    {'1.0 Turbo Drive':{'2024':28000000}, '1.0 Turbo Impetus':{'2024':31000000}},
+  },
+  Peugeot:{
+    '208':    {'1.2 Like':{'2025':22000000}, '1.2 Active':{'2025':25000000}, '1.2 Allure':{'2025':28000000}, '1.2 GT':{'2025':31000000}},
+    '2008':   {'1.2 Active':{'2025':32000000}, '1.2 Allure':{'2025':36000000}, '1.2 GT':{'2025':40000000}},
+  },
+  Renault:{
+    Kwid:     {'1.0 Life':{'2025':16500000}, '1.0 Zen':{'2025':18000000}, '1.0 Iconic':{'2025':20000000}},
+    Sandero:  {'1.6 Life':{'2025':20000000}, '1.6 Zen':{'2025':22500000}, '1.6 Stepway':{'2025':25000000}},
+    Duster:   {'1.6 Zen':{'2024':27000000}, '1.6 Intens':{'2024':30000000}},
+  },
+  Volkswagen:{
+    Polo:     {'1.6 MSI Trendline':{'2024':23000000}, '1.6 MSI Comfortline':{'2024':26000000}, '1.6 MSI Highline':{'2024':29000000}},
+    'T-Cross':{'1.0 TSI Trendline':{'2024':31000000}, '1.0 TSI Comfortline':{'2024':34000000}, '1.0 TSI Highline':{'2024':37000000}},
+  },
+};
+
+let uvaValue = null;
+let selectedPlan = null;
+let revistaTimer = null;
+let lastResults = {};
+
+function poblar(sel, items, ph) {
+  sel.innerHTML = `<option value="">${ph}</option>`;
+  items.forEach(i => { const o = document.createElement('option'); o.value = i; o.textContent = i; sel.appendChild(o); });
+}
+
+function resetFrom(fields) {
+  fields.forEach(id => {
+    const el = document.getElementById(id);
+    if(el.tagName === 'SELECT') { el.innerHTML = `<option value="">— ${id.includes('marca')?'Marca':id.includes('modelo')?'Modelo':id.includes('sub')?'Versión':'Año'} —</option>`; el.disabled = true; }
+    else el.value = '';
+  });
+}
+
+/* ---- USADO cascada ---- */
+function onUMarca() {
+  const m = document.getElementById('u-marca').value;
+  const mod = document.getElementById('u-modelo');
+  poblar(mod, m ? Object.keys(STOCK_USADO[m]||{}) : [], '— Modelo —');
+  mod.disabled = !m;
+  ['u-sub','u-anio'].forEach(id => { const s=document.getElementById(id); s.innerHTML='<option value="">— '+(id==='u-sub'?'Versión':'Año')+' —</option>'; s.disabled=true; });
+  document.getElementById('u-revista').value='';
+  document.getElementById('u-toma').value='';
+  document.getElementById('ltv-hint').textContent='LTV: —'; document.getElementById('ltv-hint').className='hint h-neu';
+  updatePlazoPanel(null); calc();
+}
+
+function onUModelo() {
+  const m=document.getElementById('u-marca').value, mo=document.getElementById('u-modelo').value;
+  const sub=document.getElementById('u-sub');
+  poblar(sub, mo ? Object.keys(STOCK_USADO[m]?.[mo]||{}) : [], '— Versión —');
+  sub.disabled = !mo;
+  const anio=document.getElementById('u-anio'); anio.innerHTML='<option value="">— Año —</option>'; anio.disabled=true;
+  document.getElementById('u-revista').value=''; document.getElementById('ltv-hint').textContent='LTV: —'; document.getElementById('ltv-hint').className='hint h-neu';
+  updatePlazoPanel(null); calc();
+}
+
+function onUSub() {
+  const m=document.getElementById('u-marca').value, mo=document.getElementById('u-modelo').value, s=document.getElementById('u-sub').value;
+  const anio=document.getElementById('u-anio');
+  poblar(anio, s ? (STOCK_USADO[m]?.[mo]?.[s]||[]) : [], '— Año —');
+  anio.disabled = !s;
+  document.getElementById('u-revista').value=''; document.getElementById('ltv-hint').textContent='LTV: —'; document.getElementById('ltv-hint').className='hint h-neu';
+  updatePlazoPanel(null); calc();
+}
+
+function onUAnio() {
+  const anio = parseInt(document.getElementById('u-anio').value)||0;
+  if(anio) { fetchRevista(); updatePlazoPanel(anio); updateCardVisibility(anio); }
+  else { document.getElementById('u-revista').value=''; updatePlazoPanel(null); }
+  calc();
+}
+
+/* ---- NUEVO cascada ---- */
+function onNMarca() {
+  const m=document.getElementById('n-marca').value;
+  const mod=document.getElementById('n-modelo');
+  poblar(mod, m ? Object.keys(STOCK_NUEVO[m]||{}) : [], '— Modelo —');
+  mod.disabled=!m;
+  ['n-sub','n-anio'].forEach(id=>{ const s=document.getElementById(id); s.innerHTML=`<option value="">— ${id==='n-sub'?'Versión':'Año'} —</option>`; s.disabled=true; });
+  document.getElementById('n-precio').value=''; document.getElementById('gastos').value=''; calc();
+}
+function onNModelo() {
+  const m=document.getElementById('n-marca').value, mo=document.getElementById('n-modelo').value;
+  const sub=document.getElementById('n-sub');
+  poblar(sub, mo ? Object.keys(STOCK_NUEVO[m]?.[mo]||{}) : [], '— Versión —');
+  sub.disabled=!mo;
+  const anio=document.getElementById('n-anio'); anio.innerHTML='<option value="">— Año —</option>'; anio.disabled=true;
+  document.getElementById('n-precio').value=''; document.getElementById('gastos').value=''; calc();
+}
+function onNSub() {
+  const m=document.getElementById('n-marca').value, mo=document.getElementById('n-modelo').value, s=document.getElementById('n-sub').value;
+  const anioSel=document.getElementById('n-anio');
+  const years = s ? Object.keys(STOCK_NUEVO[m]?.[mo]?.[s]||{}) : [];
+  poblar(anioSel, years, '— Año —');
+  anioSel.disabled=!s;
+  if(years.length===1){ anioSel.value=years[0]; onNAnio(); }
+  else { document.getElementById('n-precio').value=''; document.getElementById('gastos').value=''; calc(); }
+}
+function onNAnio() {
+  const m=document.getElementById('n-marca').value, mo=document.getElementById('n-modelo').value;
+  const s=document.getElementById('n-sub').value, a=document.getElementById('n-anio').value;
+  const precio = STOCK_NUEVO[m]?.[mo]?.[s]?.[a]||0;
+  document.getElementById('n-precio').value = precio||'';
+  document.getElementById('gastos').value = precio ? Math.round(precio*TRANSR) : '';
+  calc();
+}
+
+/* ---- Precio revista simulado (API mock) ---- */
+function fetchRevista() {
+  clearTimeout(revistaTimer);
+  const m=document.getElementById('u-marca').value, mo=document.getElementById('u-modelo').value;
+  const s=document.getElementById('u-sub').value, a=document.getElementById('u-anio').value;
+  if(!m||!mo||!a) return;
+  const load=document.getElementById('rev-load'), inp=document.getElementById('u-revista');
+  load.style.display='flex'; inp.value='';
+  revistaTimer = setTimeout(async ()=>{
+    await new Promise(r=>setTimeout(r,900));
+    const seed=(m.length*31+mo.length*17+(s||'').length*7+(parseInt(a)||0))*654321;
+    const base=5000000+(Math.abs(seed)%25000000);
+    inp.value=Math.round(base/100000)*100000;
+    load.style.display='none';
+    calc();
+  },400);
+}
+
+/* ---- UVA mock API ---- */
+async function fetchUvaValue() {
+  await new Promise(r=>setTimeout(r,800));
+  uvaValue=1487.23;
+  document.getElementById('uva-sub').textContent='UVA: $1.487,23 · TNA 24.9%';
+  calc();
+}
+
+/* ---- LTV logic ---- */
+function getLTV(anio) {
+  const ant=new Date().getFullYear()-anio;
+  if(ant<=3)  return{ltv:.80,maxM:null,label:'hasta 3 años → LTV 80%',maxPlazo:60};
+  if(ant<=7)  return{ltv:.75,maxM:null,label:'4-7 años → LTV 75%',maxPlazo:60};
+  if(ant===8) return{ltv:.50,maxM:15000000,label:'8 años → LTV 50%, tope $15M, máx. 48 cuotas',maxPlazo:48};
+  if(ant===9) return{ltv:.50,maxM:15000000,label:'9 años → LTV 50%, tope $15M, máx. 36 cuotas',maxPlazo:36};
+  if(ant===10)return{ltv:.50,maxM:15000000,label:'10 años → LTV 50%, tope $15M, máx. 24 cuotas',maxPlazo:24};
+  return{ltv:0,maxM:0,label:'más de 10 años — sin financiación',maxPlazo:0};
+}
+
+function updatePlazoPanel(anio) {
+  const el=document.getElementById('plazo-info');
+  if(!anio){el.textContent='Se determina al ingresar el año del usado'; return;}
+  const{label}=getLTV(anio); el.textContent=label;
+}
+
+function updateCardVisibility(anio) {
+  const{maxPlazo}=getLTV(anio);
+  document.getElementById('card-12').classList.toggle('dimmed', maxPlazo<12);
+  document.getElementById('card-24').classList.toggle('dimmed', maxPlazo<24);
+  document.getElementById('card-uva').classList.toggle('dimmed', maxPlazo<36);
+}
+
+function fmt(n) {
+  if(n===null||n===undefined||isNaN(n)) return '—';
+  return '$'+Math.round(n).toLocaleString('es-AR');
+}
+
+/* ---- Cálculo en paralelo de las 3 tarjetas ---- */
+function calcCard(monto, plazo, sueldo) {
+  const t=TABLA[plazo]; if(!t||!monto) return null;
+  const cuota=(monto/1000)*t.coef;
+  const qbIva=(monto*(t.qb/100))*1.21;
+  const tot=cuota+qbIva;
+  const pct=sueldo>0?(cuota/sueldo)*100:null;
+  return{cuota,qbIva,tot,pct,tna:t.tna,plazo};
+}
+function calcUva(monto, sueldo) {
+  if(!monto||!uvaValue) return null;
+  const tm=24.9/100/12, n=36;
+  const cuotaUVA=(monto/uvaValue)*(tm*Math.pow(1+tm,n))/(Math.pow(1+tm,n)-1);
+  const cuotaPesos=cuotaUVA*uvaValue;
+  return{cuotaUVA,cuotaPesos,pct:sueldo>0?(cuotaPesos/sueldo)*100:null,tna:24.9,plazo:36};
+}
+
+function fillCard(r, prefix) {
+  if(r){
+    document.getElementById(prefix+'-cuota').textContent=fmt(r.cuota);
+    document.getElementById(prefix+'-qb').textContent=r.qbIva>0?fmt(r.qbIva):'$0';
+    document.getElementById(prefix+'-tot').textContent=fmt(r.tot);
+    document.getElementById(prefix+'-pct').textContent=r.pct!==null?r.pct.toFixed(1)+'%':'—';
+  } else {
+    [prefix+'-cuota',prefix+'-qb',prefix+'-tot',prefix+'-pct'].forEach(id=>{document.getElementById(id).textContent='—';});
+  }
+}
+
+function calc() {
+  const sueldo=parseFloat(document.getElementById('sueldo').value)||0;
+  const uAnio=parseInt(document.getElementById('u-anio').value)||0;
+  const uRevista=parseFloat(document.getElementById('u-revista').value)||0;
+  const uToma=parseFloat(document.getElementById('u-toma').value)||0;
+  const nPrecio=parseFloat(document.getElementById('n-precio').value)||0;
+  const gastos=parseFloat(document.getElementById('gastos').value)||0;
+  const monto=parseFloat(document.getElementById('monto').value)||0;
+
+  /* LTV y límite de monto */
+  const montoInp=document.getElementById('monto');
+  const maxH=document.getElementById('max-hint');
+  const ltvH=document.getElementById('ltv-hint');
+  if(uAnio>0&&uRevista>0){
+    const{ltv,maxM,label}=getLTV(uAnio);
+    let maxPerm=uRevista*ltv;
+    if(maxM!==null) maxPerm=Math.min(maxPerm,maxM);
+    ltvH.textContent=label; ltvH.className='hint h-ok';
+    maxH.textContent='Máx. permitido: '+fmt(maxPerm)+' (LTV '+Math.round(ltv*100)+'%)';
+    if(monto>0&&monto>maxPerm){maxH.className='hint h-warn';montoInp.classList.add('err');}
+    else{maxH.className='hint h-ok';montoInp.classList.remove('err');}
+  } else {
+    ltvH.textContent='LTV: —'; ltvH.className='hint h-neu';
+    maxH.textContent='Máximo permitido: —'; maxH.className='hint h-neu';
+    montoInp.classList.remove('err');
+  }
+
+  /* Calcular las 3 opciones en paralelo */
+  const r12=calcCard(monto,12,sueldo);
+  const r24=calcCard(monto,24,sueldo);
+  const ruva=calcUva(monto,sueldo);
+  lastResults={12:r12, 24:r24, uva:ruva};
+
+  fillCard(r12,'c12');
+  fillCard(r24,'c24');
+  if(ruva){
+    document.getElementById('cuva-uva').textContent=ruva.cuotaUVA.toFixed(4)+' UVA';
+    document.getElementById('cuva-pesos').textContent=fmt(ruva.cuotaPesos);
+    document.getElementById('cuva-pct').textContent=ruva.pct!==null?ruva.pct.toFixed(1)+'%':'—';
+  } else {
+    ['cuva-uva','cuva-pesos','cuva-pct'].forEach(id=>{document.getElementById(id).textContent='—';});
+  }
+
+  /* Riesgo — referencia = plan 24m */
+  const refCuota=r24?r24.cuota:(r12?r12.cuota:null);
+  const b=document.getElementById('rbadge'), ico=document.getElementById('rico'), txt=document.getElementById('rtxt');
+  if(!refCuota||!sueldo){
+    b.className='rbadge r-neu'; ico.className='ti ti-clock'; txt.textContent='Completar datos para ver el análisis de riesgo';
+  } else if(refCuota<=sueldo*.5){
+    b.className='rbadge r-ok'; ico.className='ti ti-circle-check';
+    txt.textContent='Relación cuota-ingreso (24m): '+((refCuota/sueldo)*100).toFixed(1)+'% — dentro del rango recomendado (≤50%)';
+  } else {
+    b.className='rbadge r-alrt'; ico.className='ti ti-alert-triangle';
+    txt.textContent='Alerta de riesgo: la cuota (24m) supera el 50% de los ingresos ('+ ((refCuota/sueldo)*100).toFixed(1)+'%) — evaluar comercialmente';
+  }
+
+  /* Resumen */
+  const total=nPrecio+gastos;
+  document.getElementById('r-lista').textContent=nPrecio>0?fmt(nPrecio):'—';
+  document.getElementById('r-gastos').textContent=gastos>0?'+ '+fmt(gastos):'—';
+  document.getElementById('r-total').textContent=nPrecio>0?fmt(total):'—';
+  /* u-toma: solo mostrar si tiene valor real */
+  document.getElementById('r-toma').textContent=uToma>0?'− '+fmt(uToma):'—';
+  document.getElementById('r-prest').textContent=monto>0?'− '+fmt(monto):'—';
+  document.getElementById('r-efect').textContent=nPrecio>0?fmt(Math.max(total-(uToma||0)-monto,0)):'—';
+
+  /* Si había plan seleccionado, actualizar su cuota en el resumen */
+  if(selectedPlan) updatePlanSummary(selectedPlan);
+}
+
+/* ---- Selección de plan por clic ---- */
+function selectPlan(plan) {
+  selectedPlan = plan;
+  ['card-12','card-24','card-uva'].forEach(id=>document.getElementById(id).classList.remove('sel'));
+  ['badge-12','badge-24','badge-uva'].forEach(id=>{
+    const el=document.getElementById(id); el.innerHTML='';
+    if(id==='badge-24'&&plan!==24) el.innerHTML='<span class="feat-badge">Más elegida</span>';
+  });
+  const cardId = plan===12?'card-12':plan===24?'card-24':'card-uva';
+  const badgeId = plan===12?'badge-12':plan===24?'badge-24':'badge-uva';
+  document.getElementById(cardId).classList.add('sel');
+  document.getElementById(badgeId).innerHTML='<span class="sel-badge">✓ Seleccionado</span>';
+  updatePlanSummary(plan);
+  document.getElementById('btn-wa').disabled=false;
+}
+
+function updatePlanSummary(plan) {
+  const r=plan==='uva'?lastResults.uva:lastResults[plan];
+  const box=document.getElementById('plan-sel-box');
+  const txt=document.getElementById('plan-sel-txt');
+  const rowCuota=document.getElementById('row-cuota-sel');
+  const cuotaSel=document.getElementById('r-cuota-sel');
+  if(r){
+    const label=plan==='uva'?'Plan UVA (36m)':plan+' meses fijo';
+    const cuotaVal=plan==='uva'?fmt(r.cuotaPesos):fmt(r.cuota);
+    box.className='plan-sel-box active';
+    txt.textContent='Plan elegido: '+label+' · TNA '+r.tna.toFixed(2)+'%';
+    rowCuota.style.display='';
+    cuotaSel.textContent=cuotaVal+(plan==='uva'?' (cuota inicial aprox.)':'');
+  } else {
+    box.className='plan-sel-box';
+    txt.textContent='Hacé clic en una tarjeta para seleccionar el plan';
+    rowCuota.style.display='none';
+  }
+}
+
+/* ---- WhatsApp ---- */
+function compartirWA() {
+  const get=id=>document.getElementById(id).value||'';
+  const nMarca=get('n-marca'), nModelo=get('n-modelo'), nSub=get('n-sub'), nAnio=get('n-anio');
+  const uMarca=get('u-marca'), uModelo=get('u-modelo'), uSub=get('u-sub'), uAnio=get('u-anio');
+  const monto=parseFloat(get('monto'))||0;
+  const nPrecio=parseFloat(get('n-precio'))||0;
+  const gastos=parseFloat(get('gastos'))||0;
+  const uToma=parseFloat(get('u-toma'))||0;
+  const efect=Math.max(nPrecio+gastos-uToma-monto,0);
+
+  const r12=lastResults[12], r24=lastResults[24], ruva=lastResults.uva;
+  const nLabel=[nMarca,nModelo,nSub,nAnio&&'('+nAnio+')'].filter(Boolean).join(' ')||'—';
+  const uLabel=uMarca?[uMarca,uModelo,uSub,uAnio&&'('+uAnio+')'].filter(Boolean).join(' '):'Sin permuta';
+
+  let planLine='';
+  if(selectedPlan){
+    const rSel=selectedPlan==='uva'?ruva:lastResults[selectedPlan];
+    if(rSel){
+      const cuotaVal=selectedPlan==='uva'?fmt(rSel.cuotaPesos):fmt(rSel.cuota);
+      planLine='\n✅ *Plan elegido:* '+(selectedPlan==='uva'?'UVA 36 meses':selectedPlan+' meses fijo')+' — Cuota: '+cuotaVal;
+    }
+  }
+
+  const txt=[
+    '🚗 *Roma Automotores - Cotización Prendaria* 🚗',
+    '',
+    '*Unidad Seleccionada:* '+nLabel,
+    '*Usado en Permuta:* '+uLabel,
+    '----------------------------------------',
+    '💰 *Efectivo Neto a Entregar en Salón:* '+fmt(efect),
+    '----------------------------------------',
+    '📈 *Opciones de Financiación Disponibles:*',
+    r12?'• Opción 12 Cuotas Fijas: '+fmt(r12.cuota)+' de cuota pura.':'',
+    r24?'• Opción 24 Cuotas Fijas: '+fmt(r24.cuota)+' de cuota pura.':'',
+    ruva?'• Opción Plan UVA (Cuota Inicial): '+fmt(ruva.cuotaPesos):'',
+    planLine,
+    '',
+    '_Valores orientativos · Roma Automotores · Junio 2026_'
+  ].filter(l=>l!=='').join('\n');
+
+  window.open('https://api.whatsapp.com/send?text='+encodeURIComponent(txt),'_blank');
+}
+
+/* Wiring eventos */
+document.getElementById('u-sub').addEventListener('change', onUSub);
+document.getElementById('n-sub').addEventListener('change', onNSub);
+
+fetchUvaValue();
+</script>
