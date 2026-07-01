@@ -1,0 +1,523 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buscador de Precios</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #0f0f13;
+      color: #e8e8ec;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 2.5rem 2rem 1.5rem;
+      border-bottom: 1px solid #1e1e28;
+    }
+
+    header h1 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    header span {
+      color: #4f7cff;
+    }
+
+    .search-wrap {
+      max-width: 680px;
+      margin: 3rem auto 0;
+      padding: 0 1.5rem;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .search-box input {
+      flex: 1;
+      background: #18181f;
+      border: 1px solid #2a2a38;
+      color: #e8e8ec;
+      padding: 0.85rem 1.1rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-box input:focus {
+      border-color: #4f7cff;
+    }
+
+    .search-box input::placeholder { color: #555566; }
+
+    .search-box button {
+      background: #4f7cff;
+      color: #fff;
+      border: none;
+      padding: 0.85rem 1.6rem;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+
+    .search-box button:hover { background: #3a68f0; }
+    .search-box button:disabled { background: #2a3a6a; cursor: not-allowed; }
+
+    .search-actions {
+      margin-top: 0.9rem;
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .secondary-btn {
+      background: #14141c;
+      color: #e8e8ec;
+      border: 1px solid #2a2a38;
+      padding: 0.85rem 1.4rem;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .secondary-btn:hover {
+      background: #191925;
+      border-color: #4f7cff;
+    }
+
+    .secondary-btn:disabled {
+      background: #171720;
+      color: #666677;
+      cursor: not-allowed;
+    }
+
+    .status {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: #666677;
+      min-height: 1.2em;
+    }
+
+    .results-wrap {
+      max-width: 900px;
+      margin: 2.5rem auto 4rem;
+      padding: 0 1.5rem;
+    }
+
+    /* Lista de versiones */
+    .version-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .version-item {
+      background: #18181f;
+      border: 1px solid #2a2a38;
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .version-item:hover {
+      border-color: #4f7cff;
+      background: #1c1c28;
+    }
+
+    .version-item.active {
+      border-color: #4f7cff;
+      background: #151a2e;
+    }
+
+    .version-name {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .version-codia {
+      font-size: 0.75rem;
+      color: #555566;
+      margin-top: 0.2rem;
+    }
+
+    .ver-btn {
+      font-size: 0.8rem;
+      color: #4f7cff;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* Tabla de precios */
+    .precios-panel {
+      margin-top: 1.5rem;
+      background: #13131a;
+      border: 1px solid #2a2a38;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .precios-header {
+      padding: 1rem 1.4rem;
+      border-bottom: 1px solid #1e1e28;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .precios-header h2 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #aaaacc;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .precios-header .nombre-version {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      text-align: left;
+      padding: 0.75rem 1.4rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #555566;
+      border-bottom: 1px solid #1e1e28;
+    }
+
+    td {
+      padding: 0.85rem 1.4rem;
+      font-size: 0.95rem;
+      border-bottom: 1px solid #18181f;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    td.precio {
+      font-weight: 700;
+      color: #4f7cff;
+      font-variant-numeric: tabular-nums;
+    }
+
+    td.anio { color: #aaaacc; }
+
+    .empty {
+      text-align: center;
+      padding: 3rem;
+      color: #444455;
+      font-size: 0.9rem;
+    }
+
+    .loader {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid #2a2a38;
+      border-top-color: #4f7cff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 0.4rem;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>PRECIO<span>AUTO</span></h1>
+</header>
+
+<div class="search-wrap">
+  <div class="search-box">
+    <input type="text" id="input" placeholder="Ej: Peugeot 208, Corolla, HB20..." />
+    <button id="btn-buscar" onclick="buscar()">Buscar</button>
+  </div>
+  <div class="search-actions">
+    <button id="btn-actualizar" class="secondary-btn" onclick="abrirPdf()">Actualizar datos</button>
+    <input type="file" id="pdf-input" accept="application/pdf,.pdf" hidden />
+  </div>
+  <div class="status" id="status"></div>
+</div>
+
+<div class="results-wrap" id="results"></div>
+
+<script>
+  const BACKEND = "http://localhost:5000";
+
+  const input        = document.getElementById("input");
+  const btnBuscar    = document.getElementById("btn-buscar");
+  const btnActualizar = document.getElementById("btn-actualizar");
+  const pdfInput     = document.getElementById("pdf-input");
+  const status       = document.getElementById("status");
+  const results      = document.getElementById("results");
+
+  // Enter para buscar
+  input.addEventListener("keydown", e => { if (e.key === "Enter") buscar(); });
+  pdfInput.addEventListener("change", () => {
+    const file = pdfInput.files && pdfInput.files[0];
+    pdfInput.value = "";
+    if (file) actualizarDatos(file);
+  });
+
+  function setStatus(msg, loading = false) {
+    status.innerHTML = loading
+      ? `<span class="loader"></span>${msg}`
+      : msg;
+  }
+
+  async function buscar() {
+    const q = input.value.trim();
+    if (!q) return;
+
+    btnBuscar.disabled = true;
+    results.innerHTML  = "";
+    setStatus("Buscando...", true);
+
+    try {
+      const res  = await fetch(`${BACKEND}/buscar?q=${encodeURIComponent(q)}`);
+      const data = await res.json();
+
+      if (!res.ok) {
+        const extra = data.detail
+          ? ` - ${typeof data.detail === "string" ? data.detail : JSON.stringify(data.detail)}`
+          : "";
+        setStatus(`Error: ${data.error || res.status}${extra}`);
+        return;
+      }
+
+      // Normalizar respuesta (puede venir como lista o como {results:[...]})
+      const items = Array.isArray(data)
+        ? data
+        : data.results || data.data || data.cars || data.items || data.models || [];
+
+      if (!items.length) {
+        setStatus("Sin resultados.");
+        results.innerHTML = `<div class="empty">No encontramos autos para "${q}".<br>ProbÃ¡ con otra bÃºsqueda.</div>`;
+        return;
+      }
+
+      setStatus(`${items.length} versiÃ³n${items.length !== 1 ? "es" : ""} encontrada${items.length !== 1 ? "s" : ""}`);
+      renderVersiones(items);
+
+    } catch (err) {
+      setStatus("No se pudo conectar con el backend. Â¿EstÃ¡ corriendo el servidor?");
+      console.error(err);
+    } finally {
+      btnBuscar.disabled = false;
+    }
+  }
+
+  function abrirPdf() {
+    pdfInput.click();
+  }
+
+  async function actualizarDatos(file) {
+    btnActualizar.disabled = true;
+    btnBuscar.disabled = true;
+    results.innerHTML = "";
+    setStatus(`Actualizando datos desde ${file.name}...`, true);
+
+    try {
+      const formData = new FormData();
+      formData.append("pdf", file);
+
+      const res = await fetch(`${BACKEND}/actualizar_datos_pdf`, {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        const extra = data.detail
+          ? ` - ${typeof data.detail === "string" ? data.detail : JSON.stringify(data.detail)}`
+          : "";
+        setStatus(`Error: ${data.error || res.status}${extra}`);
+        return;
+      }
+
+      setStatus(`Datos actualizados desde ${file.name}`);
+      renderPdfUpdate(data);
+    } catch (err) {
+      setStatus("No se pudo conectar con el backend. ¿Está corriendo el servidor?");
+      console.error(err);
+    } finally {
+      btnActualizar.disabled = false;
+      btnBuscar.disabled = false;
+    }
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function renderPdfUpdate(data) {
+    const lines = Array.isArray(data.lines) ? data.lines : [];
+    const preview = lines.join("\n");
+
+    results.innerHTML = `
+      <div class="precios-panel">
+        <div class="precios-header">
+          <h2>Actualización PDF</h2>
+          <span class="nombre-version">${escapeHtml(data.file_name || "PDF")}</span>
+        </div>
+        <div class="empty" style="text-align:left">
+          JSON guardado en:<br>
+          <code style="display:block;margin-top:0.4rem;word-break:break-all;color:#cfd1e8">${escapeHtml(data.output_path || "")}</code>
+          <div style="margin-top:0.8rem;color:#aaaacc">Página: ${escapeHtml(data.page || 6)} | Líneas: ${lines.length}</div>
+        </div>
+        <div style="padding:0 1.4rem 1.4rem">
+          <pre style="white-space:pre-wrap;margin:0;color:#cfd1e8;font-size:0.85rem;line-height:1.55;max-height:420px;overflow:auto;background:#101018;padding:1rem;border:1px solid #1e1e28;border-radius:10px">${escapeHtml(preview || data.page_text || "Sin texto extraído")}</pre>
+        </div>
+      </div>
+    `;
+    results.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function renderVersiones(items) {
+    const list = document.createElement("div");
+    list.className = "version-list";
+
+    items.forEach(item => {
+      const nombre = item.description || item.descripcion || item.nombre || item.name || item.title || item.version || JSON.stringify(item);
+      const codia  = item.codia || item.id || item.model_id || item.modelId || item.code || item.pk;
+
+      const div = document.createElement("div");
+      div.className = "version-item";
+      div.innerHTML = `
+        <div>
+          <div class="version-name">${nombre}</div>
+          ${codia ? `<div class="version-codia">id ${codia}</div>` : ""}
+        </div>
+        <span class="ver-btn">Ver precios â†’</span>
+      `;
+
+      div.addEventListener("click", () => {
+        document.querySelectorAll(".version-item").forEach(el => el.classList.remove("active"));
+        div.classList.add("active");
+        if (codia) cargarPrecios(codia, nombre);
+      });
+
+      list.appendChild(div);
+    });
+
+    results.appendChild(list);
+  }
+
+  async function cargarPrecios(codia, nombre) {
+    const prev = document.getElementById("precios-panel");
+    if (prev) prev.remove();
+
+    const panel = document.createElement("div");
+    panel.id = "precios-panel";
+    panel.className = "precios-panel";
+    panel.innerHTML = `
+      <div class="precios-header">
+        <h2>Precios por año</h2>
+        <span class="nombre-version">${nombre}</span>
+      </div>
+      <div style="padding:2rem;text-align:center;color:#555566">
+        <span class="loader"></span> Cargando precios...
+      </div>
+    `;
+    results.appendChild(panel);
+
+    try {
+      const res = await fetch(`${BACKEND}/precios/${codia}`);
+      const data = await res.json();
+
+      if (!res.ok) {
+        const extra = data.detail
+          ? `<br><small style="font-size:0.75rem;display:block;margin-top:0.5rem">${typeof data.detail === "string" ? data.detail : JSON.stringify(data.detail)}</small>`
+          : "";
+        panel.innerHTML += `<div class="empty">Error al cargar precios (${res.status})${extra}</div>`;
+        panel.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+
+      let filas = [];
+
+      if (Array.isArray(data)) {
+        filas = data.map(d => ({
+          anio: d.year || d.anio || d.y || "?",
+          precio: d.price || d.precio || d.p || 0
+        })).sort((a, b) => b.anio - a.anio);
+      } else if (typeof data === "object") {
+        filas = Object.entries(data)
+          .filter(([k]) => /^\d{4}$/.test(k))
+          .map(([k, v]) => ({ anio: k, precio: v }))
+          .sort((a, b) => b.anio - a.anio);
+      }
+
+      if (!filas.length) {
+        panel.innerHTML = `
+          <div class="precios-header">
+            <h2>Precios por año</h2>
+            <span class="nombre-version">${nombre}</span>
+          </div>
+          <div class="empty">No hay precios disponibles para esta versión.<br>
+          <small style="font-size:0.75rem;margin-top:0.5rem;display:block">Respuesta: ${JSON.stringify(data).slice(0,200)}</small></div>
+        `;
+        panel.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+
+      const rows = filas.map(f =>
+        `<tr>
+          <td class="anio">${f.anio}</td>
+          <td class="precio">$${Number(f.precio).toLocaleString("es-AR")}</td>
+        </tr>`
+      ).join("");
+
+      panel.innerHTML = `
+        <div class="precios-header">
+          <h2>Precios por año</h2>
+          <span class="nombre-version">${nombre}</span>
+        </div>
+        <table>
+          <thead><tr><th>Año</th><th>Precio</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+      panel.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    } catch (err) {
+      panel.innerHTML = `<div class="empty">Error de conexión. ¿Está corriendo el backend?</div>`;
+      console.error(err);
+    }
+  }
+</script>
+

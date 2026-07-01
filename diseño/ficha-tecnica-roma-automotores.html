@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha Técnica UI — Roma Automotores</title>
+<style>
+  :root {
+    --navy:       #0B2341;
+    --navy-light: #16243F;
+    --white:      #FFFFFF;
+    --gray-50:    #F8F9FA;
+    --gray-100:   #F1F3F4;
+    --gray-300:   #D9D9D9;
+    --gray-500:   #6B7280;
+    --gray-700:   #374151;
+    --rci-green:  #639922;
+    --rci-amber:  #BA7517;
+    --rci-red:    #E24B4A;
+    --wsp-green:  #25D366;
+    --font: 'Inter', system-ui, sans-serif;
+    --radius: 6px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); background: var(--gray-50); color: var(--gray-700); line-height: 1.5; }
+
+  .page { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* HEADER */
+  .doc-header { background: var(--navy); color: var(--white); border-radius: 12px; padding: 32px 36px; margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-start; }
+  .doc-header h1 { font-size: 22px; font-weight: 600; letter-spacing: -.3px; }
+  .doc-header p { font-size: 13px; opacity: .65; margin-top: 4px; }
+  .doc-meta { text-align: right; font-size: 12px; opacity: .55; }
+  .doc-meta strong { display: block; font-size: 13px; opacity: 1; margin-bottom: 2px; }
+
+  /* SECTION */
+  .section { margin-bottom: 48px; }
+  .section-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .8px; color: var(--gray-500); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--gray-300); }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+  /* TOKEN CARD */
+  .token-card { background: var(--white); border: 1px solid var(--gray-300); border-radius: var(--radius); padding: 14px 16px; }
+  .token-card .label { font-size: 11px; color: var(--gray-500); margin-bottom: 6px; }
+  .token-card .value { font-size: 13px; font-weight: 500; color: var(--gray-700); font-family: 'Courier New', monospace; }
+  .token-card .desc { font-size: 11px; color: var(--gray-500); margin-top: 4px; }
+
+  /* COLOR SWATCH */
+  .swatch-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .swatch { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--gray-300); }
+  .swatch-color { height: 52px; }
+  .swatch-info { padding: 8px 10px; background: var(--white); }
+  .swatch-name { font-size: 11px; font-weight: 600; color: var(--gray-700); }
+  .swatch-hex { font-size: 10px; color: var(--gray-500); font-family: monospace; margin-top: 1px; }
+  .swatch-use { font-size: 10px; color: var(--gray-500); margin-top: 3px; font-style: italic; }
+
+  /* TYPOGRAPHY */
+  .type-row { background: var(--white); border: 1px solid var(--gray-300); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 8px; display: flex; align-items: baseline; gap: 24px; }
+  .type-meta { min-width: 180px; }
+  .type-meta .t-label { font-size: 11px; font-weight: 600; color: var(--gray-500); }
+  .type-meta .t-spec { font-size: 10px; color: var(--gray-500); font-family: monospace; margin-top: 2px; }
+  .type-sample { flex: 1; }
+
+  /* SPACING */
+  .spacing-row { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+  .spacing-bar { background: var(--navy); border-radius: 2px; height: 8px; flex-shrink: 0; }
+  .spacing-label { font-size: 12px; font-family: monospace; color: var(--gray-700); min-width: 60px; }
+  .spacing-use { font-size: 11px; color: var(--gray-500); }
+
+  /* COMPONENT */
+  .comp-card { background: var(--white); border: 1px solid var(--gray-300); border-radius: var(--radius); padding: 20px; }
+  .comp-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .comp-sub { font-size: 11px; color: var(--gray-500); margin-bottom: 16px; }
+  .comp-preview { background: var(--gray-100); border-radius: var(--radius); padding: 16px; margin-bottom: 14px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .comp-spec { font-size: 11px; }
+  .comp-spec table { width: 100%; border-collapse: collapse; }
+  .comp-spec td { padding: 4px 8px; border-bottom: 1px solid var(--gray-100); font-size: 11px; }
+  .comp-spec td:first-child { color: var(--gray-500); width: 140px; }
+  .comp-spec td:last-child { font-family: monospace; color: var(--gray-700); }
+
+  /* BUTTONS */
+  .btn-primary { background: var(--navy); color: var(--white); border: none; border-radius: 20px; padding: 10px 24px; font-size: 13px; font-weight: 500; cursor: default; }
+  .btn-outline { background: transparent; color: var(--navy); border: 1px solid var(--navy); border-radius: var(--radius); padding: 9px 20px; font-size: 13px; cursor: default; display: flex; align-items: center; gap: 6px; }
+  .btn-wsp { background: var(--wsp-green); color: #063618; border: none; border-radius: var(--radius); padding: 10px 20px; font-size: 13px; font-weight: 500; cursor: default; display: flex; align-items: center; gap: 6px; }
+  .btn-select { background: transparent; color: var(--navy); border: 1px solid var(--navy); border-radius: 20px; padding: 6px 20px; font-size: 12px; cursor: default; }
+
+  /* FORM INPUTS */
+  .input-demo { border: 1px solid var(--gray-300); border-radius: var(--radius); padding: 8px 12px; font-size: 13px; color: var(--gray-500); background: var(--white); min-width: 180px; }
+  .input-demo.error { border-color: var(--rci-red); }
+  .select-demo { border: 1px solid var(--gray-300); border-radius: var(--radius); padding: 8px 28px 8px 12px; font-size: 13px; background: var(--white); min-width: 140px; appearance: none; }
+
+  /* STATES */
+  .badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+  .badge-rec { background: #EFF6FF; color: #1D4ED8; }
+  .badge-uva { background: #FEF3C7; color: #92400E; }
+
+  /* RCI BAR */
+  .rci-demo { width: 200px; }
+  .rci-track { height: 7px; border-radius: 4px; overflow: visible; display: flex; position: relative; margin: 6px 0; }
+  .rci-g { background: var(--rci-green); width: 50%; }
+  .rci-a { background: var(--rci-amber); width: 33.3%; }
+  .rci-r { background: var(--rci-red); width: 16.7%; }
+  .rci-dot { position: absolute; top: 50%; transform: translate(-50%,-50%); width: 12px; height: 12px; border-radius: 50%; background: var(--white); border: 2.5px solid; }
+
+  /* INFOAUTO BOX */
+  .infoauto-demo { background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: var(--radius); padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
+  .ia-value { font-size: 16px; font-weight: 600; color: #1D4ED8; }
+  .ia-label { font-size: 10px; color: #3B82F6; text-transform: uppercase; letter-spacing: .3px; }
+  .ia-src { font-size: 10px; color: #93C5FD; }
+
+  /* CARDS */
+  .plan-card { border: 1px solid var(--gray-300); border-radius: var(--radius); padding: 14px; min-width: 200px; }
+  .plan-card.rec { border: 2px solid #1D4ED8; }
+  .plan-name { font-size: 12px; font-weight: 600; margin: 6px 0 2px; }
+  .plan-cuota-lbl { font-size: 10px; color: var(--gray-500); }
+  .plan-cuota { font-size: 20px; font-weight: 600; color: var(--gray-700); }
+  .plan-row { display: flex; justify-content: space-between; font-size: 11px; padding: 3px 0; border-top: 1px solid var(--gray-100); }
+  .plan-row:first-of-type { border-top: none; }
+  .plan-lbl { color: var(--gray-500); }
+  .plan-val { font-weight: 500; }
+  .uva-warn { background: #FEF3C7; border-radius: 4px; padding: 6px 8px; margin-top: 6px; font-size: 10px; color: #92400E; display: flex; gap: 5px; }
+
+  /* LAYOUT DIAGRAM */
+  .layout-diagram { background: var(--white); border: 1px solid var(--gray-300); border-radius: var(--radius); padding: 20px; font-family: monospace; font-size: 11px; color: var(--gray-700); line-height: 1.8; }
+
+  /* FIGMA NODES */
+  .node-table { background: var(--white); border: 1px solid var(--gray-300); border-radius: var(--radius); overflow: hidden; width: 100%; }
+  .node-table th { background: var(--gray-100); font-size: 11px; font-weight: 600; padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--gray-300); }
+  .node-table td { font-size: 11px; padding: 7px 12px; border-bottom: 1px solid var(--gray-100); }
+  .node-table td:first-child { font-family: monospace; color: #1D4ED8; }
+  .node-table tr:last-child td { border-bottom: none; }
+
+  /* ALERT */
+  .alert { border-radius: var(--radius); padding: 10px 14px; font-size: 12px; margin-bottom: 12px; display: flex; gap: 8px; }
+  .alert-info { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
+  .alert-warn { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
+
+  /* DIVIDER */
+  hr { border: none; border-top: 1px solid var(--gray-300); margin: 40px 0; }
+
+  /* TAG */
+  .tag { display: inline-block; background: var(--gray-100); border: 1px solid var(--gray-300); border-radius: 4px; padding: 1px 7px; font-size: 10px; font-family: monospace; color: var(--gray-700); margin-left: 4px; }
+
+  .full { grid-column: 1 / -1; }
+  .note { font-size: 11px; color: var(--gray-500); margin-top: 8px; font-style: italic; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="doc-header">
+    <div>
+      <h1>Ficha Técnica UI — Roma Automotores</h1>
+      <p>Simulador Prendario Interno · Especificaciones para Frontend</p>
+    </div>
+    <div class="doc-meta">
+      <strong>Diseño UX/UI</strong>
+      Renzo Segovia<br>
+      Versión 1.0 · Julio 2025
+    </div>
+  </div>
+
+  <!-- ─── PALETA DE COLORES ─── -->
+  <div class="section">
+    <div class="section-title">01 — Paleta de colores</div>
+
+    <div class="alert alert-info">
+      ⚠ Regla semántica crítica: Verde, ámbar y rojo están reservados exclusivamente para el indicador RCI (Capacidad de Pago). No usar estos colores en botones, badges ni estados que no sean RCI.
+    </div>
+
+    <div class="swatch-grid">
+      <div class="swatch">
+        <div class="swatch-color" style="background:#0B2341"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Navy Primary</div>
+          <div class="swatch-hex">#0B2341</div>
+          <div class="swatch-use">Navbar, header resumen, títulos</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#16243F"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Navy Light</div>
+          <div class="swatch-hex">#16243F</div>
+          <div class="swatch-use">Caja "Efectivo a entregar", sidebar</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#FFFFFF; border: 1px solid #e5e7eb"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">White</div>
+          <div class="swatch-hex">#FFFFFF</div>
+          <div class="swatch-use">Fondos de cards, inputs, superficie</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#F1F3F4"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Gray 100</div>
+          <div class="swatch-hex">#F1F3F4</div>
+          <div class="swatch-use">Fondo general de pantalla</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#D9D9D9"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Gray 300</div>
+          <div class="swatch-hex">#D9D9D9</div>
+          <div class="swatch-use">Bordes de inputs, separadores</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#639922"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">RCI Verde</div>
+          <div class="swatch-hex">#639922</div>
+          <div class="swatch-use">RCI Cómodo (0–30%) SOLO</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#BA7517"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">RCI Ámbar</div>
+          <div class="swatch-hex">#BA7517</div>
+          <div class="swatch-use">RCI Ajustado (30–50%) + alerta UVA</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#E24B4A"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">RCI Rojo</div>
+          <div class="swatch-hex">#E24B4A</div>
+          <div class="swatch-use">RCI Exigido (50%+) + errores validación</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#1D4ED8"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Blue Accent</div>
+          <div class="swatch-hex">#1D4ED8</div>
+          <div class="swatch-use">Badge "Recomendada", caja Infoauto, links</div>
+        </div>
+      </div>
+      <div class="swatch">
+        <div class="swatch-color" style="background:#25D366"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">WhatsApp Green</div>
+          <div class="swatch-hex">#25D366</div>
+          <div class="swatch-use">Botón "Compartir por WhatsApp" SOLO</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── TIPOGRAFÍA ─── -->
+  <div class="section">
+    <div class="section-title">02 — Tipografía</div>
+
+    <div class="alert alert-info">
+      Fuente única: <strong>Inter</strong> · Google Fonts · import como <code style="font-family:monospace;font-size:11px">font-family: 'Inter', system-ui, sans-serif</code>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="t-label">Heading / Sección</div>
+        <div class="t-spec">font-size: 19px | weight: 500 | color: #0B2341</div>
+      </div>
+      <div class="type-sample" style="font-size:19px;font-weight:500;color:#0B2341">DATOS DEL CLIENTE</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="t-label">Navbar / Labels mayús</div>
+        <div class="t-spec">font-size: 16px | weight: 400 | color: #FFFFFF | letter-spacing: .2px</div>
+      </div>
+      <div class="type-sample" style="font-size:16px;font-weight:400;color:#0B2341;letter-spacing:.2px">SIMULADOR FINANCIERO</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="t-label">Cuota mensual (hero)</div>
+        <div class="t-spec">font-size: 24–26px | weight: 500 | color: #374151</div>
+      </div>
+      <div class="type-sample" style="font-size:25px;font-weight:500;color:#374151">$270.000</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="t-label">Plan name</div>
+        <div class="t-spec">font-size: 16px | weight: 600 | color: #374151</div>
+      </div>
+      <div class="type-sample" style="font-size:16px;font-weight:600;color:#374151">PLAN PROMO</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="t-label">Body / Labels</div>
+        <div class="t-spec">font-size: 14–15px | weight: 400 | color: #374151</div>
+      </div>
+      <div class="type-sample" style="font-size:14px;color:#374151">Peugeot 208 Allure MT · Año 2026 · 0 km · Nafta</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="t-label">Caption / Helper text</div>
+        <div class="t-spec">font-size: 12px | weight: 400 | color: #6B7280</div>
+      </div>
+      <div class="type-sample" style="font-size:12px;color:#6B7280">Las opciones se calculan según la señal de crédito vigente.</div>
+    </div>
+    <div class="type-row">
+      <div class="type-meta">
+        <div class="t-label">Micro / Infoauto label</div>
+        <div class="t-spec">font-size: 10–11px | weight: 500 | uppercase | letter-spacing: .3px</div>
+      </div>
+      <div class="type-sample" style="font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.3px;color:#3B82F6">VALOR DE REVISTA</div>
+    </div>
+  </div>
+
+  <!-- ─── ESPACIADO ─── -->
+  <div class="section">
+    <div class="section-title">03 — Espaciado y layout</div>
+    <div class="grid-2">
+      <div class="token-card">
+        <div class="label">Ancho total del canvas</div>
+        <div class="value">1440px</div>
+        <div class="desc">Desktop-only. No responsive en esta versión.</div>
+      </div>
+      <div class="token-card">
+        <div class="label">Ancho del sidebar derecho (Resumen)</div>
+        <div class="value">440px</div>
+        <div class="desc">Position fija a la derecha, altura 100% viewport.</div>
+      </div>
+      <div class="token-card">
+        <div class="label">Ancho del área de formulario</div>
+        <div class="value">950px</div>
+        <div class="desc">Ocupa el espacio restante: 1440 - 440 - 50px margin.</div>
+      </div>
+      <div class="token-card">
+        <div class="label">Altura del navbar</div>
+        <div class="value">90px</div>
+        <div class="desc">Background #0B2341, posición fija arriba.</div>
+      </div>
+      <div class="token-card">
+        <div class="label">Altura de cada sección de formulario</div>
+        <div class="value">130px (datos/usado) · 158px (nuevo) · 89px (resumen)</div>
+        <div class="desc">Cada sección separada por borde 1px #D9D9D9.</div>
+      </div>
+      <div class="token-card">
+        <div class="label">Padding interno de secciones</div>
+        <div class="value">padding: 16px 16px</div>
+        <div class="desc">Aplicado a cada bloque de formulario.</div>
+      </div>
+      <div class="token-card">
+        <div class="label">Border radius general</div>
+        <div class="value">6px (cards, inputs) · 20px (chips, badges, btn redondeado)</div>
+        <div class="desc">Dos radios en el sistema, no mezclar.</div>
+      </div>
+      <div class="token-card">
+        <div class="label">Gap entre tarjetas de planes</div>
+        <div class="value">16px</div>
+        <div class="desc">Grid de 3 columnas, ancho 280px c/u, gap 16px.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── COMPONENTES ─── -->
+  <div class="section">
+    <div class="section-title">04 — Componentes</div>
+
+    <!-- BOTONES -->
+    <div class="comp-card" style="margin-bottom:12px">
+      <div class="comp-title">Botones</div>
+      <div class="comp-sub">Tres variantes. Nunca usar rojo como color de botón de acción neutral.</div>
+      <div class="comp-preview">
+        <button class="btn-primary">Acción principal</button>
+        <button class="btn-outline">📄 Imprimir / descargar PDF</button>
+        <button class="btn-wsp">📱 Compartir por WhatsApp</button>
+        <button class="btn-select">Seleccionar plan</button>
+      </div>
+      <table class="comp-spec">
+        <tr><td>btn-primary</td><td>bg #0B2341 · color #FFF · border-radius: 20px · padding: 10px 24px</td></tr>
+        <tr><td>btn-pdf (outline)</td><td>bg transparent · border 1px #0B2341 · border-radius: 6px · padding: 9px 20px</td></tr>
+        <tr><td>btn-wsp</td><td>bg #25D366 · color #063618 · border-radius: 6px · font-weight: 500</td></tr>
+        <tr><td>btn-select</td><td>bg transparent · border 1px #0B2341 · border-radius: 20px · padding: 6px 20px · font-size: 12px</td></tr>
+        <tr><td>Área táctil mínima</td><td>min-height: 44px (todos los botones)</td></tr>
+      </table>
+    </div>
+
+    <!-- INPUTS -->
+    <div class="comp-card" style="margin-bottom:12px">
+      <div class="comp-title">Inputs y selects del formulario</div>
+      <div class="comp-sub">Todos los campos tienen label encima, placeholder en gris 500, borde #D9D9D9.</div>
+      <div class="comp-preview">
+        <input class="input-demo" placeholder="Ej: Renzo" readonly>
+        <input class="input-demo" placeholder="Ej: 45361089" readonly>
+        <select class="select-demo"><option>Peugeot</option></select>
+        <select class="select-demo"><option>208</option></select>
+        <input class="input-demo error" placeholder="Campo con error" readonly>
+      </div>
+      <table class="comp-spec">
+        <tr><td>Ancho input (Datos cliente)</td><td>216.25px cada uno · 4 inputs en fila</td></tr>
+        <tr><td>Ancho select (Vehículo usado)</td><td>Marca 164px · Modelo 164px · Submodelo 164px · Año 100px</td></tr>
+        <tr><td>Altura de todos</td><td>31px</td></tr>
+        <tr><td>Border</td><td>1px solid #D9D9D9 · border-radius: 6px</td></tr>
+        <tr><td>Focus state</td><td>border-color: #1D4ED8 · outline: none</td></tr>
+        <tr><td>Error state</td><td>border-color: #E24B4A</td></tr>
+        <tr><td>Font dentro del input</td><td>Inter 13px · color #374151</td></tr>
+        <tr><td>Placeholder</td><td>color #6B7280</td></tr>
+      </table>
+    </div>
+
+    <!-- INFOAUTO BOX -->
+    <div class="comp-card" style="margin-bottom:12px">
+      <div class="comp-title">Caja Infoauto — Valor de Revista</div>
+      <div class="comp-sub">Elemento diferenciado del formulario, comunica que el dato viene de una fuente externa.</div>
+      <div class="comp-preview">
+        <div class="infoauto-demo">
+          <div>
+            <div class="ia-label">VALOR DE REVISTA</div>
+            <div class="ia-value">$12.000.000</div>
+            <div class="ia-src">Infoauto · 2026</div>
+          </div>
+        </div>
+      </div>
+      <table class="comp-spec">
+        <tr><td>Tamaño</td><td>239px × 92px</td></tr>
+        <tr><td>Background</td><td>#EFF6FF (azul muy claro)</td></tr>
+        <tr><td>Border</td><td>1px solid #BFDBFE</td></tr>
+        <tr><td>Label "VALOR DE REVISTA"</td><td>10px · uppercase · #3B82F6 · letter-spacing: .3px</td></tr>
+        <tr><td>Valor monetario</td><td>24px · font-weight: 600 · #1D4ED8</td></tr>
+        <tr><td>Fuente "Infoauto · 2026"</td><td>10px · #93C5FD</td></tr>
+        <tr><td>Posición</td><td>Alineada a la derecha dentro del módulo "Vehículo Usado"</td></tr>
+      </table>
+    </div>
+
+    <!-- BADGES -->
+    <div class="comp-card" style="margin-bottom:12px">
+      <div class="comp-title">Badges</div>
+      <div class="comp-sub">Dos badges en el sistema. El verde está PROHIBIDO para badges — pertenece al RCI.</div>
+      <div class="comp-preview">
+        <span class="badge badge-rec">⭐ RECOMENDADA</span>
+        <span class="badge badge-uva">⚠ Ajustable por UVA</span>
+      </div>
+      <table class="comp-spec">
+        <tr><td>badge-recomendada</td><td>bg #EFF6FF · color #1D4ED8 · border-radius: 20px · font-size: 11px · font-weight: 500</td></tr>
+        <tr><td>badge-uva</td><td>bg #FEF3C7 · color #92400E · border-radius: 20px · font-size: 11px</td></tr>
+        <tr><td>Posición</td><td>Top-left de la card. Solo la card recomendada lleva badge-rec.</td></tr>
+      </table>
+    </div>
+
+    <!-- TARJETAS DE PLANES -->
+    <div class="comp-card" style="margin-bottom:12px">
+      <div class="comp-title">Tarjetas de opciones de financiamiento</div>
+      <div class="comp-sub">Grid de 3 columnas. Ancho fijo 280px. La "Recomendada" lleva borde azul de 2px.</div>
+      <div class="comp-preview" style="align-items:flex-start;gap:8px">
+
+        <div class="plan-card rec" style="width:200px">
+          <span class="badge badge-rec" style="font-size:10px">⭐ RECOMENDADA</span>
+          <div style="font-size:10px;color:#6B7280;margin-top:8px">Tasa fija</div>
+          <div class="plan-name">PLAN PROMO</div>
+          <hr style="border:none;border-top:1px solid #F1F3F4;margin:6px 0">
+          <div class="plan-cuota-lbl">Cuota mensual</div>
+          <div class="plan-cuota">$270.000</div>
+          <div style="font-size:10px;color:#6B7280;margin-bottom:6px">por mes</div>
+          <div class="plan-row"><span class="plan-lbl">Plazo</span><span class="plan-val">24 cuotas</span></div>
+          <div class="plan-row"><span class="plan-lbl">TNA</span><span class="plan-val">25,00%</span></div>
+          <div class="plan-row"><span class="plan-lbl">Otorgamiento</span><span class="plan-val">$120.000</span></div>
+          <div class="plan-row"><span class="plan-lbl">Amortización</span><span class="plan-val">Francés</span></div>
+          <hr style="border:none;border-top:1px solid #F1F3F4;margin:6px 0">
+          <div style="font-size:10px;color:#6B7280;margin-bottom:3px">Capacidad de pago (RCI) 28%</div>
+          <div class="rci-demo">
+            <div class="rci-track">
+              <div class="rci-g"></div><div class="rci-a"></div><div class="rci-r"></div>
+              <div class="rci-dot" style="left:46.7%;border-color:#639922"></div>
+            </div>
+          </div>
+          <div style="font-size:11px;font-weight:500;color:#639922">Cómodo</div>
+        </div>
+
+        <div class="plan-card" style="width:200px">
+          <div style="font-size:10px;color:#6B7280;margin-top:2px">Tasa fija</div>
+          <div class="plan-name">PLAN TRADICIONAL</div>
+          <hr style="border:none;border-top:1px solid #F1F3F4;margin:6px 0">
+          <div class="plan-cuota-lbl">Cuota mensual</div>
+          <div class="plan-cuota">$330.000</div>
+          <div style="font-size:10px;color:#6B7280;margin-bottom:6px">por mes</div>
+          <div class="plan-row"><span class="plan-lbl">Plazo</span><span class="plan-val">36 cuotas</span></div>
+          <div class="plan-row"><span class="plan-lbl">TNA</span><span class="plan-val">39,00%</span></div>
+          <div class="plan-row"><span class="plan-lbl">Otorgamiento</span><span class="plan-val">$120.000</span></div>
+          <div class="plan-row"><span class="plan-lbl">Amortización</span><span class="plan-val">Francés</span></div>
+          <hr style="border:none;border-top:1px solid #F1F3F4;margin:6px 0">
+          <div style="font-size:10px;color:#6B7280;margin-bottom:3px">Capacidad de pago (RCI) 42%</div>
+          <div class="rci-demo">
+            <div class="rci-track">
+              <div class="rci-g"></div><div class="rci-a"></div><div class="rci-r"></div>
+              <div class="rci-dot" style="left:70%;border-color:#BA7517"></div>
+            </div>
+          </div>
+          <div style="font-size:11px;font-weight:500;color:#BA7517">Ajustado</div>
+        </div>
+
+        <div class="plan-card" style="width:200px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:10px;color:#6B7280">Tasa variable</span>
+            <span class="badge badge-uva" style="font-size:9px;padding:1px 6px">UVA</span>
+          </div>
+          <div class="plan-name">PLAN UVA</div>
+          <hr style="border:none;border-top:1px solid #F1F3F4;margin:6px 0">
+          <div class="plan-cuota-lbl">Cuota inicial aprox.</div>
+          <div class="plan-cuota">$356.000</div>
+          <div style="font-size:10px;color:#6B7280;margin-bottom:6px">sujeta a ajuste CER</div>
+          <div class="plan-row"><span class="plan-lbl">Plazo</span><span class="plan-val">60 cuotas</span></div>
+          <div class="plan-row"><span class="plan-lbl">TNA</span><span class="plan-val">9,50%</span></div>
+          <div class="plan-row"><span class="plan-lbl">Otorgamiento</span><span class="plan-val">$120.000</span></div>
+          <div class="plan-row"><span class="plan-lbl">Amortización</span><span class="plan-val">Francés</span></div>
+          <hr style="border:none;border-top:1px solid #F1F3F4;margin:6px 0">
+          <div style="font-size:10px;color:#6B7280;margin-bottom:3px">Capacidad de pago (RCI) 60%</div>
+          <div class="rci-demo">
+            <div class="rci-track">
+              <div class="rci-g"></div><div class="rci-a"></div><div class="rci-r"></div>
+              <div class="rci-dot" style="left:96.7%;border-color:#E24B4A"></div>
+            </div>
+          </div>
+          <div style="font-size:11px;font-weight:500;color:#E24B4A">Exigido</div>
+          <div class="uva-warn">⚠ La cuota se ajusta mensualmente según CER (inflación). El valor inicial puede aumentar.</div>
+        </div>
+
+      </div>
+      <table class="comp-spec">
+        <tr><td>Ancho de cada card</td><td>280px</td></tr>
+        <tr><td>Border normal</td><td>1px solid #D9D9D9</td></tr>
+        <tr><td>Border recomendada</td><td>2px solid #1D4ED8</td></tr>
+        <tr><td>Border-radius</td><td>6px</td></tr>
+        <tr><td>Cuota label</td><td>"Cuota mensual" en Promo/Trad · "Cuota inicial aprox." en UVA</td></tr>
+        <tr><td>Advertencia UVA</td><td>bg #FEF3C7 · color #92400E · font-size: 10px · solo aparece en card UVA</td></tr>
+      </table>
+    </div>
+
+    <!-- BARRA RCI -->
+    <div class="comp-card" style="margin-bottom:12px">
+      <div class="comp-title">Indicador RCI — Capacidad de Pago</div>
+      <div class="comp-sub">Barra segmentada en 3 zonas fijas. El marcador circular se posiciona según el % real del RCI.</div>
+      <div class="comp-preview" style="flex-direction:column;gap:16px;align-items:flex-start">
+        <div>
+          <div style="font-size:11px;color:#6B7280;margin-bottom:4px">28% — Cómodo</div>
+          <div style="width:240px;height:7px;border-radius:4px;overflow:visible;display:flex;position:relative">
+            <div style="background:#639922;width:50%"></div>
+            <div style="background:#BA7517;width:33.3%"></div>
+            <div style="background:#E24B4A;width:16.7%"></div>
+            <div style="position:absolute;top:50%;left:46.7%;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;background:#F1F3F4;border:2.5px solid #639922"></div>
+          </div>
+          <div style="font-size:11px;font-weight:500;color:#639922;margin-top:4px">Cómodo</div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:#6B7280;margin-bottom:4px">42% — Ajustado</div>
+          <div style="width:240px;height:7px;border-radius:4px;overflow:visible;display:flex;position:relative">
+            <div style="background:#639922;width:50%"></div>
+            <div style="background:#BA7517;width:33.3%"></div>
+            <div style="background:#E24B4A;width:16.7%"></div>
+            <div style="position:absolute;top:50%;left:70%;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;background:#F1F3F4;border:2.5px solid #BA7517"></div>
+          </div>
+          <div style="font-size:11px;font-weight:500;color:#BA7517;margin-top:4px">Ajustado</div>
+        </div>
+        <div>
+          <div style="font-size:11px;color:#6B7280;margin-bottom:4px">60% — Exigido</div>
+          <div style="width:240px;height:7px;border-radius:4px;overflow:visible;display:flex;position:relative">
+            <div style="background:#639922;width:50%"></div>
+            <div style="background:#BA7517;width:33.3%"></div>
+            <div style="background:#E24B4A;width:16.7%"></div>
+            <div style="position:absolute;top:50%;left:96.7%;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;background:#F1F3F4;border:2.5px solid #E24B4A"></div>
+          </div>
+          <div style="font-size:11px;font-weight:500;color:#E24B4A;margin-top:4px">Exigido</div>
+        </div>
+      </div>
+      <table class="comp-spec">
+        <tr><td>Altura del track</td><td>7px · border-radius: 4px · overflow: visible</td></tr>
+        <tr><td>Zona verde (Cómodo)</td><td>0–50% del ancho · bg #639922 · RCI 0–30%</td></tr>
+        <tr><td>Zona ámbar (Ajustado)</td><td>50–83.3% del ancho · bg #BA7517 · RCI 30–50%</td></tr>
+        <tr><td>Zona roja (Exigido)</td><td>83.3–100% del ancho · bg #E24B4A · RCI 50%+</td></tr>
+        <tr><td>Marcador</td><td>12×12px · border-radius: 50% · bg: color de fondo · border: 2.5px solid (color de zona actual)</td></tr>
+        <tr><td>Posición del marcador X</td><td>(rci_percent / 100) × ancho_track — centrado con transform: translateX(-50%)</td></tr>
+        <tr><td>Label estado</td><td>font-size: 11px · font-weight: 500 · color según zona</td></tr>
+        <tr><td>⚠ Color del marcador</td><td>Usar el color de la ZONA donde cae el marcador, no un color fijo</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ─── LAYOUT / ESTRUCTURA ─── -->
+  <div class="section">
+    <div class="section-title">05 — Estructura de layout</div>
+
+    <div class="layout-diagram">
+┌──────────────────────────────── 1440px ─────────────────────────────────────────┐
+│  NAVBAR  (height: 90px · bg: #0B2341)                                           │
+│  [LOGO ROMA]    AUTOMOTORES    SIMULADOR FINANCIERO    PANEL ADM    CERRAR SESIÓN│
+└─────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────── 990px ──────────────────────┐  ┌──── 440px ───────┐
+│  PROGRESS TABS  (height: 63px · bg: #FFF)                 │  │                  │
+│  [👤 Cliente] | [🚗 Usado] | [🚗 Nuevo] | [📊 Opciones]  │  │  RESUMEN DE LA   │
+└───────────────────────────────────────────────────────────┘  │  SIMULACIÓN      │
+┌─────────────────── 950px ─────────────────┐  ← x=40px       │  (bg: #FFF)      │
+│  1. DATOS DEL CLIENTE     (h: 130px)       │                  │  ─────────────   │
+├────────────────────────────────────────────┤                  │  Cliente         │
+│  2. VEHÍCULO USADO        (h: 130px)       │                  │  Vehículos       │
+├────────────────────────────────────────────┤                  │  Operación       │
+│  3. VEHÍCULO NUEVO        (h: 158px)       │                  │  Plan seleccion. │
+├────────────────────────────────────────────┤                  │  ─────────────   │
+│  4. RESUMEN DE OPERACIÓN  (h: 89px)        │                  │  [btn PDF]       │
+├────────────────────────────────────────────┤                  │  [btn WhatsApp]  │
+│  5. OPCIONES DE FINANCIAMIENTO (h: 408px)  │                  └──────────────────┘
+│  ┌──────┐ ┌──────┐ ┌──────┐               │
+│  │PROMO │ │TRAD. │ │ UVA  │               │
+│  │280px │ │280px │ │280px │               │
+│  └──────┘ └──────┘ └──────┘               │
+└────────────────────────────────────────────┘
+    </div>
+  </div>
+
+  <!-- ─── NODE IDS DE FIGMA ─── -->
+  <div class="section">
+    <div class="section-title">06 — Node IDs Figma (referencia para inspección)</div>
+    <div class="alert alert-info">
+      Archivo Figma: <strong>ROMA AUTOMOTORES</strong> · fileKey: <code style="font-family:monospace;font-size:11px">grSIEyJYmytmLIivj6Fwmo</code>
+    </div>
+    <table class="node-table">
+      <tr><th>Node ID</th><th>Nombre en Figma</th><th>Descripción</th></tr>
+      <tr><td>1:2</td><td>Desktop - 1</td><td>Frame principal, 1440×1160px</td></tr>
+      <tr><td>23:16</td><td>Barra de navegación</td><td>Navbar navy, 1440×90px</td></tr>
+      <tr><td>20:42</td><td>Progreso</td><td>Tabs de progreso con íconos, 990×63px</td></tr>
+      <tr><td>31:19</td><td>Datos cliente</td><td>Módulo 1 — formulario de cliente</td></tr>
+      <tr><td>40:36</td><td>Usado</td><td>Módulo 2 — cascada selects + Infoauto</td></tr>
+      <tr><td>44:14</td><td>infoautos</td><td>Caja Valor de Revista, 239×92px</td></tr>
+      <tr><td>50:16</td><td>Nuevo</td><td>Módulo 3 — buscador vehículo nuevo</td></tr>
+      <tr><td>50:15</td><td>Resumen</td><td>Módulo 4 — ecuación efectivo a entregar</td></tr>
+      <tr><td>21:17</td><td>Opciones</td><td>Módulo 5 — 3 tarjetas de financiamiento</td></tr>
+      <tr><td>23:18</td><td>Recomendada</td><td>Card Plan Promo con badge azul</td></tr>
+      <tr><td>64:61</td><td>Tradicional</td><td>Card Plan Tradicional</td></tr>
+      <tr><td>64:68</td><td>Uva</td><td>Card Plan UVA con advertencia ámbar</td></tr>
+      <tr><td>19:18</td><td>Resumen final</td><td>Sidebar derecho, 440×894px</td></tr>
+    </table>
+  </div>
+
+  <!-- ─── REGLAS SEMÁNTICAS ─── -->
+  <div class="section">
+    <div class="section-title">07 — Reglas semánticas de color (crítico)</div>
+    <div class="alert alert-warn">
+      Estas reglas no son negociables. Si un color se reutiliza con significado distinto, el sistema semántico se rompe.
+    </div>
+    <table class="node-table">
+      <tr><th>Color</th><th>Uso permitido</th><th>Uso prohibido</th></tr>
+      <tr><td style="color:#639922;font-weight:600">#639922 Verde</td><td>Zona RCI "Cómodo" · marcador RCI · label "Cómodo"</td><td>Badges, botones, estados positivos genéricos, textos de éxito</td></tr>
+      <tr><td style="color:#BA7517;font-weight:600">#BA7517 Ámbar</td><td>Zona RCI "Ajustado" · marcador · label · fondo advertencia UVA</td><td>Warnings genéricos, estados de carga, badges informativos</td></tr>
+      <tr><td style="color:#E24B4A;font-weight:600">#E24B4A Rojo</td><td>Zona RCI "Exigido" · marcador · label · border de input con error de validación</td><td>Botones (nunca), cualquier acción de exportar/imprimir</td></tr>
+      <tr><td style="color:#25D366;font-weight:600">#25D366 Verde WSP</td><td>Botón "Compartir por WhatsApp" únicamente</td><td>Cualquier otro botón, texto, estado o elemento</td></tr>
+      <tr><td style="color:#1D4ED8;font-weight:600">#1D4ED8 Azul</td><td>Badge "Recomendada" · Caja Infoauto · links · focus state</td><td>RCI, errores, advertencias</td></tr>
+    </table>
+  </div>
+
+  <div style="text-align:center;font-size:11px;color:#6B7280;margin-top:40px;padding-top:20px;border-top:1px solid #D9D9D9">
+    Ficha Técnica UI · Roma Automotores · Diseño: Renzo Segovia · v1.0 · 2025
+  </div>
+
+</div>
+</body>
+</html>

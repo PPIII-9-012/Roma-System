@@ -1,0 +1,714 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+.w{font-family:'Barlow',sans-serif;background:var(--color-background-tertiary);padding:1.25rem 1rem 2rem}
+.hdr{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:0.5px solid var(--color-border-tertiary)}
+.logo{background:#8B1A1A;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:700;padding:7px 13px;border-radius:var(--border-radius-md);letter-spacing:.5px;flex-shrink:0}
+.hdr h1{font-family:'Barlow Condensed',sans-serif;font-size:21px;font-weight:700;color:var(--color-text-primary);line-height:1.2}
+.hdr p{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+.mod{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:1rem;overflow:hidden}
+.mhd{display:flex;align-items:center;gap:9px;padding:.85rem 1.1rem;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+.mn{background:#8B1A1A;color:#fff;font-size:10px;font-weight:700;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mhd h2{font-size:13px;font-weight:600;color:var(--color-text-primary)}
+.mb{padding:1.1rem}
+.sl{font-size:10px;font-weight:700;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.8px;margin-bottom:.65rem;padding-bottom:5px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:.75rem}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:.75rem}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:.75rem}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg label{font-size:11px;color:var(--color-text-secondary);font-weight:500}
+.fg input,.fg select{font-family:'Barlow',sans-serif;font-size:13px;padding:7px 9px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);width:100%;transition:border-color .15s}
+.fg input:focus,.fg select:focus{outline:none;border-color:#8B1A1A;box-shadow:0 0 0 2px rgba(139,26,26,.1)}
+.fg input.err{border-color:var(--color-border-danger);box-shadow:0 0 0 2px rgba(220,53,69,.1)}
+.fg input[readonly]{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.fg select:disabled{opacity:.4;pointer-events:none}
+.sub{font-size:10px;color:var(--color-text-tertiary);margin-top:2px}
+.hint{font-size:10px;font-weight:600;margin-top:3px;padding:3px 7px;border-radius:var(--border-radius-md);display:inline-block}
+.h-ok{background:var(--color-background-success);color:var(--color-text-success)}
+.h-warn{background:var(--color-background-danger);color:var(--color-text-danger)}
+.h-neu{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.spin{animation:sp .8s linear infinite;display:inline-block}
+@keyframes sp{to{transform:rotate(360deg)}}
+.rev-load{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--color-text-tertiary);margin-top:3px}
+
+/* ── MÓDULO 3: TARJETAS DESTACADAS ── */
+.featured-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1rem}
+.fc{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary);cursor:pointer;transition:border-color .2s,box-shadow .2s,opacity .2s}
+.fc:hover:not(.fc-blocked){border-color:#8B1A1A;box-shadow:0 2px 8px rgba(139,26,26,.1)}
+.fc.fc-sel{border:2px solid #8B1A1A;box-shadow:0 0 0 3px rgba(139,26,26,.1)}
+.fc.fc-blocked{opacity:.45;cursor:not-allowed;filter:grayscale(.5)}
+.fc-top{padding:10px 12px 8px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.fc-tag{font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.tag-fijo{color:#8B1A1A}
+.tag-uva{color:#1a4a8B}
+.tag-sel{color:var(--color-text-success)}
+.fc-name{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--color-text-primary);line-height:1.2}
+.fc-sub{font-size:10px;color:var(--color-text-secondary);margin-top:2px}
+.fc-body{padding:10px 12px}
+.fc-cuota-lbl{font-size:10px;color:var(--color-text-secondary);margin-bottom:3px}
+.fc-cuota{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;color:#8B1A1A;line-height:1;margin-bottom:8px}
+.fc-cuota.fc-blocked-txt{font-size:14px;color:var(--color-text-danger)}
+.fc-rows{display:flex;flex-direction:column;gap:0}
+.fc-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-top:0.5px solid var(--color-border-tertiary)}
+.fc-row .rl{font-size:10px;color:var(--color-text-secondary)}
+.fc-row .rv{font-size:11px;font-weight:600;font-family:'Barlow Condensed',sans-serif;color:var(--color-text-primary)}
+.fc-row .rv.warn{color:var(--color-text-warning)}
+.fc-row .rv.danger{color:var(--color-text-danger)}
+
+/* ── DROPDOWN OTROS PLANES ── */
+.other-plans-wrap{margin-bottom:1rem}
+.other-plans-label{font-size:11px;font-weight:600;color:var(--color-text-secondary);margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.other-plans-select{font-family:'Barlow',sans-serif;font-size:13px;padding:9px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary);width:100%;cursor:pointer;transition:border-color .15s}
+.other-plans-select:focus{outline:none;border-color:#8B1A1A;box-shadow:0 0 0 2px rgba(139,26,26,.1)}
+.other-plans-select.has-sel{border-color:#8B1A1A;background:var(--color-background-primary)}
+
+/* ── RIESGO + RESUMEN ── */
+.rbadge{padding:8px 12px;border-radius:var(--border-radius-md);font-size:12px;font-weight:600;display:flex;align-items:center;gap:7px;margin-bottom:1rem}
+.r-ok{background:var(--color-background-success);color:var(--color-text-success);border:0.5px solid var(--color-border-success)}
+.r-alrt{background:var(--color-background-warning);color:var(--color-text-warning);border:0.5px solid var(--color-border-warning)}
+.r-neu{background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-tertiary)}
+.plan-sel-box{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 12px;margin-bottom:1rem;font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:8px}
+.plan-sel-box.active{background:var(--color-background-success);color:var(--color-text-success);border-color:var(--color-border-success)}
+.sep{height:0.5px;background:var(--color-border-tertiary);margin:.75rem 0}
+.rtbl{width:100%;font-size:13px;border-collapse:collapse}
+.rtbl td{padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.rtbl tr:last-child td{border-bottom:none}
+.rtbl td:last-child{text-align:right;font-weight:600;font-family:'Barlow Condensed',sans-serif;font-size:14px}
+.rtot{margin-top:.7rem;padding:11px 14px;background:#8B1A1A;border-radius:var(--border-radius-md);display:flex;justify-content:space-between;align-items:center}
+.rtot span:first-child{font-size:12px;font-weight:600;color:rgba(255,255,255,.8)}
+.rtot span:last-child{font-size:22px;font-weight:700;color:#fff;font-family:'Barlow Condensed',sans-serif}
+.bpdf{width:100%;margin-top:1rem;padding:12px;background:#8B1A1A;border:none;border-radius:var(--border-radius-md);font-family:'Barlow',sans-serif;font-size:13px;font-weight:700;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .15s}
+.bpdf:hover{opacity:.88}
+.bpdf:disabled{opacity:.38;cursor:not-allowed}
+</style>
+
+<div class="w">
+<h2 class="sr-only">Simulador prendario Roma Automotores</h2>
+<div class="hdr">
+  <div class="logo">ROMA</div>
+  <div><h1>Simulador prendario</h1><p>Roma Automotores · PSA Finance — Tabla Junio 2026</p></div>
+</div>
+
+<!-- MÓDULO 1 -->
+<div class="mod">
+  <div class="mhd"><div class="mn">1</div><h2>Ingreso de datos</h2></div>
+  <div class="mb">
+    <div class="sl">Datos del cliente</div>
+    <div class="g4" style="margin-bottom:1.1rem">
+      <div class="fg"><label>Nombre</label><input type="text" id="nombre" placeholder="Ej: Juan"></div>
+      <div class="fg"><label>Apellido</label><input type="text" id="apellido" placeholder="Ej: Pérez"></div>
+      <div class="fg"><label>DNI</label><input type="text" id="dni" placeholder="Ej: 30.123.456"></div>
+      <div class="fg">
+        <label>Ingresos mensuales ($)</label>
+        <input type="text" id="sueldo" placeholder="Ej: 800.000" oninput="onMoney(this);calc()">
+        <span class="sub">Dato declarativo</span>
+      </div>
+    </div>
+
+    <div class="sl">Vehículo usado — permuta</div>
+    <div class="g4" style="margin-bottom:.75rem">
+      <div class="fg"><label>Marca</label>
+        <select id="u-marca" onchange="onUMarca()">
+          <option value="">— Marca —</option>
+          <option>Chevrolet</option><option>Citroën</option><option>Fiat</option><option>Ford</option>
+          <option>Honda</option><option>Nissan</option><option>Peugeot</option><option>Renault</option>
+          <option>Toyota</option><option>Volkswagen</option>
+        </select>
+      </div>
+      <div class="fg"><label>Modelo</label><select id="u-modelo" onchange="onUModelo()" disabled><option value="">— Modelo —</option></select></div>
+      <div class="fg"><label>Submodelo / versión</label><select id="u-sub" onchange="onUSub()" disabled><option value="">— Versión —</option></select></div>
+      <div class="fg"><label>Año</label><select id="u-anio" onchange="onUAnio()" disabled><option value="">— Año —</option></select></div>
+    </div>
+    <div class="g2" style="margin-bottom:1.1rem">
+      <div class="fg">
+        <label>Precio de revista — Infoauto ($)</label>
+        <input type="text" id="u-revista" placeholder="Se completa al elegir año" readonly>
+        <div class="rev-load" id="rev-load" style="display:none"><i class="ti ti-loader spin"></i> Consultando Infoauto...</div>
+        <span class="hint h-neu" id="ltv-hint">LTV: —</span>
+      </div>
+      <div class="fg">
+        <label>Precio de toma real — agencia ($)</label>
+        <input type="text" id="u-toma" placeholder="Dejar vacío si no hay permuta" oninput="onMoney(this);calc()">
+        <span class="sub">Manual · vacío = sin permuta</span>
+      </div>
+    </div>
+
+    <div class="sl">Vehículo nuevo — stock Roma</div>
+    <div class="g4" style="margin-bottom:.75rem">
+      <div class="fg"><label>Marca</label>
+        <select id="n-marca" onchange="onNMarca()">
+          <option value="">— Marca —</option>
+          <option>Chevrolet</option><option>Citroën</option><option>Fiat</option>
+          <option>Peugeot</option><option>Renault</option><option>Volkswagen</option>
+        </select>
+      </div>
+      <div class="fg"><label>Modelo</label><select id="n-modelo" onchange="onNModelo()" disabled><option value="">— Modelo —</option></select></div>
+      <div class="fg"><label>Submodelo / versión</label><select id="n-sub" onchange="onNSub()" disabled><option value="">— Versión —</option></select></div>
+      <div class="fg"><label>Año</label><select id="n-anio" onchange="onNAnio()" disabled><option value="">— Año —</option></select></div>
+    </div>
+    <div class="g2" style="margin-bottom:0">
+      <div class="fg">
+        <label>Precio de lista ($)</label>
+        <input type="text" id="n-precio" placeholder="Se completa al elegir versión" readonly>
+      </div>
+      <div class="fg">
+        <label>Gastos de transferencia / papeles ($)</label>
+        <input type="text" id="gastos" placeholder="Ingresá el monto manualmente" oninput="onMoney(this);calc()">
+        <span class="sub">Manual</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MÓDULO 2 -->
+<div class="mod">
+  <div class="mhd"><div class="mn">2</div><h2>Monto a financiar</h2></div>
+  <div class="mb">
+    <div class="g2" style="margin-bottom:0">
+      <div class="fg">
+        <label>Monto a solicitar ($)</label>
+        <input type="text" id="monto" placeholder="Ej: 8.000.000" oninput="onMoney(this);calc()">
+        <span class="hint h-neu" id="max-hint">Máximo permitido: —</span>
+      </div>
+      <div class="fg">
+        <label>Plazo disponible según antigüedad</label>
+        <div id="plazo-info" style="padding:7px 9px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);font-size:12px;color:var(--color-text-secondary);background:var(--color-background-secondary);line-height:1.5">
+          Se determina al ingresar el año del usado
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MÓDULO 3 -->
+<div class="mod">
+  <div class="mhd"><div class="mn">3</div><h2>Comparativa de planes</h2></div>
+  <div class="mb">
+
+    <div id="rbadge" class="rbadge r-neu">
+      <i class="ti ti-clock" id="rico"></i>
+      <span id="rtxt">Completar datos para ver el análisis de riesgo</span>
+    </div>
+
+    <!-- 3 tarjetas destacadas -->
+    <div class="sl" style="margin-bottom:.75rem">Opciones destacadas</div>
+    <div class="featured-grid" id="featured-grid">
+      <!-- generadas por JS -->
+    </div>
+
+    <!-- Dropdown otros planes -->
+    <div class="other-plans-wrap">
+      <div class="other-plans-label">
+        <i class="ti ti-list" aria-hidden="true"></i>
+        Ver otros planes y plazos disponibles
+      </div>
+      <select class="other-plans-select" id="otros-planes" onchange="onOtrosPlan()">
+        <option value="">— Seleccioná otro plan —</option>
+      </select>
+    </div>
+
+    <!-- Plan seleccionado -->
+    <div class="plan-sel-box" id="plan-sel-box">
+      <i class="ti ti-hand-click"></i>
+      <span id="plan-sel-txt">Seleccioná una opción para ver el resumen</span>
+    </div>
+
+    <div class="sl">Resumen de operación</div>
+    <table class="rtbl">
+      <tr><td style="color:var(--color-text-secondary)">Precio de lista</td><td id="r-lista">—</td></tr>
+      <tr><td style="color:var(--color-text-secondary)">+ Gastos de transferencia / papeles</td><td id="r-gastos">—</td></tr>
+      <tr><td style="color:var(--color-text-secondary);font-weight:600">Total a pagar</td><td id="r-total" style="font-weight:700">—</td></tr>
+      <tr><td style="color:var(--color-text-success)">− Precio de toma real (agencia)</td><td id="r-toma" style="color:var(--color-text-success)">—</td></tr>
+      <tr><td style="color:var(--color-text-success)">− Préstamo solicitado</td><td id="r-prest" style="color:var(--color-text-success)">—</td></tr>
+      <tr id="row-cuota-sel" style="display:none">
+        <td id="r-cuota-lbl" style="color:var(--color-text-secondary)">Cuota del plan elegido</td>
+        <td id="r-cuota-sel">—</td>
+      </tr>
+    </table>
+    <div class="rtot">
+      <span>Efectivo neto a entregar en salón</span>
+      <span id="r-efect">—</span>
+    </div>
+
+    <button class="bpdf" id="btn-pdf" onclick="generarPDF()" disabled>
+      <i class="ti ti-file-text"></i>
+      Generar resumen para el cliente (PDF)
+    </button>
+  </div>
+</div>
+</div>
+
+<script>
+/* ── TABLA PSA FINANCE JUNIO 2026 ── */
+const TABLA_PSA = {
+  PROMO_FIJA:{nombre:"Promo Fija Usados",tipo:"fijo",maxPrestamo:12000000,getLTV:()=>12000000,maxPlazoFn:()=>36,
+    plazos:{12:{tna:0.0,ce:0.10,factor:83.33},18:{tna:0.199,ce:0.10,factor:68.20},24:{tna:0.269,ce:0.10,factor:59.04},36:{tna:0.329,ce:0.10,factor:49.81}}},
+  TRADICIONAL_VO:{nombre:"Tradicional VO",tipo:"fijo",maxPrestamo:null,
+    getLTV:(ant,rev)=>{if(ant<3)return Math.min(rev*.80,50000000);if(ant<7)return Math.min(rev*.75,30000000);if(ant<=10)return Math.min(rev*.50,15000000);return 0;},
+    maxPlazoFn:(ant)=>ant<=7?60:ant===8?48:ant===9?36:ant===10?24:0,
+    plazos:{12:{tna:0.475,ce:0.025,factor:114.61},18:{tna:0.475,ce:0.010,factor:87.04},24:{tna:0.475,ce:0.010,factor:73.62},36:{tna:0.475,ce:0.000,factor:60.89},48:{tna:0.475,ce:0.000,factor:55.17},60:{tna:0.475,ce:0.000,factor:52.17}}},
+  TRADICIONAL_VO10:{nombre:"Tradicional VO 10%",tipo:"fijo",maxPrestamo:null,
+    getLTV:(ant,rev)=>{if(ant<3)return Math.min(rev*.80,50000000);if(ant<7)return Math.min(rev*.75,30000000);if(ant<=10)return Math.min(rev*.50,15000000);return 0;},
+    maxPlazoFn:(ant)=>ant<=7?60:ant===8?48:ant===9?36:ant===10?24:0,
+    plazos:{12:{tna:0.235,ce:0.10,factor:98.43},18:{tna:0.305,ce:0.10,factor:75.26},24:{tna:0.345,ce:0.10,factor:64.29},36:{tna:0.385,ce:0.10,factor:53.98},48:{tna:0.395,ce:0.10,factor:48.65},60:{tna:0.415,ce:0.10,factor:47.02}}},
+  PROMO_UVA:{nombre:"Promo UVA VO",tipo:"uva",maxPrestamo:17000000,getLTV:()=>17000000,rciMax:0.30,maxPlazoFn:()=>36,
+    plazos:{12:{tna:0.0,ce:0.06,factor:83.33},24:{tna:0.069,ce:0.06,factor:45.93},36:{tna:0.099,ce:0.06,factor:33.95}}},
+  UVA_TRAD:{nombre:"UVA Tradicional VO",tipo:"uva",maxPrestamo:40000000,getLTV:(ant,rev)=>Math.min(rev*.70,40000000),rciMax:0.30,maxPlazoFn:()=>60,
+    plazos:{12:{tna:0.249,ce:0.00,factor:99.35},24:{tna:0.249,ce:0.00,factor:57.68},36:{tna:0.249,ce:0.00,factor:44.06},48:{tna:0.249,ce:0.00,factor:37.46},60:{tna:0.249,ce:0.00,factor:33.65}}},
+  UVA_TRAD10:{nombre:"UVA Trad. 10%",tipo:"uva",maxPrestamo:40000000,getLTV:(ant,rev)=>Math.min(rev*.70,40000000),rciMax:0.30,maxPlazoFn:()=>60,
+    plazos:{12:{tna:0.069,ce:0.10,factor:87.69},24:{tna:0.159,ce:0.10,factor:51.70},36:{tna:0.179,ce:0.10,factor:39.23},48:{tna:0.189,ce:0.10,factor:33.15},60:{tna:0.189,ce:0.10,factor:29.19}}},
+};
+
+/* Las 3 tarjetas fijas destacadas */
+const FEATURED = [
+  {pk:'PROMO_FIJA',    plazo:24},
+  {pk:'TRADICIONAL_VO',plazo:24},
+  {pk:'PROMO_UVA',     plazo:24},
+];
+
+const STOCK_USADO={
+  Chevrolet:{Onix:{LS:['2019','2020','2021'],LT:['2018','2019','2020','2021'],LTZ:['2017','2018','2019']},Cruze:{LS:['2016','2017','2018'],LT:['2017','2018','2019'],LTZ:['2016','2017','2018']},Tracker:{LS:['2019','2020','2021'],LT:['2018','2019','2020'],Premier:['2019','2020','2021']}},
+  Citroën:{C3:{Live:['2018','2019','2020'],Feel:['2018','2019','2020','2021'],Shine:['2019','2020','2021']},Berlingo:{'Furgón':['2016','2017','2018'],'Multispace':['2016','2017']}},
+  Fiat:{Cronos:{Drive:['2019','2020','2021'],Precision:['2019','2020'],Like:['2020','2021']},Argo:{Drive:['2018','2019','2020'],HGT:['2019','2020']},Toro:{Freedom:['2017','2018','2019'],Ranch:['2018','2019']}},
+  Ford:{Focus:{SE:['2016','2017'],SEL:['2016','2017'],Titanium:['2016','2017']},EcoSport:{'1.6 S':['2016','2017'],'2.0 SE':['2017','2018'],'2.0 Titanium':['2017','2018']},Ranger:{'XLS 2.2':['2017','2018'],'XLT 3.2':['2016','2017','2018']}},
+  Honda:{'HR-V':{LX:['2017','2018','2019'],EX:['2017','2018','2019']},City:{EXL:['2016','2017','2018'],Si:['2016','2017']}},
+  Nissan:{March:{Sense:['2016','2017','2018'],Advance:['2017','2018']},Kicks:{Sense:['2018','2019','2020'],Advance:['2018','2019','2020'],Exclusive:['2019','2020']}},
+  Peugeot:{'208':{Active:['2018','2019','2020'],Allure:['2018','2019','2020'],'GT Line':['2019','2020']},'308':{Active:['2016','2017'],Allure:['2016','2017','2018'],GT:['2017','2018']},'2008':{Active:['2019','2020'],Allure:['2019','2020'],'GT Line':['2020','2021']}},
+  Renault:{Kwid:{Life:['2018','2019','2020'],Zen:['2018','2019','2020','2021'],Iconic:['2019','2020','2021']},Sandero:{Life:['2016','2017','2018'],Zen:['2017','2018','2019'],Stepway:['2016','2017','2018']},Duster:{Zen:['2017','2018','2019'],Intens:['2017','2018','2019']}},
+  Toyota:{Etios:{X:['2016','2017','2018'],XS:['2016','2017','2018'],Platinum:['2016','2017']},Corolla:{LE:['2017','2018','2019'],SEG:['2016','2017','2018','2019'],XEI:['2017','2018','2019']},Yaris:{XS:['2018','2019','2020'],S:['2018','2019','2020']}},
+  Volkswagen:{Gol:{Trend:['2016','2017','2018'],Comfortline:['2016','2017','2018'],Highline:['2016','2017']},Polo:{Trendline:['2018','2019','2020','2021'],Comfortline:['2018','2019','2020','2021'],Highline:['2019','2020','2021']},Vento:{Trendline:['2016','2017','2018'],Comfortline:['2016','2017','2018'],Highline:['2017','2018']}},
+};
+const STOCK_NUEVO={
+  Chevrolet:{Tracker:{'1.2 Turbo AT LS':{'2025':32000000},'1.2 Turbo AT LT':{'2025':35000000},'1.2 Turbo AT RS':{'2025':38500000}},Onix:{'1.0 Turbo Joy':{'2025':22000000},'1.0 Turbo LT':{'2025':25000000},'1.0 Turbo LTZ':{'2025':27500000}}},
+  Citroën:{C3:{'1.2 Feel':{'2024':19500000},'1.2 Shine':{'2024':22000000}},Berlingo:{'Van Furgón':{'2024':21000000},'Van Multispace':{'2024':24000000}}},
+  Fiat:{Cronos:{'1.3 Like':{'2025':21000000},'1.3 Drive':{'2025':23500000},'1.3 Precision':{'2025':26000000}},Pulse:{'1.0 Turbo Drive':{'2024':28000000},'1.0 Turbo Impetus':{'2024':31000000}}},
+  Peugeot:{'208':{'1.2 Like':{'2025':22000000},'1.2 Active':{'2025':25000000},'1.2 Allure':{'2025':28000000},'1.2 GT':{'2025':31000000}},'2008':{'1.2 Active':{'2025':32000000},'1.2 Allure':{'2025':36000000},'1.2 GT':{'2025':40000000}}},
+  Renault:{Kwid:{'1.0 Life':{'2025':16500000},'1.0 Zen':{'2025':18000000},'1.0 Iconic':{'2025':20000000}},Sandero:{'1.6 Life':{'2025':20000000},'1.6 Zen':{'2025':22500000},'1.6 Stepway':{'2025':25000000}},Duster:{'1.6 Zen':{'2024':27000000},'1.6 Intens':{'2024':30000000}}},
+  Volkswagen:{Polo:{'1.6 MSI Trendline':{'2024':23000000},'1.6 MSI Comfortline':{'2024':26000000},'1.6 MSI Highline':{'2024':29000000}},'T-Cross':{'1.0 TSI Trendline':{'2024':31000000},'1.0 TSI Comfortline':{'2024':34000000},'1.0 TSI Highline':{'2024':37000000}}},
+};
+
+/* ── ESTADO ── */
+let selectedPlanKey = null; // "PK_plazo"
+let lastResults = {};
+let revistaTimer = null;
+
+/* ── DINERO ── */
+function onMoney(el){const r=el.value.replace(/\./g,'').replace(/[^0-9]/g,'');el.value=r?parseInt(r).toLocaleString('es-AR'):'';}
+function parseMoney(v){return parseFloat(String(v||'').replace(/\./g,'').replace(',','.'))||0;}
+function fmt(n){return(n===null||n===undefined||isNaN(n))?'—':'$'+Math.round(n).toLocaleString('es-AR');}
+
+/* ── CASCADA USADO ── */
+function mkO(items,ph){return`<option value="">${ph}</option>`+items.map(i=>`<option>${i}</option>`).join('');}
+function onUMarca(){
+  const m=document.getElementById('u-marca').value;
+  const mod=document.getElementById('u-modelo');
+  mod.innerHTML=mkO(m?Object.keys(STOCK_USADO[m]||[]):[],'— Modelo —');mod.disabled=!m;
+  ['u-sub','u-anio'].forEach(id=>{const s=document.getElementById(id);s.innerHTML=`<option value="">— ${id==='u-sub'?'Versión':'Año'} —</option>`;s.disabled=true;});
+  document.getElementById('u-revista').value='';
+  document.getElementById('ltv-hint').textContent='LTV: —';document.getElementById('ltv-hint').className='hint h-neu';
+  document.getElementById('plazo-info').textContent='Se determina al ingresar el año del usado';
+  calc();
+}
+function onUModelo(){
+  const m=document.getElementById('u-marca').value,mo=document.getElementById('u-modelo').value;
+  const sub=document.getElementById('u-sub');
+  sub.innerHTML=mkO(mo?Object.keys(STOCK_USADO[m]?.[mo]||[]):[],'— Versión —');sub.disabled=!mo;
+  const a=document.getElementById('u-anio');a.innerHTML='<option value="">— Año —</option>';a.disabled=true;
+  document.getElementById('u-revista').value='';calc();
+}
+function onUSub(){
+  const m=document.getElementById('u-marca').value,mo=document.getElementById('u-modelo').value,s=document.getElementById('u-sub').value;
+  const a=document.getElementById('u-anio');
+  const yrs=s?STOCK_USADO[m]?.[mo]?.[s]||[]:[];
+  a.innerHTML=mkO(yrs,'— Año —');a.disabled=!s;
+  document.getElementById('u-revista').value='';calc();
+}
+function onUAnio(){
+  const anio=parseInt(document.getElementById('u-anio').value)||0;
+  if(anio){fetchRevista();updatePlazoPanel(anio);}
+  else{document.getElementById('u-revista').value='';document.getElementById('plazo-info').textContent='Se determina al ingresar el año del usado';}
+  calc();
+}
+
+/* ── CASCADA NUEVO ── */
+function onNMarca(){
+  const m=document.getElementById('n-marca').value;
+  document.getElementById('n-modelo').innerHTML=mkO(m?Object.keys(STOCK_NUEVO[m]||[]):[],'— Modelo —');
+  document.getElementById('n-modelo').disabled=!m;
+  ['n-sub','n-anio'].forEach(id=>{const s=document.getElementById(id);s.innerHTML=`<option value="">— ${id==='n-sub'?'Versión':'Año'} —</option>`;s.disabled=true;});
+  document.getElementById('n-precio').value='';calc();
+}
+function onNModelo(){
+  const m=document.getElementById('n-marca').value,mo=document.getElementById('n-modelo').value;
+  const sub=document.getElementById('n-sub');
+  sub.innerHTML=mkO(mo?Object.keys(STOCK_NUEVO[m]?.[mo]||[]):[],'— Versión —');sub.disabled=!mo;
+  const a=document.getElementById('n-anio');a.innerHTML='<option value="">— Año —</option>';a.disabled=true;
+  document.getElementById('n-precio').value='';calc();
+}
+function onNSub(){
+  const m=document.getElementById('n-marca').value,mo=document.getElementById('n-modelo').value,s=document.getElementById('n-sub').value;
+  const yrs=s?Object.keys(STOCK_NUEVO[m]?.[mo]?.[s]||{}):[];
+  const a=document.getElementById('n-anio');
+  a.innerHTML=mkO(yrs,'— Año —');a.disabled=!s;
+  if(yrs.length===1){a.value=yrs[0];onNAnio();}
+  else{document.getElementById('n-precio').value='';calc();}
+}
+function onNAnio(){
+  const m=document.getElementById('n-marca').value,mo=document.getElementById('n-modelo').value,s=document.getElementById('n-sub').value,a=document.getElementById('n-anio').value;
+  const precio=STOCK_NUEVO[m]?.[mo]?.[s]?.[a]||0;
+  document.getElementById('n-precio').value=precio?precio.toLocaleString('es-AR'):'';
+  if(precio&&!document.getElementById('gastos').value)
+    document.getElementById('gastos').value=Math.round(precio*0.0757).toLocaleString('es-AR');
+  calc();
+}
+
+/* ── INFOAUTO MOCK ── */
+function fetchRevista(){
+  clearTimeout(revistaTimer);
+  const m=document.getElementById('u-marca').value,mo=document.getElementById('u-modelo').value,s=document.getElementById('u-sub').value,a=document.getElementById('u-anio').value;
+  if(!m||!mo||!a)return;
+  const ld=document.getElementById('rev-load'),inp=document.getElementById('u-revista');
+  ld.style.display='flex';inp.value='';
+  revistaTimer=setTimeout(async()=>{
+    await new Promise(r=>setTimeout(r,900));
+    const seed=(m.length*31+mo.length*17+(s||'').length*7+(parseInt(a)||0))*654321;
+    const val=Math.round((5000000+Math.abs(seed)%25000000)/100000)*100000;
+    inp.value=val.toLocaleString('es-AR');
+    ld.style.display='none';calc();
+  },400);
+}
+function updatePlazoPanel(anio){
+  const ant=new Date().getFullYear()-anio;
+  const msgs={0:'0 km → hasta 60 cuotas · LTV 80%',3:'hasta 3 años → hasta 60 cuotas · LTV 80%',7:'4-7 años → hasta 60 cuotas · LTV 75%',8:'8 años → máx. 48 cuotas · LTV 50%, tope $15M',9:'9 años → máx. 36 cuotas · LTV 50%, tope $15M',10:'10 años → máx. 24 cuotas · LTV 50%, tope $15M'};
+  const k=ant<=0?0:ant<=3?3:ant<=7?7:ant===8?8:ant===9?9:10;
+  document.getElementById('plazo-info').textContent=msgs[k]||'más de 10 años — sin financiación';
+}
+
+/* ── MOTOR DE CÁLCULO ── */
+function calcPlan(pk,plazo,monto,sueldo,ant,revista){
+  const plan=TABLA_PSA[pk],t=plan.plazos[plazo];
+  if(!t||!monto)return null;
+  const maxPlazo=plan.maxPlazoFn?plan.maxPlazoFn(ant):60;
+  if(plazo>maxPlazo)return{blocked:true,motivo:`Plazo máx. ${maxPlazo}m para esta antigüedad`,planKey:pk};
+  const ltv=plan.getLTV(ant,revista);
+  if(plan.maxPrestamo!==null&&monto>plan.maxPrestamo)return{blocked:true,motivo:`Tope del plan: ${fmt(plan.maxPrestamo)}`,planKey:pk};
+  if(ltv!==null&&ltv!==undefined&&monto>ltv)return{blocked:true,motivo:`Supera LTV: ${fmt(ltv)}`,planKey:pk};
+  const cuota=(monto/1000)*t.factor;
+  const qbIva=t.ce>0?(monto*t.ce)*1.21:0;
+  const tot=cuota+qbIva;
+  const pct=sueldo>0?cuota/sueldo:null;
+  const rciRechazado=plan.rciMax!=null&&pct!=null&&pct>plan.rciMax;
+  return{cuota,qbIva,tot,pct,tna:t.tna,ce:t.ce,factor:t.factor,plazo,planKey:pk,nombre:plan.nombre,tipo:plan.tipo,rciRechazado,blocked:false};
+}
+
+/* ── RENDER TARJETAS DESTACADAS ── */
+function renderFeatured(monto,sueldo,ant,revista){
+  const grid=document.getElementById('featured-grid');
+  grid.innerHTML='';
+  FEATURED.forEach(({pk,plazo})=>{
+    const ck=pk+'_'+plazo;
+    const r=lastResults[ck];
+    const plan=TABLA_PSA[pk];
+    const isSel=selectedPlanKey===ck;
+    const isUva=plan.tipo==='uva';
+    const blocked=!r||r.blocked||(r.rciRechazado);
+    const noData=!monto;
+
+    const card=document.createElement('div');
+    card.className='fc'+(isSel?' fc-sel':'')+(blocked&&!noData?' fc-blocked':'');
+    if(!blocked||noData)card.onclick=()=>selectPlan(ck);
+
+    // Tag
+    const tagCls=isSel?'tag-sel':isUva?'tag-uva':'tag-fijo';
+    const tagTxt=isSel?'✓ Seleccionado':isUva?'● UVA':'● Tasa fija';
+    const tagIcon=isSel?'ti-circle-check':isUva?'ti-trending-up':'ti-lock';
+
+    // Cuota principal
+    let cuotaHtml='', rowsHtml='';
+    if(noData){
+      cuotaHtml=`<div class="fc-cuota-lbl">Cuota mensual</div><div class="fc-cuota" style="color:var(--color-text-tertiary);font-size:18px">Ingresar monto</div>`;
+    } else if(blocked){
+      const motivo=r?r.motivo||'No disponible':'No disponible';
+      cuotaHtml=`<div class="fc-cuota-lbl">No disponible</div><div class="fc-cuota fc-blocked-txt">${motivo}</div>`;
+    } else {
+      const pctTxt=r.pct!=null?(r.pct*100).toFixed(1)+'%':'—';
+      const pctCls=isUva&&r.pct>0.30?'rv danger':r.pct!=null&&r.pct>0.50?'rv warn':'rv';
+      cuotaHtml=`<div class="fc-cuota-lbl">Cuota mensual</div><div class="fc-cuota">${fmt(r.cuota)}</div>`;
+      rowsHtml=`
+        <div class="fc-row"><span class="rl">TNA</span><span class="rv">${r.tna>0?(r.tna*100).toFixed(2)+'%':'0%'}</span></div>
+        <div class="fc-row"><span class="rl">Quebranto c/IVA</span><span class="rv">${r.qbIva>0?fmt(r.qbIva):'$0'}</span></div>
+        <div class="fc-row"><span class="rl">1ra cuota total</span><span class="rv">${fmt(r.tot)}</span></div>
+        <div class="fc-row"><span class="rl">% ingresos</span><span class="${pctCls}">${pctTxt}</span></div>`;
+    }
+
+    card.innerHTML=`
+      <div class="fc-top">
+        <div class="fc-tag ${tagCls}"><i class="ti ${tagIcon}" aria-hidden="true"></i>${tagTxt}</div>
+        <div class="fc-name">${plan.nombre}</div>
+        <div class="fc-sub">${plazo} meses · ${r&&!r.blocked?((r.tna*100).toFixed(r.tna===0?0:2)+'% TNA'):'—'}</div>
+      </div>
+      <div class="fc-body">
+        ${cuotaHtml}
+        <div class="fc-rows">${rowsHtml}</div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+/* ── RENDER DROPDOWN OTROS PLANES ── */
+function renderDropdown(monto,sueldo,ant,revista){
+  const sel=document.getElementById('otros-planes');
+  const featuredKeys=new Set(FEATURED.map(f=>f.pk+'_'+f.plazo));
+  sel.innerHTML='<option value="">— Ver otros planes y plazos —</option>';
+
+  const groups={fijo:[],uva:[]};
+  Object.keys(TABLA_PSA).forEach(pk=>{
+    const plan=TABLA_PSA[pk];
+    Object.keys(plan.plazos).map(Number).sort((a,b)=>a-b).forEach(pl=>{
+      const ck=pk+'_'+pl;
+      if(featuredKeys.has(ck))return; // excluir destacadas
+      const r=lastResults[ck];
+      const blocked=!r||r.blocked||r.rciRechazado;
+      const isUva=plan.tipo==='uva';
+      const label=`${plan.nombre} — ${pl} meses${r&&!r.blocked&&!r.rciRechazado?' · Cuota: '+fmt(r.cuota):blocked?r?(' · '+r.motivo):'':''}`+
+        (r&&r.rciRechazado?' · Supera RCI UVA 30%':'');
+      groups[isUva?'uva':'fijo'].push({ck,label,blocked,planKey:pk,plazo:pl});
+    });
+  });
+
+  if(groups.fijo.length){
+    const og=document.createElement('optgroup');og.label='Tasa fija';
+    groups.fijo.forEach(({ck,label,blocked})=>{
+      const o=document.createElement('option');o.value=ck;o.textContent=label;o.disabled=blocked;
+      if(selectedPlanKey===ck)o.selected=true;
+      og.appendChild(o);
+    });
+    sel.appendChild(og);
+  }
+  if(groups.uva.length){
+    const og=document.createElement('optgroup');og.label='Planes UVA (RCI máx. 30%)';
+    groups.uva.forEach(({ck,label,blocked})=>{
+      const o=document.createElement('option');o.value=ck;o.textContent=label;o.disabled=blocked;
+      if(selectedPlanKey===ck)o.selected=true;
+      og.appendChild(o);
+    });
+    sel.appendChild(og);
+  }
+
+  // Si el seleccionado es del dropdown, marcar
+  const fromDropdown=selectedPlanKey&&!featuredKeys.has(selectedPlanKey);
+  sel.className='other-plans-select'+(fromDropdown?' has-sel':'');
+}
+
+function onOtrosPlan(){
+  const sel=document.getElementById('otros-planes');
+  const ck=sel.value;
+  if(!ck)return;
+  selectPlan(ck);
+  // Limpiar selección visual de las 3 tarjetas si viene del dropdown
+  // (selectPlan ya re-renderiza featured con ninguna seleccionada de las 3)
+}
+
+/* ── SELECCIÓN ── */
+function selectPlan(ck){
+  selectedPlanKey=ck;
+  const r=lastResults[ck];
+  const featuredKeys=new Set(FEATURED.map(f=>f.pk+'_'+f.plazo));
+  // Si viene de tarjeta, limpiar dropdown
+  if(featuredKeys.has(ck)) document.getElementById('otros-planes').value='';
+  updatePlanSummary(ck);
+  renderFeatured(
+    parseMoney(document.getElementById('monto').value),
+    parseMoney(document.getElementById('sueldo').value),
+    calcAnt(), parseMoney(document.getElementById('u-revista').value)
+  );
+  renderDropdown(
+    parseMoney(document.getElementById('monto').value),
+    parseMoney(document.getElementById('sueldo').value),
+    calcAnt(), parseMoney(document.getElementById('u-revista').value)
+  );
+  document.getElementById('btn-pdf').disabled=!r||r.blocked||r.rciRechazado;
+}
+
+function calcAnt(){
+  const uAnio=parseInt(document.getElementById('u-anio').value)||0;
+  return uAnio?new Date().getFullYear()-uAnio:0;
+}
+
+function updatePlanSummary(ck){
+  const r=lastResults[ck];
+  const box=document.getElementById('plan-sel-box'),txt=document.getElementById('plan-sel-txt');
+  const row=document.getElementById('row-cuota-sel'),lbl=document.getElementById('r-cuota-lbl'),val=document.getElementById('r-cuota-sel');
+  if(r&&!r.blocked&&!r.rciRechazado&&r.cuota){
+    box.className='plan-sel-box active';
+    txt.textContent=`Plan elegido: ${r.nombre} — ${r.plazo} meses · TNA ${(r.tna*100).toFixed(2)}%`;
+    row.style.display='';
+    lbl.textContent=`Cuota${r.tipo==='uva'?' inicial aprox.':''} plan elegido`;
+    val.textContent=fmt(r.cuota);
+  } else {
+    box.className='plan-sel-box';
+    txt.textContent='Seleccioná una opción para ver el resumen';
+    row.style.display='none';
+  }
+}
+
+/* ── CALC PRINCIPAL ── */
+function calc(){
+  const sueldo=parseMoney(document.getElementById('sueldo').value);
+  const uAnio=parseInt(document.getElementById('u-anio').value)||0;
+  const uRevista=parseMoney(document.getElementById('u-revista').value);
+  const uToma=parseMoney(document.getElementById('u-toma').value);
+  const nPrecio=parseMoney(document.getElementById('n-precio').value);
+  const gastos=parseMoney(document.getElementById('gastos').value);
+  const monto=parseMoney(document.getElementById('monto').value);
+  const ant=uAnio?new Date().getFullYear()-uAnio:0;
+
+  /* LTV hint */
+  const mi=document.getElementById('monto'),mh=document.getElementById('max-hint'),lh=document.getElementById('ltv-hint');
+  if(uAnio>0&&uRevista>0){
+    const ltv=TABLA_PSA.TRADICIONAL_VO.getLTV(ant,uRevista);
+    lh.textContent=`Antigüedad ${ant} año${ant!==1?'s':''} — LTV ${ant<3?'80':ant<7?'75':'50'}%`;
+    lh.className='hint h-ok';
+    mh.textContent='Máx. Trad. VO: '+fmt(ltv);
+    mh.className=monto>0&&monto>ltv?'hint h-warn':'hint h-ok';
+    mi.classList.toggle('err',monto>0&&monto>ltv);
+  } else {
+    lh.textContent='LTV: —';lh.className='hint h-neu';
+    mh.textContent='Máximo permitido: —';mh.className='hint h-neu';
+    mi.classList.remove('err');
+  }
+
+  /* Calcular todos los planes */
+  lastResults={};
+  Object.keys(TABLA_PSA).forEach(pk=>{
+    Object.keys(TABLA_PSA[pk].plazos).map(Number).forEach(pl=>{
+      lastResults[pk+'_'+pl]=calcPlan(pk,pl,monto,sueldo,ant,uRevista);
+    });
+  });
+
+  /* Badge riesgo */
+  const ref=lastResults['TRADICIONAL_VO_24'];
+  const b=document.getElementById('rbadge'),ico=document.getElementById('rico'),txt=document.getElementById('rtxt');
+  if(!ref||ref.blocked||!sueldo){
+    b.className='rbadge r-neu';ico.className='ti ti-clock';txt.textContent='Completar datos para ver el análisis de riesgo';
+  } else if(ref.pct<=0.50){
+    b.className='rbadge r-ok';ico.className='ti ti-circle-check';
+    txt.textContent=`RCI (Trad. VO 24m): ${(ref.pct*100).toFixed(1)}% — dentro del límite recomendado (≤50%)`;
+  } else {
+    b.className='rbadge r-alrt';ico.className='ti ti-alert-triangle';
+    txt.textContent=`Alerta: cuota Trad. VO 24m supera el 50% de ingresos (${(ref.pct*100).toFixed(1)}%) — evaluar`;
+  }
+
+  /* Resumen */
+  const total=nPrecio+gastos;
+  document.getElementById('r-lista').textContent=nPrecio>0?fmt(nPrecio):'—';
+  document.getElementById('r-gastos').textContent=gastos>0?'+ '+fmt(gastos):'—';
+  document.getElementById('r-total').textContent=nPrecio>0?fmt(total):'—';
+  document.getElementById('r-toma').textContent=uToma>0?'− '+fmt(uToma):'—';
+  document.getElementById('r-prest').textContent=monto>0?'− '+fmt(monto):'—';
+  document.getElementById('r-efect').textContent=nPrecio>0?fmt(Math.max(total-uToma-monto,0)):'—';
+
+  renderFeatured(monto,sueldo,ant,uRevista);
+  renderDropdown(monto,sueldo,ant,uRevista);
+  if(selectedPlanKey)updatePlanSummary(selectedPlanKey);
+}
+
+/* ── PDF ── */
+function generarPDF(){
+  const r=selectedPlanKey?lastResults[selectedPlanKey]:null;
+  if(!r||r.blocked)return;
+  const g=id=>document.getElementById(id).value||'';
+  const nombre=((g('nombre')+' '+g('apellido')).trim())||'—';
+  const nMarca=g('n-marca'),nModelo=g('n-modelo'),nSub=g('n-sub'),nAnio=g('n-anio');
+  const uMarca=g('u-marca'),uModelo=g('u-modelo'),uSub=g('u-sub'),uAnio=g('u-anio');
+  const nPrecio=parseMoney(g('n-precio')),gastos=parseMoney(g('gastos'));
+  const uToma=parseMoney(g('u-toma')),monto=parseMoney(g('monto'));
+  const total=nPrecio+gastos,efect=Math.max(total-uToma-monto,0);
+  const fecha=new Date().toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit',year:'numeric'});
+  const nLabel=[nMarca,nModelo,nSub,nAnio&&'('+nAnio+')'].filter(Boolean).join(' ')||'—';
+  const uLabel=uMarca?[uMarca,uModelo,uSub,uAnio&&'('+uAnio+')'].filter(Boolean).join(' '):null;
+  const planNombre=r.nombre+' — '+r.plazo+' meses';
+  const tnaDisplay=(r.tna*100).toFixed(2)+'%';
+
+  const otrasOps=Object.entries(lastResults)
+    .filter(([k,v])=>v&&!v.blocked&&!v.rciRechazado&&k!==selectedPlanKey&&TABLA_PSA[v.planKey]?.tipo==='fijo')
+    .slice(0,4).map(([,v])=>`<tr><td>${v.nombre} ${v.plazo}m</td><td>${(v.tna*100).toFixed(2)}%</td><td><strong>${fmt(v.cuota)}</strong></td></tr>`).join('');
+
+  const html=`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Cotización Roma — ${nombre}</title>
+<style>
+@page{size:A4;margin:1.8cm 1.5cm}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;font-size:12px;color:#1a1a1a;background:#fff}
+.page{max-width:750px;margin:0 auto}
+.header{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:14px;border-bottom:3px solid #8B1A1A;margin-bottom:18px}
+.logo{background:#8B1A1A;color:#fff;font-size:22px;font-weight:900;padding:8px 14px;border-radius:5px;letter-spacing:1px}
+.brand h1{font-size:18px;font-weight:700;margin-bottom:2px}
+.brand p{font-size:11px;color:#666}
+.meta{text-align:right;font-size:11px;color:#666;line-height:1.7}
+.sec{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#8B1A1A;border-bottom:1px solid #e5e5e5;padding-bottom:4px;margin-bottom:10px;margin-top:18px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid #f0f0f0;font-size:12px}
+.row .lbl{color:#555}.row .val{font-weight:600}
+.hbox{background:#8B1A1A;color:#fff;border-radius:6px;padding:14px 18px;margin:18px 0;display:flex;justify-content:space-between;align-items:center}
+.hbox .hl{font-size:12px;font-weight:600;opacity:.85}.hbox .hv{font-size:26px;font-weight:700}
+.pcard{border:2px solid #8B1A1A;border-radius:8px;padding:14px 16px;margin:14px 0;background:#fdf9f9}
+.pcard h3{font-size:15px;font-weight:700;color:#8B1A1A;margin-bottom:10px}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+.ps{background:#fff;border:0.5px solid #ddd;border-radius:5px;padding:8px 10px;text-align:center}
+.psl{font-size:10px;color:#777;margin-bottom:3px}.psv{font-size:14px;font-weight:700}.psv.red{color:#8B1A1A}
+table{width:100%;border-collapse:collapse;font-size:11px}
+th{background:#f5f5f5;padding:5px 8px;text-align:left;font-weight:600;color:#555;border-bottom:1px solid #ddd}
+td{padding:5px 8px;border-bottom:0.5px solid #eee}
+.acl{background:#fffbf0;border:1px solid #f0d080;border-radius:5px;padding:10px 12px;margin-top:14px;font-size:10px;color:#7a5c00;line-height:1.6}
+.foot{margin-top:24px;padding-top:12px;border-top:1px solid #ddd;font-size:10px;color:#999;text-align:center;line-height:1.6}
+</style></head><body><div class="page">
+<div class="header">
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="logo">ROMA</div>
+    <div class="brand"><h1>Roma Automotores</h1><p>Cotización de financiación prendaria</p></div>
+  </div>
+  <div class="meta"><div><strong>Fecha:</strong> ${fecha}</div><div><strong>Tabla:</strong> PSA Finance Junio 2026</div>${nombre!=='—'?`<div><strong>Cliente:</strong> ${nombre}</div>`:''}</div>
+</div>
+<div class="two-col">
+  <div>
+    <div class="sec">Vehículo a adquirir</div>
+    <div class="row"><span class="lbl">Modelo</span><span class="val">${nLabel||'—'}</span></div>
+    <div class="row"><span class="lbl">Precio de lista</span><span class="val">${fmt(nPrecio)}</span></div>
+    <div class="row"><span class="lbl">Gastos de transferencia</span><span class="val">${gastos>0?fmt(gastos):'—'}</span></div>
+    <div class="row"><span class="lbl"><strong>Total</strong></span><span class="val"><strong>${fmt(total)}</strong></span></div>
+  </div>
+  <div>
+    <div class="sec">${uLabel?'Vehículo entregado en permuta':'Operación'}</div>
+    ${uLabel?`<div class="row"><span class="lbl">Modelo</span><span class="val">${uLabel}</span></div>
+    <div class="row"><span class="lbl">Precio de toma agencia</span><span class="val">${uToma>0?fmt(uToma):'—'}</span></div>`:'<div class="row"><span class="lbl">Permuta</span><span class="val">Sin permuta</span></div>'}
+    <div class="row"><span class="lbl">Monto financiado</span><span class="val">${monto>0?fmt(monto):'—'}</span></div>
+  </div>
+</div>
+<div class="hbox"><span class="hl">💰 Efectivo neto a entregar en salón</span><span class="hv">${fmt(efect)}</span></div>
+<div class="sec">Plan de financiación elegido</div>
+<div class="pcard">
+  <h3>${planNombre} ✓</h3>
+  <div class="pgrid">
+    <div class="ps"><div class="psl">Cuota mensual</div><div class="psv red">${fmt(r.cuota)}</div></div>
+    <div class="ps"><div class="psl">TNA</div><div class="psv">${tnaDisplay}</div></div>
+    <div class="ps"><div class="psl">Quebranto c/IVA</div><div class="psv">${r.qbIva>0?fmt(r.qbIva):'$0'}</div></div>
+    <div class="ps"><div class="psl">1ra cuota total</div><div class="psv">${fmt(r.tot)}</div></div>
+    <div class="ps"><div class="psl">Plazo</div><div class="psv">${r.plazo} cuotas</div></div>
+    <div class="ps"><div class="psl">Aporte CE</div><div class="psv">${r.ce>0?((r.ce*100).toFixed(0))+'%':'Sin quebranto'}</div></div>
+  </div>
+</div>
+${otrasOps?`<div class="sec">Otras opciones disponibles</div><table><thead><tr><th>Plan</th><th>TNA</th><th>Cuota</th></tr></thead><tbody>${otrasOps}</tbody></table>`:''}
+<div class="acl"><strong>Importante:</strong> Los valores de cuota se calculan con el coeficiente PSA Finance de Junio 2026. La cuota final puede variar según verificación crediticia, seguro del vehículo y condiciones al momento de la firma. Los planes UVA se ajustan mensualmente por el índice UVA (BCRA).</div>
+<div class="foot">Roma Automotores · Cotización orientativa generada el ${fecha} · Válida sujeto a disponibilidad de stock y condiciones vigentes.</div>
+</div></body></html>`;
+
+  const w=window.open('','_blank','width=900,height=700');
+  w.document.write(html);w.document.close();
+  w.onload=()=>{w.focus();w.print();};
+}
+
+document.getElementById('u-sub').addEventListener('change',onUSub);
+document.getElementById('n-sub').addEventListener('change',onNSub);
+calc(); // render inicial
+</script>
