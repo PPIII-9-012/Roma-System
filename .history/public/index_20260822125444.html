@@ -307,72 +307,13 @@
 
 <div class="app">
     <div class="main-col">
-        <div class="progress-tabs">
-            <button class="progress-tab active" data-target="sec-cliente"><img src="cliente.png" alt=""><span>Cliente</span></button>
-            <button class="progress-tab" data-target="sec-usado"><span>🚗</span><span>Vehículo usado</span></button>
-            <button class="progress-tab" data-target="sec-nuevo"><span>🚗</span><span>Vehículo nuevo</span></button>
-            <button class="progress-tab" data-target="sec-opciones"><span>📈</span><span>Resumen y opciones</span></button>
-        </div>
-        <div class="form-card">
-            <section class="form-section" id="sec-cliente">
-                <div class="form-section-head"><span class="form-section-num">1</span><span class="form-section-title">DATOS DEL CLIENTE</span></div>
-                <div class="field-row">
-                    <div class="field"><label>Nombre</label><input placeholder="Ej: Renzo"></div>
-                    <div class="field"><label>Apellido</label><input placeholder="Ej: Segovia"></div>
-                    <div class="field"><label>Número de documento</label><input placeholder="Ej: 45361089"></div>
-                    <div class="field"><label>Ingresos mensuales</label><input placeholder="Ej: 1.000.000"></div>
-                </div>
-            </section>
-            <section class="form-section" id="sec-usado">
-                <div class="form-section-head"><span class="form-section-num">2</span><span class="form-section-title">VEHÍCULO USADO</span></div>
-                <div class="used-layout">
-                    <div class="used-fields">
-                        <div class="field"><label>Marca</label><select><option>Peugeot</option></select></div>
-                        <div class="field"><label>Modelo</label><select><option>208</option></select></div>
-                        <div class="field"><label>Submodelo</label><select><option>Allure MT</option></select></div>
-                        <div class="field"><label>Año</label><select><option>2021</option></select></div>
-                    </div>
-                    <div class="infoauto-box">VALOR DE REVISTA<strong class="infoauto-value">$ 12.000.000</strong><small>Infoautos - 2026</small></div>
-                </div>
-            </section>
-            <section class="form-section" id="sec-nuevo">
-                <div class="form-section-head"><span class="form-section-num">3</span><span class="form-section-title">VEHÍCULO NUEVO</span></div>
-                <div class="search-wrap"><input class="search-input" placeholder="🔍 Buscar por modelo o dominio (ej: 208, KWID, AF123CD)"></div>
-                <div class="new-car-card">
-                    <img class="car-photo" src="logotiporoma.png" alt="Vehículo">
-                    <div><div class="car-name">Peugeot 208 Allure MT</div><div class="car-meta">Año 2026 · 0km · Nafta<br>Dominio: AF123CD</div></div>
-                    <div><div class="price-label">Precio de lista</div><div class="price-value">$ 28.900.000</div></div>
-                    <div><div class="price-label">Gastos de transferencia</div><div class="price-value">$ 950.000</div></div>
-                </div>
-            </section>
-            <section class="form-section" id="sec-opciones">
-                <div class="form-section-head"><span class="form-section-num">4</span><span class="form-section-title">RESUMEN DE LA OPERACIÓN</span></div>
-                <div class="op-grid">
-                    <div><div class="op-label">Precio del vehículo + transferencia</div><div class="op-value">$29.850.000</div></div>
-                    <div><div class="op-label">Valor del usado</div><div class="op-value negative">$12.000.000</div></div>
-                    <div><div class="op-label">Monto a financiar</div><div class="op-value negative">$8.000.000</div></div>
-                    <div class="cash-box">Efectivo a entregar<strong>$9.500.000</strong></div>
-                </div>
-            </section>
-            <section class="form-section">
-                <div class="form-section-head"><span class="form-section-num">5</span><span class="form-section-title">OPCIONES DE FINANCIAMIENTO</span></div>
-                <div class="plans-grid">
-                    <div class="plan-card"><span class="plan-badge">★ RECOMENDADA</span><div class="plan-type">Tasa fija</div><div class="plan-name">PLAN PROMO</div><div class="plan-price">$ 270.000</div><div class="plan-row"><span>Plazo</span><span>24 Cuotas</span></div><div class="plan-row"><span>TNA</span><span>25,00%</span></div><div class="plan-row"><span>Gasto de otorgamiento</span><span>$120.000</span></div><div class="plan-row"><span>Sistema de amortización</span><span>Francés</span></div><div class="rci"></div><button class="plan-button">Seleccionar plan</button></div>
-                    <div class="plan-card"><div class="plan-type">Tasa fija</div><div class="plan-name">PLAN TRADICIONAL</div><div class="plan-price">$ 330.000</div><div class="plan-row"><span>Plazo</span><span>36 Cuotas</span></div><div class="plan-row"><span>TNA</span><span>39,00%</span></div><div class="plan-row"><span>Gasto de otorgamiento</span><span>$120.000</span></div><div class="plan-row"><span>Sistema de amortización</span><span>Francés</span></div><div class="rci"></div><button class="plan-button">Seleccionar plan</button></div>
-                    <div class="plan-card"><div class="plan-type">Tasa variable</div><div class="plan-name">PLAN UVA</div><div class="plan-price">$ 356.000</div><div class="plan-row"><span>Plazo</span><span>60 Cuotas</span></div><div class="plan-row"><span>TNA</span><span>9,50%</span></div><div class="plan-row"><span>Gasto de otorgamiento</span><span>$120.000</span></div><div class="plan-row"><span>Sistema de amortización</span><span>Francés</span></div><div class="rci"></div><button class="plan-button">Seleccionar plan</button></div>
-                </div>
-            </section>
-        </div>
+    <div class="progress-tabs">
+        <button class="progress-tab active" data-target="sec-cliente"><img class="cliente-logo" src="cliente.png" alt=""><span>Cliente</span></button>
+        <button class="progress-tab" data-target="sec-usado">🚗<span>Vehículo usado</span></button>
+        <button class="progress-tab" data-target="sec-nuevo">🚙<span>Vehículo nuevo</span></button>
+        <button class="progress-tab" data-target="sec-opciones">📊<span>Resumen y opciones</span></button>
     </div>
-    <aside class="side-col">
-        <div class="summary-card"><div class="summary-head">▣ &nbsp; RESUMEN DE LA SIMULACIÓN</div><div class="summary-body">
-            <div class="summary-title">Cliente</div><div class="summary-row"><span>Nombre completo: Renzo Segovia</span></div><div class="summary-row"><span>DNI: 45.361.089</span><span>Ingresos: $1.000.000</span></div><hr class="summary-divider">
-            <div class="summary-title">Vehículos</div><div class="summary-row"><span>Usado&nbsp; Peugeot 208 Allure MT 2023</span><span class="negative">$12.000.000</span></div><div class="summary-row"><span>Nuevo&nbsp; Peugeot 208 Allure MT 2026</span><span>$28.900.000</span></div><div class="summary-row"><span>Gastos de transferencia</span><span>$950.000</span></div><hr class="summary-divider">
-            <div class="summary-title">Resumen de la operación</div><div class="summary-row"><span>Precio del vehículo + transferencia</span><span>$29.850.000</span></div><div class="summary-row"><span>Valor del usado</span><span class="negative">$12.000.000</span></div><div class="summary-row"><span>Monto a financiar</span><span class="negative">$8.000.000</span></div><div class="summary-cash">Efectivo a entregar<strong>$9.500.000</strong></div><hr class="summary-divider">
-            <div class="summary-title">Plan seleccionado</div><div class="summary-row"><span>Tasa fija<br><b>PLAN PROMO</b></span><span>Cuota mensual<br>$270.000</span></div><div class="summary-row"><span>Plazo</span><span>24 cuotas</span></div><div class="summary-row"><span>TNA</span><span>25,00%</span></div><div class="summary-row"><span>Gasto de otorgamiento</span><span>$120.000</span></div><div class="summary-row"><span>Sistema de amortización</span><span>Francés</span></div>
-        </div></div>
-        <button class="side-action">▣ &nbsp; Imprimir/descargar pdf</button><button class="side-action whatsapp">◉ &nbsp; Compartir por Whatsapp</button>
-    </aside>
+    </div>
 </div>
 
 </body>
