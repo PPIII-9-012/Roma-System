@@ -235,33 +235,7 @@
         .plan-row span:first-child { color: #6B7280; }
         .plan-row span:last-child { font-weight: 600; }
         .rci { height: 5px; margin: 7px 0 3px; background: linear-gradient(to right, #639922 50%, #BA7517 50% 83%, #E24B4A 83%); border-radius: 4px; }
-        .plan-button {
-            display: block;
-            margin: 8px auto 0;
-            padding: 5px 14px;
-            border: 1px solid #0B2341;
-            background: #FFFFFF;
-            color: #0B2341;
-            border-radius: 4px;
-            font-size: 9px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease;
-        }
-        .plan-button:hover {
-            background: #0B2341;
-            color: #FFFFFF;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(11, 35, 65, .22);
-        }
-        .plan-button:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(11, 35, 65, .16);
-        }
-        .plan-button:focus-visible {
-            outline: 2px solid #639922;
-            outline-offset: 2px;
-        }
+        .plan-button { display: block; margin: 8px auto 0; padding: 4px 14px; border: 1px solid #0B2341; background: #FFFFFF; border-radius: 4px; font-size: 9px; }
         .summary-card { border: 1px solid #D9D9D9; }
         .summary-head { background: #0B2341; color: #FFFFFF; padding: 14px; font-size: 14px; font-weight: 700; }
         .summary-logo {
@@ -380,9 +354,9 @@
     <div class="main-col">
         <div class="progress-tabs">
             <button class="progress-tab active" data-target="sec-cliente"><img src="cliente.png" alt=""><span>Cliente</span></button>
-            <button class="progress-tab" data-target="sec-usado"><img src="coche.png" alt=""><span>Vehículo usado</span></button>
-            <button class="progress-tab" data-target="sec-nuevo"><img src="coche.png" alt=""><span>Vehículo nuevo</span></button>
-            <button class="progress-tab" data-target="sec-opciones"><img src="linea.png" alt=""><span>Resumen y opciones</span></button>
+            <button class="progress-tab" data-target="sec-usado"><span>🚗</span><span>Vehículo usado</span></button>
+            <button class="progress-tab" data-target="sec-nuevo"><span>🚗</span><span>Vehículo nuevo</span></button>
+            <button class="progress-tab" data-target="sec-opciones"><span>📈</span><span>Resumen y opciones</span></button>
         </div>
         <div class="form-card">
             <section class="form-section" id="sec-cliente">
