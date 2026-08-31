@@ -1,0 +1,22 @@
+# Credenciales y variables de entorno
+.env
+.env.local
+.env.*.local
+*.env
+
+# Contextos y notas
+CONTEXT*.md
+context*.md
+
+# Python y caché
+__pycache__/
+*.py[cod]
+*$py.class
+env/
+venv/
+.venv/
+
+# Logs y temporales
+*.log
+.DS_Store
+Thumbs.db

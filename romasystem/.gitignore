@@ -1,0 +1,23 @@
+# Archivos de entorno y credenciales (NUNCA SUBIR)
+.env
+.env.local
+.env.*.local
+*.env
+
+# Python y caché
+__pycache__/
+*.py[cod]
+*$py.class
+env/
+venv/
+.venv/
+
+# Logs y temporales
+*.log
+servidor.log
+.DS_Store
+Thumbs.db
+
+# Backups y binarios pesados
+archive/backups/
+*.zip
