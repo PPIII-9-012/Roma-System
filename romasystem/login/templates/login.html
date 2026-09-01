@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ROMA Automotores - Portal de Administración. Gestioná la señal de crédito del simulador de forma simple, segura y eficiente.">
+  <meta name="theme-color" content="#0a101d">
+  <title>Iniciar Sesión | ROMA Automotores - Administración</title>
+
+  <!-- Google Fonts: Inter & Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login_styles.css') }}">
+</head>
+<body>
+  <div class="login-wrapper">
+    <!-- LEFT PANEL: Hero & Brand Showcase -->
+    <aside class="hero-panel" aria-label="Información de la plataforma">
+      <!-- Background overlay and automotive showroom imagery -->
+      <div class="hero-background">
+        <div class="dealership-bg-image"></div>
+        <div class="dealership-glow"></div>
+        <div class="car-overlay"></div>
+        <div class="dealership-facade">
+          <div class="facade-sign">
+            <span class="sign-brand">ROMA</span>
+            <span class="sign-sub">AUTOMOTORES</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Content -->
+      <div class="hero-content">
+        <!-- Brand Logo Top -->
+        <div class="brand-logo light" aria-label="Logo ROMA Automotores">
+          <div class="logo-symbol">
+            <span class="logo-text">ROMA</span>
+            <span class="logo-tagline">AUTOMOTORES</span>
+          </div>
+        </div>
+
+        <!-- Hero Headline & Description -->
+        <div class="hero-text-block">
+          <h1 class="hero-title">
+            Bienvenido a<br>
+            <span class="hero-title-highlight">Administración</span>
+          </h1>
+          <div class="red-accent-bar" aria-hidden="true"></div>
+          <p class="hero-description">
+            Gestioná la señal de crédito del simulador de forma simple, segura y eficiente.
+          </p>
+        </div>
+
+        <!-- Hero Footer Badge (System Status) -->
+        <div class="system-status-badge">
+          <span class="status-dot"></span>
+          <span>Sistema Operativo • Versión 3.4.0</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- RIGHT PANEL: Authentication Form -->
+    <main class="auth-panel" id="main-content">
+      <div class="auth-container">
+        <!-- Login Card -->
+        <section class="auth-card" aria-labelledby="login-title">
+          <!-- Card Brand Header -->
+          <div class="card-brand" aria-hidden="true">
+            <div class="logo-symbol dark">
+              <span class="logo-text">ROMA</span>
+              <span class="logo-tagline">AUTOMOTORES</span>
+            </div>
+          </div>
+
+          <!-- Title & Subtitle -->
+          <header class="card-header">
+            <h2 id="login-title" class="card-title">Iniciar sesión</h2>
+            <p class="card-subtitle">Ingresá tus credenciales para continuar</p>
+          </header>
+
+          <!-- Login Form -->
+          <form id="login-form" class="login-form" method="POST" action="/" autocomplete="on">
+            {% if error %}
+            <div class="auth-error-banner" role="alert">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <span>{{ error }}</span>
+            </div>
+            {% endif %}
+
+            <!-- Email / Username Input Group -->
+            <div class="form-group" id="group-username">
+              <label for="email" class="form-label">Email o Usuario</label>
+              <div class="input-container">
+                <span class="input-icon" aria-hidden="true">
+                  <!-- User SVG Icon -->
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </span>
+                <input 
+                  type="text" 
+                  id="email" 
+                  name="email" 
+                  class="form-input" 
+                  placeholder="Ingresá tu email o usuario" 
+                  value="{{ email or '' }}"
+                  required 
+                  autocomplete="username"
+                  aria-describedby="username-error"
+                >
+              </div>
+              <span class="error-feedback" id="username-error" role="alert"></span>
+            </div>
+
+            <!-- Password Input Group -->
+            <div class="form-group" id="group-password">
+              <label for="password" class="form-label">Contraseña</label>
+              <div class="input-container">
+                <span class="input-icon" aria-hidden="true">
+                  <!-- Lock SVG Icon -->
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                </span>
+                <input 
+                  type="password" 
+                  id="password" 
+                  name="password" 
+                  class="form-input password-input" 
+                  placeholder="Ingresá tu contraseña" 
+                  required 
+                  autocomplete="current-password"
+                  aria-describedby="password-error"
+                >
+                <!-- Toggle Password Visibility -->
+                <button 
+                  type="button" 
+                  id="toggle-password" 
+                  class="toggle-password-btn" 
+                  aria-label="Mostrar contraseña"
+                  title="Mostrar u ocultar contraseña"
+                >
+                  <!-- Eye open SVG -->
+                  <svg class="eye-icon eye-show" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <!-- Eye off SVG -->
+                  <svg class="eye-icon eye-hide hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"></path>
+                    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"></path>
+                    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"></path>
+                    <line x1="2" y1="2" x2="22" y2="22"></line>
+                  </svg>
+                </button>
+              </div>
+              <span class="error-feedback" id="password-error" role="alert"></span>
+            </div>
+
+            <!-- Forgot Password Link -->
+            <div class="forgot-password-row">
+              <button type="button" class="forgot-link-btn" id="open-forgot-modal">
+                ¿Olvidaste tu contraseña?
+              </button>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" id="btn-submit" class="btn-primary">
+              <span class="btn-text">Iniciar sesión</span>
+              <span class="btn-loader" aria-hidden="true">
+                <svg class="spinner" viewBox="0 0 24 24" fill="none">
+                  <circle class="path" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" stroke-linecap="round"></circle>
+                </svg>
+              </span>
+            </button>
+
+            <!-- Divider -->
+            <div class="form-divider" aria-hidden="true">
+              <span class="divider-line"></span>
+              <span class="divider-text">o</span>
+              <span class="divider-line"></span>
+            </div>
+
+            <!-- Secure Access Button -->
+            <button type="button" id="btn-secure-access" class="btn-secondary">
+              <!-- Shield Check SVG Icon -->
+              <svg class="shield-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <path d="m9 12 2 2 4-4"></path>
+              </svg>
+              <span>Acceso seguro</span>
+            </button>
+          </form>
+        </section>
+
+        <!-- Right Panel Footer -->
+        <footer class="auth-footer">
+          <p>© 2026 ROMA Automotores. Todos los derechos reservados.</p>
+        </footer>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL: Forgot Password -->
+  <div id="modal-forgot" class="modal-overlay" aria-hidden="true" role="dialog" aria-labelledby="modal-forgot-title">
+    <div class="modal-card">
+      <button type="button" class="modal-close-btn" id="close-forgot-modal" aria-label="Cerrar modal">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="modal-icon-header">
+        <div class="icon-circle red">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d90429" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+        </div>
+      </div>
+
+      <h3 id="modal-forgot-title" class="modal-title">Recuperar contraseña</h3>
+      <p class="modal-subtitle">Ingresá tu correo corporativo o usuario asignado para enviarte el enlace de restablecimiento.</p>
+
+      <form id="forgot-form" class="modal-form" novalidate>
+        <div class="form-group">
+          <label for="recovery-input" class="form-label">Correo o Usuario</label>
+          <div class="input-container">
+            <input type="text" id="recovery-input" class="form-input" placeholder="ejemplo@romaautomotores.com" required>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" id="cancel-forgot-modal">Cancelar</button>
+          <button type="submit" class="btn-primary">Enviar enlace</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Secure Access / 2FA Info -->
+  <div id="modal-secure" class="modal-overlay" aria-hidden="true" role="dialog" aria-labelledby="modal-secure-title">
+    <div class="modal-card">
+      <button type="button" class="modal-close-btn" id="close-secure-modal" aria-label="Cerrar modal">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="modal-icon-header">
+        <div class="icon-circle blue">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            <path d="m9 12 2 2 4-4"></path>
+          </svg>
+        </div>
+      </div>
+
+      <h3 id="modal-secure-title" class="modal-title">Protocolo de Acceso Seguro</h3>
+      <p class="modal-subtitle">Esta terminal administrativa cuenta con encriptación SSL de 256 bits y verificación multifactorial activa.</p>
+
+      <div class="security-features-list">
+        <div class="feature-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <div>
+            <strong>Canal Encriptado</strong>
+            <p>Conexión directa protegida con la base de datos de créditos ROMA.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <div>
+            <strong>Sesión Auditada</strong>
+            <p>Todas las transacciones de señales quedan registradas por seguridad.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-primary" id="understand-secure-modal" style="width: 100%;">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATIONS CONTAINER -->
+  <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Scripts -->
+  <script src="{{ url_for('static', filename='js/login_main.js') }}"></script>
+</body>
+</html>
