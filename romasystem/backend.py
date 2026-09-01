@@ -25,8 +25,9 @@ if sys.platform == "win32":
         sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
 
 import requests
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, request, send_from_directory, render_template, redirect, url_for, session
 from flask_cors import CORS
+from auth import authenticate_user
 
 def _load_env():
     candidates = [
@@ -51,7 +52,13 @@ def _load_env():
 
 _load_env()
 
-app = Flask(__name__, static_folder=".")
+app = Flask(
+    __name__,
+    static_folder="login/static",
+    static_url_path="/static",
+    template_folder="login/templates"
+)
+app.secret_key = os.environ.get("FLASK_SECRET_KEY")
 CORS(app)
 
 
@@ -563,9 +570,56 @@ def calcular_todos_los_planes(
 # RUTAS DE LA API & WEB
 # ---------------------------------------------------------------------------
 
-@app.route("/")
-def index():
+@app.route("/", methods=["GET", "POST"])
+def login_page():
+    if "user" in session:
+        return redirect(url_for("home"))
+
+    if request.method == "POST":
+        email = request.form.get("email") or request.form.get("username")
+        password = request.form.get("password")
+
+        if not email or not password:
+            return render_template(
+                "login.html",
+                error="Por favor, completá todos los campos.",
+                email=email
+            )
+
+        try:
+            response = authenticate_user(email, password)
+
+            if response and response.user:
+                session["user"] = {
+                    "id": response.user.id,
+                    "email": response.user.email
+                }
+                return redirect(url_for("home"))
+
+        except Exception:
+            pass
+
+        return render_template(
+            "login.html",
+            error="Email o contraseña incorrectos",
+            email=email
+        )
+
+    return render_template("login.html")
+
+
+@app.route("/home")
+def home():
+    if "user" not in session:
+        return redirect(url_for("login_page"))
+
     return send_from_directory(".", "index.html")
+
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login_page"))
 
 
 @app.route("/buscar")
@@ -656,6 +710,12 @@ def simular_todos():
 
 @app.route("/<path:filename>")
 def serve_static(filename):
+    if filename == "index.html" and "user" not in session:
+        return redirect(url_for("login_page"))
+
+    if filename.startswith("."):
+        return "", 404
+
     return send_from_directory(".", filename)
 
 
