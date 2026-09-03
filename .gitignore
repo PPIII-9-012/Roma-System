@@ -20,3 +20,6 @@ venv/
 *.log
 .DS_Store
 Thumbs.db
+
+.history/
+.vscode/

@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Financiero — Roma Automotores</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #F1F3F4;
+            color: #374151;
+        }
+
+        .navbar {
+            height: 90px;
+            background: #0B2341;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .navbar-left,
+        .navbar-links,
+        .navbar-logout {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-left {
+            gap: 14px;
+        }
+
+        .navbar-links {
+            gap: 36px;
+        }
+
+        .navbar-logo {
+            width: auto;
+            height: 70px;
+            display: block;
+        }
+
+        .navbar-brand {
+            font-size: 13px;
+            opacity: .7;
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+
+        /* Perfil del usuario - Minimalista */
+        .user-menu {
+            margin-left: 14px;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-profile-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            color: #FFFFFF;
+            cursor: pointer;
+            padding: 0;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .user-profile-btn:hover {
+            border-color: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.08);
+            transform: scale(1.05);
+        }
+
+        .user-profile-btn:focus-visible {
+            border-color: #FFFFFF;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35);
+        }
+
+        .user-icon {
+            width: 17px;
+            height: 17px;
+            stroke: #FFFFFF;
+            display: block;
+        }
+
+        /* Menú desplegable flotante */
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 12px);
+            left: 0;
+            min-width: 200px;
+            background: #FFFFFF;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+            z-index: 1000;
+            padding: 6px;
+            animation: userDropdownFadeIn 0.15s ease-out;
+        }
+
+        .user-dropdown.show {
+            display: block;
+        }
+
+        @keyframes userDropdownFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-dropdown-header {
+            padding: 8px 10px 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .user-dropdown-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #0B2341;
+            line-height: 1.2;
+            word-break: break-word;
+        }
+
+        .user-dropdown-role {
+            font-size: 10px;
+            font-weight: 500;
+            color: #6B7280;
+            text-transform: capitalize;
+            margin-top: 1px;
+        }
+
+        .user-dropdown-divider {
+            height: 1px;
+            background: #F1F3F4;
+            margin: 6px 4px;
+        }
+
+        .user-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 10px;
+            color: #374151;
+            font-size: 11px;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.15s ease, color 0.15s ease;
+            cursor: pointer;
+            border: 0;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+
+        .user-dropdown-item:hover {
+            background: #F8FAFC;
+            color: #0B2341;
+        }
+
+        .user-dropdown-item.logout-item:hover {
+            background: #FEF2F2;
+            color: #DC2626;
+        }
+
+        .user-dropdown-item svg {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+            stroke: currentColor;
+            opacity: 0.75;
+        }
+
+        .user-dropdown-item:hover svg {
+            opacity: 1;
+        }
+
+        .navbar-brand,
+        .navbar-link,
+        .navbar-logout {
+            color: #FFFFFF;
+        }
+
+        .navbar-link {
+            font-size: 14px;
+            opacity: .55;
+            text-decoration: none;
+            padding-bottom: 4px;
+            letter-spacing: .2px;
+            transition: opacity .15s;
+            position: relative;
+            background: transparent;
+            border: 0;
+            cursor: pointer;
+        }
+
+        .navbar-link:hover {
+            opacity: .85;
+            transform: scale(1.05);
+        }
+
+        .navbar-link.active {
+            opacity: 1;
+            font-weight: 600;
+        }
+
+        .navbar-link.active::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -10px;
+            height: 3px;
+            background: #a52222;
+            transform: scale(1.2);
+        }
+
+        .navbar-logout {
+            font-size: 13px;
+            opacity: .6;
+            transition: all 0.3s ease;
+            gap: 6px;
+            background: transparent;
+            border: 0;
+            cursor: pointer;
+        }
+
+        .navbar-logout:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .logout-logo {
+            width: auto;
+            height: 18px;
+            display: block;
+        }
+
+        .app {
+            display: flex;
+            max-width: 1440px;
+            margin: 0 auto;
+            align-items: flex-start;
+        }
+
+        .main-col {
+            flex: 1;
+            min-width: 0;
+            padding: 24px 24px 60px 40px;
+        }
+
+        .side-col {
+            width: 320px;
+            flex-shrink: 0;
+            padding: 24px 40px 60px 0;
+            position: sticky;
+            top: 90px;
+        }
+
+        .progress-tabs {
+            background: #FFFFFF;
+            display: flex;
+            border-bottom: 1px solid #9CA3AF;
+            margin-bottom: 10px;
+        }
+
+        .progress-tab {
+            flex: 1;
+            min-width: 0;
+            min-height: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            padding: 5px 8px;
+            background: #FFFFFF;
+            border: 0;
+            border-right: 1px solid #9CA3AF;
+            color: #6B7280;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .progress-tab:last-child {
+            border-right: 0;
+        }
+
+        .progress-tab.active {
+            color: #0B2341;
+            font-weight: 600;
+            border-bottom: 2px solid #0B2341;
+        }
+
+        .progress-tab img {
+            height: 22px;
+            width: auto;
+        }
+
+        .form-card,
+        .summary-card {
+            background: #FFFFFF;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-section {
+            padding: 12px 16px 16px;
+            border-bottom: 8px solid #F1F3F4;
+            scroll-margin-top: 104px;
+        }
+
+        .form-section-head {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .form-section-num {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #0B2341;
+            color: #FFFFFF;
+            display: grid;
+            place-items: center;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .form-section-title {
+            color: #0B2341;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .field-row,
+        .used-fields {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+        }
+
+        .field label {
+            font-size: 10px;
+            color: #6B7280;
+            font-weight: 500;
+        }
+
+        .field input,
+        .field select,
+        .search-input {
+            width: 100%;
+            height: 28px;
+            padding: 4px 8px;
+            border: 1px solid #9CA3AF;
+            border-radius: 5px;
+            background: #FFFFFF;
+            color: #374151;
+            font-size: 11px;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .field input:focus,
+        .field select:focus,
+        .search-input:focus {
+            border-color: #0B2341;
+            box-shadow: 0 0 0 1px #0B2341;
+        }
+
+        .search-input {
+            padding-left: 28px;
+            background-image: url('buscar.png');
+            background-repeat: no-repeat;
+            background-position: 8px center;
+            background-size: 14px 14px;
+        }
+
+        .used-layout {
+            display: grid;
+            grid-template-columns: 1fr 158px;
+            gap: 12px;
+            align-items: end;
+        }
+
+        .infoauto-box {
+            background: #EFF6FF;
+            border: 1px solid #70A5F8;
+            border-radius: 6px;
+            min-height: 72px;
+            padding: 9px;
+            text-align: center;
+            color: #1D4ED8;
+            font-size: 10px;
+        }
+
+        .infoauto-value {
+            display: block;
+            font-size: 15px;
+            font-weight: 700;
+            margin-top: 3px;
+        }
+
+        .search-wrap {
+            position: relative;
+            margin-bottom: 8px;
+        }
+
+        /* Dropdown de búsqueda Infoauto */
+        .search-dropdown {
+            position: absolute;
+            top: 32px;
+            left: 0;
+            right: 0;
+            background: #FFFFFF;
+            border: 1px solid #9CA3AF;
+            border-radius: 5px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            max-height: 220px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+        }
+
+        .search-item {
+            padding: 8px 12px;
+            font-size: 11px;
+            border-bottom: 1px solid #F1F3F4;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-item:hover {
+            background: #EFF6FF;
+            color: #1D4ED8;
+        }
+
+        .search-item-title {
+            font-weight: 600;
+        }
+
+        .search-item-codia {
+            font-size: 9px;
+            color: #6B7280;
+        }
+
+        .op-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr) 160px;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .op-label {
+            font-size: 10px;
+            color: #6B7280;
+        }
+
+        .op-value {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .negative {
+            color: #E24B4A;
+        }
+
+        .cash-box {
+            border: 1px solid #639922;
+            border-radius: 5px;
+            padding: 8px;
+            text-align: center;
+            color: #639922;
+            background: #F8FCF4;
+        }
+
+        .cash-box strong {
+            display: block;
+            font-size: 16px;
+        }
+
+        /* Controles de plazo */
+        .plans-control-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .plazo-selector-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: #374151;
+            font-weight: 600;
+        }
+
+        .plazo-selector-wrap select {
+            height: 26px;
+            padding: 2px 8px;
+            border: 1px solid #9CA3AF;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #0B2341;
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .plan-card {
+            border: 1px solid #D9D9D9;
+            border-radius: 6px;
+            padding: 10px;
+            min-width: 0;
+            cursor: pointer;
+            transition: border-color .2s, box-shadow .2s;
+            background: #FFFFFF;
+            position: relative;
+        }
+
+        .plan-card:hover {
+            box-shadow: 0 2px 8px rgba(11, 35, 65, .12);
+        }
+
+        .plan-card.selected {
+            border: 2px solid #639922;
+            background: #FAFDF7;
+        }
+
+        .plan-card.blocked {
+            opacity: 0.55;
+            filter: grayscale(0.5);
+        }
+
+        .plan-badge {
+            display: inline-block;
+            background: #639922;
+            color: #FFFFFF;
+            border-radius: 4px;
+            padding: 3px 6px;
+            font-size: 8px;
+            font-weight: 700;
+        }
+
+        .plan-badge.badge-uva {
+            background: #7C3AED;
+        }
+
+        .plan-type {
+            color: #6B7280;
+            font-size: 9px;
+            margin-top: 7px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .plan-name {
+            color: #0B2341;
+            font-size: 12px;
+            font-weight: 700;
+            margin: 4px 0 8px;
+        }
+
+        .plan-price {
+            color: #374151;
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .plan-row {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #F1F3F4;
+            padding: 4px 0;
+            font-size: 9px;
+        }
+
+        .plan-row span:first-child {
+            color: #6B7280;
+        }
+
+        .plan-row span:last-child {
+            font-weight: 600;
+        }
+
+        /* RCI Bar */
+        .rci {
+            height: 5px;
+            margin: 7px 0 3px;
+            background: #E5E7EB;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .rci-fill {
+            height: 100%;
+            background: #639922;
+            width: 0%;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        .rci-fill.warn {
+            background: #BA7517;
+        }
+
+        .rci-fill.danger {
+            background: #E24B4A;
+        }
+
+        .plan-button {
+            display: block;
+            margin: 8px auto 0;
+            padding: 5px 14px;
+            border: 1px solid #0B2341;
+            background: #FFFFFF;
+            color: #0B2341;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease;
+            width: 100%;
+            text-align: center;
+        }
+
+        .plan-button:hover {
+            background: #0B2341;
+            color: #FFFFFF;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(11, 35, 65, .22);
+        }
+
+        .plan-card.selected .plan-button {
+            background: #639922;
+            color: #FFFFFF;
+            border-color: #639922;
+        }
+
+        .summary-card {
+            border: 1px solid #D9D9D9;
+        }
+
+        .summary-head {
+            background: #0B2341;
+            color: #FFFFFF;
+            padding: 14px;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .summary-logo {
+            width: auto;
+            height: 18px;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+
+        .summary-body {
+            padding: 12px 14px;
+        }
+
+        .summary-title {
+            color: #6B7280;
+            font-size: 10px;
+            text-transform: uppercase;
+            margin: 8px 0 4px;
+            font-weight: 700;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 3px 0;
+            font-size: 10px;
+        }
+
+        .summary-row span:last-child {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .summary-divider {
+            border: 0;
+            border-top: 1px solid #D9D9D9;
+            margin: 8px 0;
+        }
+
+        .summary-cash {
+            border: 1px solid #639922;
+            color: #639922;
+            text-align: center;
+            padding: 6px;
+            margin-top: 8px;
+            font-size: 11px;
+            background: #F8FCF4;
+            border-radius: 4px;
+        }
+
+        .summary-cash strong {
+            display: block;
+            font-size: 15px;
+        }
+
+        .side-action {
+            width: 100%;
+            margin-top: 10px;
+            padding: 9px;
+            border: 1px solid #0B2341;
+            border-radius: 5px;
+            background: #FFFFFF;
+            font-size: 11px;
+            font-weight: 600;
+            color: #0B2341;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: transform 0.2s ease, filter 0.2s ease;
+        }
+
+        .print-logo {
+            width: auto;
+            height: 16px;
+            display: block;
+        }
+
+        .side-action:hover {
+            transform: translateY(-1px);
+            filter: brightness(0.95);
+            background: #F8FAFC;
+        }
+
+        .whatsapp-logo {
+            width: auto;
+            height: 16px;
+            display: block;
+        }
+
+        .side-action.whatsapp {
+            background: #63B35C;
+            color: #FFFFFF;
+            border: 0;
+        }
+
+        .side-action.whatsapp:hover {
+            background: #52a04b;
+        }
+
+        .validation-banner {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 10px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .validation-banner.warn {
+            background: #FEF3C7;
+            border: 1px solid #F59E0B;
+            color: #B45309;
+            display: block;
+        }
+
+        .validation-banner.danger {
+            background: #FEE2E2;
+            border: 1px solid #EF4444;
+            color: #B91C1C;
+            display: block;
+        }
+
+        @media (max-width: 900px) {
+            .navbar {
+                height: auto;
+                min-height: 90px;
+                flex-wrap: wrap;
+                gap: 14px 20px;
+                padding: 14px 24px;
+            }
+
+            .navbar-links {
+                order: 3;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .app {
+                flex-direction: column;
+            }
+
+            .main-col,
+            .side-col {
+                width: 100%;
+                padding: 16px 24px 24px;
+            }
+
+            .side-col {
+                position: static;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .navbar {
+                align-items: center;
+                padding: 12px 16px;
+            }
+
+            .navbar-logo {
+                height: 50px;
+            }
+
+            .navbar-brand {
+                font-size: 11px;
+                letter-spacing: 1px;
+            }
+
+            .navbar-links {
+                gap: 12px;
+            }
+
+            .navbar-link {
+                font-size: 11px;
+                letter-spacing: 0;
+                text-align: center;
+            }
+
+            .main-col,
+            .side-col {
+                padding: 12px 16px 20px;
+            }
+
+            .field-row,
+            .used-fields,
+            .plans-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .used-layout,
+            .op-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+        <div class="navbar-left">
+            <img class="navbar-logo" src="logotiporoma.png" alt="Roma">
+            <span class="navbar-brand">AUTOMOTORES</span>
+
+            <div class="user-menu" id="userMenu">
+                <button class="user-profile-btn" type="button" id="userProfileBtn" title="Perfil de usuario"
+                    aria-label="Perfil de usuario" aria-haspopup="true" aria-expanded="false">
+                    <svg class="user-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </button>
+                <div class="user-dropdown" id="userDropdown">
+                    <div class="user-dropdown-header">
+                        <span class="user-dropdown-name">{{ usuario.nombre }}</span>
+                        <span class="user-dropdown-role">{{ usuario.rol|capitalize }}</span>
+                    </div>
+                    <div class="user-dropdown-divider"></div>
+                    {% if usuario.rol == "administrador" %}
+                    <a href="/admin/usuarios" class="user-dropdown-item" id="adminUsersBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        <span>Administrar usuarios</span>
+                    </a>
+                    {% endif %}
+                    <a href="/logout" class="user-dropdown-item logout-item" id="logoutDropdownLink">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        <span>Cerrar sesión</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="navbar-links">
+            <button class="navbar-link active" type="button" id="simuladorBtn">SIMULADOR FINANCIERO</button>
+            <button class="navbar-link" type="button" id="panelAdmimBtn"
+                onclick="alert('Panel administrativo Roma Automotores')">PANEL ADMINISTRATIVO</button>
+        </div>
+        <button class="navbar-logout" type="button" id="logoutBtn" onclick="window.location.href='/logout'">
+            <img class="logout-logo" src="cerrarsesion.png" alt="">
+            <span>CERRAR SESIÓN</span>
+        </button>
+    </div>
+
+    <div class="app">
+        <div class="main-col">
+            <div class="progress-tabs">
+                <button class="progress-tab active" data-target="sec-cliente"><img src="cliente.png"
+                        alt=""><span>Cliente</span></button>
+                <button class="progress-tab" data-target="sec-usado"><img src="coche.png" alt=""><span>Vehículo
+                        usado</span></button>
+                <button class="progress-tab" data-target="sec-nuevo"><img src="coche.png" alt=""><span>Vehículo
+                        nuevo</span></button>
+                <button class="progress-tab" data-target="sec-opciones"><img src="linea.png" alt=""><span>Resumen y
+                        opciones</span></button>
+            </div>
+
+            <div class="form-card">
+                <!-- 1. DATOS DEL CLIENTE -->
+                <section class="form-section" id="sec-cliente">
+                    <div class="form-section-head"><span class="form-section-num">1</span><span
+                            class="form-section-title">DATOS DEL CLIENTE</span></div>
+                    <div class="field-row">
+                        <div class="field"><label>Nombre</label><input id="clientName" placeholder="Ej: Renzo"
+                                value="Renzo" oninput="actualizarSimulacion()"></div>
+                        <div class="field"><label>Apellido</label><input id="clientSurname" placeholder="Ej: Segovia"
+                                value="Segovia" oninput="actualizarSimulacion()"></div>
+                        <div class="field"><label>Número de documento</label><input id="clientDni"
+                                placeholder="Ej: 45.361.089" value="45.361.089" oninput="actualizarSimulacion()"></div>
+                        <div class="field"><label>Ingresos mensuales ($)</label><input id="monthlyIncome"
+                                inputmode="numeric" placeholder="Ej: 1.000.000" value="1.000.000"
+                                oninput="actualizarSimulacionDebounced()"></div>
+                    </div>
+                </section>
+
+                <!-- 2. VEHÍCULO USADO (PERMUTA) CON INFOAUTO -->
+                <section class="form-section" id="sec-usado">
+                    <div class="form-section-head"><span class="form-section-num">2</span><span
+                            class="form-section-title">VEHÍCULO USADO (PERMUTA)</span></div>
+
+                    <div class="search-wrap">
+                        <input class="search-input" id="searchUsedCar"
+                            placeholder="Buscar usado en Infoauto por modelo o versión (ej: 208, Corolla, Amarok, Gol...)"
+                            oninput="buscarInfoautoUsadoDebounced()">
+                        <div class="search-dropdown" id="searchUsedDropdown"></div>
+                    </div>
+
+                    <div class="used-layout">
+                        <div class="used-fields">
+                            <div class="field">
+                                <label>Modelo / Versión</label>
+                                <input id="usedBrandModel" value="Peugeot 208 Allure 1.6"
+                                    placeholder="Ej: Peugeot 208 Allure" oninput="actualizarSimulacion()">
+                            </div>
+                            <div class="field">
+                                <label>Año del Usado</label>
+                                <select id="usedYear" onchange="cambiarAnioUsado()">
+                                    <option value="2026">2026</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2022">2022</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2020">2020</option>
+                                    <option value="2019" selected>2019</option>
+                                    <option value="2018">2018</option>
+                                    <option value="2017">2017</option>
+                                    <option value="2016">2016</option>
+                                    <option value="2015">2015</option>
+                                    <option value="2014">2014</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label>Valor Revista Infoauto ($)</label>
+                                <input id="usedRevistaValue" inputmode="numeric" value="20.000.000"
+                                    placeholder="Ej: 20.000.000" oninput="actualizarSimulacionDebounced()">
+                            </div>
+                            <div class="field">
+                                <label>Precio Toma Agencia ($)</label>
+                                <input id="usedTradeInValue" inputmode="numeric" value="10.000.000"
+                                    placeholder="Aclarar precio toma" oninput="actualizarSimulacionDebounced()">
+                            </div>
+                        </div>
+                        <div class="infoauto-box">
+                            VALOR DE REVISTA
+                            <strong class="infoauto-value" id="usedRevistaDisplay">$ 20.000.000</strong>
+                            <small id="usedAntiquityDisplay">Infoauto · Antigüedad 7 años</small>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. VEHÍCULO NUEVO / A COMPRAR CON FORMULARIO COMPLETO -->
+                <section class="form-section" id="sec-nuevo">
+                    <div class="form-section-head"><span class="form-section-num">3</span><span
+                            class="form-section-title">VEHÍCULO NUEVO / A COMPRAR</span></div>
+
+                    <div class="search-wrap">
+                        <input class="search-input" id="searchNewCar"
+                            placeholder="Buscar vehículo nuevo en Infoauto (ej: 208, Cronos, Amarok, Corolla, Nivus...)"
+                            oninput="buscarInfoautoNuevoDebounced()">
+                        <div class="search-dropdown" id="searchNewDropdown"></div>
+                    </div>
+
+                    <div class="used-fields">
+                        <div class="field">
+                            <label>Modelo / Versión</label>
+                            <input id="newCarName" value="Peugeot 208 Allure MT" placeholder="Ej: Peugeot 208 Allure MT"
+                                oninput="actualizarSimulacion()">
+                        </div>
+                        <div class="field">
+                            <label>Año</label>
+                            <input type="number" id="newCarYear" value="2026" min="2000" max="2030"
+                                placeholder="Ej: 2026" oninput="actualizarSimulacionDebounced()">
+                        </div>
+                        <div class="field">
+                            <label>Precio de Lista ($)</label>
+                            <input id="newCarPrice" inputmode="numeric" value="23.000.000" placeholder="Ingresar precio"
+                                oninput="alCambiarPrecioNuevo()">
+                        </div>
+                        <div class="field">
+                            <label>Gastos Transferencia / Papeles ($)</label>
+                            <input id="newCarTransfer" inputmode="numeric" value="1.740.000"
+                                placeholder="Ingresar gastos" oninput="actualizarSimulacionDebounced()">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. RESUMEN DE LA OPERACIÓN -->
+                <section class="form-section" id="sec-opciones">
+                    <div class="form-section-head"><span class="form-section-num">4</span><span
+                            class="form-section-title">RESUMEN DE LA OPERACIÓN</span></div>
+                    <div class="op-grid">
+                        <div>
+                            <div class="op-label">Precio vehículo + transferencia</div>
+                            <div class="op-value" id="opTotalPrice">$24.740.000</div>
+                        </div>
+                        <div>
+                            <div class="op-label">Valor de toma (usado)</div>
+                            <div class="op-value negative" id="opUsedValue">$10.000.000</div>
+                        </div>
+                        <div>
+                            <div class="op-label">Capital a financiar ($)</div>
+                            <input id="opFinancingInput" inputmode="numeric" value="8.000.000" class="op-value negative"
+                                style="border: 1px solid #D9D9D9; padding: 2px 6px; border-radius: 4px; width: 120px;"
+                                oninput="actualizarSimulacionDebounced()">
+                        </div>
+                        <div class="cash-box">
+                            Efectivo a entregar
+                            <strong id="operationCash">$6.740.000</strong>
+                        </div>
+                    </div>
+                    <div class="validation-banner" id="operationAlert"></div>
+                </section>
+
+                <!-- 5. OPCIONES DE FINANCIAMIENTO PSA -->
+                <section class="form-section">
+                    <div class="form-section-head">
+                        <span class="form-section-num">5</span>
+                        <span class="form-section-title">OPCIONES DE FINANCIAMIENTO PSA FINANCE</span>
+                    </div>
+
+                    <div class="plans-control-row">
+                        <span style="font-size: 11px; color: #6B7280;">Seleccioná el plazo deseado para recalcular las
+                            cuotas:</span>
+                        <div class="plazo-selector-wrap">
+                            <label for="plazoSelect">Plazo:</label>
+                            <select id="plazoSelect" onchange="cambiarPlazoGlobal()">
+                                <option value="12">12 Cuotas</option>
+                                <option value="18">18 Cuotas</option>
+                                <option value="24" selected>24 Cuotas</option>
+                                <option value="36">36 Cuotas</option>
+                                <option value="48">48 Cuotas</option>
+                                <option value="60">60 Cuotas</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="plans-grid" id="plansContainer">
+                        <!-- Tarjetas de planes renderizadas dinámicamente -->
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- SIDEBAR: RESUMEN DE LA SIMULACIÓN -->
+        <aside class="side-col">
+            <div class="summary-card">
+                <div class="summary-head">
+                    <img class="summary-logo" src="resumen.png" alt="">
+                    RESUMEN DE LA SIMULACIÓN
+                </div>
+                <div class="summary-body">
+                    <div class="summary-title">Cliente</div>
+                    <div class="summary-row">
+                        <span id="sumClientFullName">Renzo Segovia</span>
+                    </div>
+                    <div class="summary-row">
+                        <span id="sumClientDni">DNI: 45.361.089</span>
+                        <span>Ingresos: <strong id="summaryIncome">$1.000.000</strong></span>
+                    </div>
+
+                    <hr class="summary-divider">
+
+                    <div class="summary-title">Vehículos</div>
+                    <div class="summary-row">
+                        <span id="sumUsedCarTitle">Usado: Peugeot 208</span>
+                        <span class="negative" id="sumUsedCarValue">$10.000.000</span>
+                    </div>
+                    <div class="summary-row">
+                        <span id="sumNewCarTitle">Nuevo: Peugeot 208 Allure</span>
+                        <span id="sumNewCarPrice">$23.000.000</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Gastos de transferencia</span>
+                        <span id="sumTransferPrice">$1.740.000</span>
+                    </div>
+
+                    <hr class="summary-divider">
+
+                    <div class="summary-title">Resumen de la operación</div>
+                    <div class="summary-row">
+                        <span>Precio total vehículo + transf.</span>
+                        <span id="sumTotalPrice">$24.740.000</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Valor toma usado</span>
+                        <span class="negative" id="sumTradeIn">$10.000.000</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Monto a financiar</span>
+                        <span class="negative" id="summaryFinancing">$8.000.000</span>
+                    </div>
+                    <div class="summary-cash">
+                        Efectivo a entregar
+                        <strong id="summaryCash">$6.740.000</strong>
+                    </div>
+
+                    <hr class="summary-divider">
+
+                    <div class="summary-title">Plan seleccionado</div>
+                    <div class="summary-row">
+                        <span><span id="sumPlanType">Tasa fija</span><br><b id="sumPlanName">PLAN PROMO</b></span>
+                        <span>Cuota mensual pura<br><strong id="summaryPayment">$0</strong></span>
+                    </div>
+                    <div class="summary-row">
+                        <span>1ra Cuota (c/Quebranto IVA)</span>
+                        <span id="sumFirstPayment" style="color: #1D4ED8; font-weight: 700;">$0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Plazo</span>
+                        <span id="sumTerm">24 cuotas</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>TNA</span>
+                        <span id="sumTna">26,90%</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Gasto otorgamiento (c/IVA)</span>
+                        <span id="sumQuebranto">$968.000</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Relación Cuota / Ingreso (RCI)</span>
+                        <span id="sumRci">47,2% (Aceptable)</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Sistema de amortización</span>
+                        <span>Francés / PSA Factor</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="side-action" onclick="imprimirCotizacion()">
+                <img class="print-logo" src="imprimir.png" alt="">
+                Imprimir / Descargar PDF
+            </button>
+            <button class="side-action whatsapp" onclick="compartirWhatsapp()">
+                <img class="whatsapp-logo" src="whatsapp.png" alt="">
+                Compartir por WhatsApp
+            </button>
+        </aside>
+    </div>
+
+    <script>
+        const BACKEND = window.location.protocol.startsWith("http") ? window.location.origin : "http://localhost:5000";
+
+        let debounceTimer = null;
+        let searchUsedDebounceTimer = null;
+        let searchNewDebounceTimer = null;
+
+        let PLANES_CONFIG = {};
+        let selectedPlanKey = "TRADICIONAL_VO";
+        let currentPlazo = 24;
+        let simulationResults = [];
+
+        let usedCarPricesByYear = {};
+
+        // Helper robusto para formatear y parsear números monetarios en formato argentino
+        const formatMoney = (val) => '$' + Math.round(Number(val) || 0).toLocaleString('es-AR');
+        const parseNumber = (val) => {
+            if (val === null || val === undefined) return 0;
+            if (typeof val === 'number') return isNaN(val) ? 0 : val;
+            const clean = String(val).replace(/[^\d]/g, '');
+            return clean ? parseInt(clean, 10) : 0;
+        };
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            setupTabsAndUI();
+            await cargarConfiguracionPlanes();
+            await actualizarSimulacion();
+        });
+
+        function setupTabsAndUI() {
+            // Setup User Profile Dropdown
+            const userProfileBtn = document.getElementById('userProfileBtn');
+            const userDropdown = document.getElementById('userDropdown');
+
+            if (userProfileBtn && userDropdown) {
+                userProfileBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isOpen = userDropdown.classList.toggle('show');
+                    userProfileBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!userDropdown.contains(e.target) && !userProfileBtn.contains(e.target)) {
+                        userDropdown.classList.remove('show');
+                        userProfileBtn.setAttribute('aria-expanded', 'false');
+                    }
+                });
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && userDropdown.classList.contains('show')) {
+                        userDropdown.classList.remove('show');
+                        userProfileBtn.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
+
+            const navbarLinks = document.querySelectorAll('.navbar-link');
+            navbarLinks.forEach((link) => {
+                link.addEventListener('click', () => {
+                    navbarLinks.forEach((item) => item.classList.remove('active'));
+                    link.classList.add('active');
+                });
+            });
+
+            const progressTabs = document.querySelectorAll('.progress-tab');
+            progressTabs.forEach((tab) => {
+                tab.addEventListener('click', () => {
+                    const section = document.getElementById(tab.dataset.target);
+                    if (section) {
+                        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                    progressTabs.forEach((item) => item.classList.remove('active'));
+                    tab.classList.add('active');
+                });
+            });
+
+            // Formateo visual al salir de los inputs numéricos
+            const numInputs = ['monthlyIncome', 'usedRevistaValue', 'usedTradeInValue', 'newCarPrice', 'newCarTransfer', 'opFinancingInput'];
+            numInputs.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('blur', () => {
+                        const num = parseNumber(el.value);
+                        if (num > 0) el.value = num.toLocaleString('es-AR');
+                    });
+                }
+            });
+
+            // Cerrar dropdowns si se hace clic fuera
+            document.addEventListener('click', (e) => {
+                const dropUsed = document.getElementById('searchUsedDropdown');
+                const inUsed = document.getElementById('searchUsedCar');
+                if (dropUsed && !dropUsed.contains(e.target) && e.target !== inUsed) {
+                    dropUsed.style.display = 'none';
+                }
+
+                const dropNew = document.getElementById('searchNewDropdown');
+                const inNew = document.getElementById('searchNewCar');
+                if (dropNew && !dropNew.contains(e.target) && e.target !== inNew) {
+                    dropNew.style.display = 'none';
+                }
+            });
+        }
+
+        async function cargarConfiguracionPlanes() {
+            try {
+                const res = await fetch(`${BACKEND}/planes`);
+                const data = await res.json();
+                PLANES_CONFIG = data.planes || {};
+            } catch (e) {
+                console.error("Error al cargar configuracion de planes:", e);
+            }
+        }
+
+        function cambiarPlazoGlobal() {
+            currentPlazo = parseInt(document.getElementById('plazoSelect').value) || 24;
+            actualizarSimulacion();
+        }
+
+        function alCambiarPrecioNuevo() {
+            // Al tipear un nuevo precio de auto, sugerir automáticamente gastos de transferencia al 7.5% si no se editaron
+            const p = parseNumber(document.getElementById('newCarPrice').value);
+            if (p > 0) {
+                document.getElementById('newCarTransfer').value = Math.round(p * 0.075).toLocaleString('es-AR');
+            }
+            actualizarSimulacionDebounced();
+        }
+
+        function actualizarSimulacionDebounced() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                actualizarSimulacion();
+            }, 150);
+        }
+
+        function obtenerValoresFormulario() {
+            const income = parseNumber(document.getElementById('monthlyIncome').value);
+            const usedYear = parseInt(document.getElementById('usedYear').value) || 2019;
+            const usedRevista = parseNumber(document.getElementById('usedRevistaValue').value);
+            const usedTradeIn = parseNumber(document.getElementById('usedTradeInValue').value);
+            const newPrice = parseNumber(document.getElementById('newCarPrice').value);
+            const newYear = parseInt(document.getElementById('newCarYear').value) || 2026;
+            const newTransfer = parseNumber(document.getElementById('newCarTransfer').value);
+            const financing = parseNumber(document.getElementById('opFinancingInput').value);
+
+            return {
+                ingresos: income,
+                anio_usado: usedYear,
+                precio_revista: usedRevista,
+                precio_toma: usedTradeIn,
+                precio_nuevo: newPrice,
+                anio_nuevo: newYear,
+                gastos_transf: newTransfer,
+                monto: financing,
+                plazo: currentPlazo
+            };
+        }
+
+        async function actualizarSimulacion() {
+            const v = obtenerValoresFormulario();
+
+            // 1. Cálculos directos
+            const totalPrice = v.precio_nuevo + v.gastos_transf;
+            const cashNeeded = Math.max(0, totalPrice - v.precio_toma - v.monto);
+            const currentYear = new Date().getFullYear();
+            const antiquity = currentYear - v.anio_usado;
+
+            document.getElementById('usedRevistaDisplay').textContent = formatMoney(v.precio_revista);
+            document.getElementById('usedAntiquityDisplay').textContent = `Infoauto · Antigüedad ${antiquity} año${antiquity !== 1 ? 's' : ''}`;
+
+            document.getElementById('opTotalPrice').textContent = formatMoney(totalPrice);
+            document.getElementById('opUsedValue').textContent = formatMoney(v.precio_toma);
+            document.getElementById('operationCash').textContent = formatMoney(cashNeeded);
+
+            // Sidebar
+            const name = document.getElementById('clientName').value || 'Cliente';
+            const surname = document.getElementById('clientSurname').value || '';
+            const dni = document.getElementById('clientDni').value || '';
+            const usedCarName = document.getElementById('usedBrandModel').value || 'Usado';
+            const newCarName = document.getElementById('newCarName').value || 'Nuevo';
+
+            document.getElementById('sumClientFullName').textContent = `${name} ${surname}`.trim();
+            document.getElementById('sumClientDni').textContent = dni ? `DNI: ${dni}` : '';
+            document.getElementById('summaryIncome').textContent = formatMoney(v.ingresos);
+
+            document.getElementById('sumUsedCarTitle').textContent = `Usado: ${usedCarName} (${v.anio_usado})`;
+            document.getElementById('sumUsedCarValue').textContent = formatMoney(v.precio_toma);
+            document.getElementById('sumNewCarTitle').textContent = `Nuevo: ${newCarName} (${v.anio_nuevo})`;
+            document.getElementById('sumNewCarPrice').textContent = formatMoney(v.precio_nuevo);
+            document.getElementById('sumTransferPrice').textContent = formatMoney(v.gastos_transf);
+
+            document.getElementById('sumTotalPrice').textContent = formatMoney(totalPrice);
+            document.getElementById('sumTradeIn').textContent = formatMoney(v.precio_toma);
+            document.getElementById('summaryFinancing').textContent = formatMoney(v.monto);
+            document.getElementById('summaryCash').textContent = formatMoney(cashNeeded);
+
+            // 2. Consulta al motor prendario PSA
+            try {
+                const res = await fetch(`${BACKEND}/simular-todos`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(v)
+                });
+                const data = await res.json();
+                simulationResults = data.resultados || [];
+                renderPlanCards(simulationResults, v);
+            } catch (e) {
+                console.error("Error al calcular planes:", e);
+            }
+        }
+
+        function renderPlanCards(results, formValues) {
+            const container = document.getElementById('plansContainer');
+            container.innerHTML = "";
+
+            const planesParaPlazo = results.filter(r => r.plazo === currentPlazo);
+
+            if (!planesParaPlazo.length) {
+                container.innerHTML = `<div style="grid-column: 1/-1; padding: 20px; text-align: center; color: #6B7280; font-size: 11px;">No hay planes configurados para ${currentPlazo} meses.</div>`;
+                return;
+            }
+
+            let selectedResult = planesParaPlazo.find(p => p.plan_key === selectedPlanKey);
+            if (!selectedResult) {
+                selectedResult = planesParaPlazo[0];
+                selectedPlanKey = selectedResult.plan_key;
+            }
+
+            planesParaPlazo.forEach(p => {
+                const isSelected = p.plan_key === selectedPlanKey;
+                const isUva = p.plan_tipo === 'uva';
+                const isBlocked = !p.disponible;
+
+                let badgeHtml = '';
+                if (p.plan_key === 'PROMO_FIJA' || p.plan_key === 'PROMO_UVA') {
+                    badgeHtml = `<span class="plan-badge ${isUva ? 'badge-uva' : ''}">★ PROMO PSA</span>`;
+                } else if (isUva) {
+                    badgeHtml = `<span class="plan-badge badge-uva">UVA VARIABLE</span>`;
+                } else {
+                    badgeHtml = `<span class="plan-badge" style="background:#0B2341;">TASA FIJA</span>`;
+                }
+
+                let rciFillWidth = 0;
+                let rciFillClass = '';
+                if (p.rci_pct !== null && p.rci_pct !== undefined) {
+                    rciFillWidth = Math.min(100, (p.rci_pct / 60) * 100);
+                    if (p.rci_estado === 'alerta') rciFillClass = 'warn';
+                    if (p.rci_estado === 'rechazado') rciFillClass = 'danger';
+                }
+
+                const tnaText = (p.tna_pct !== undefined && p.tna_pct !== null) ? Number(p.tna_pct).toFixed(2) + '%' : (p.tna ? (p.tna * 100).toFixed(2) + '%' : '0.00%');
+
+                const card = document.createElement('div');
+                card.className = `plan-card ${isSelected ? 'selected' : ''} ${isBlocked ? 'blocked' : ''}`;
+                card.innerHTML = `
+                ${badgeHtml}
+                <div class="plan-type">${isUva ? 'Tasa Variable UVA' : 'Tasa Fija'}</div>
+                <div class="plan-name">${p.plan_nombre}</div>
+                <div class="plan-price">${formatMoney(p.cuota_pura)} <small style="font-size:10px;font-weight:400;color:#6B7280;">/mes</small></div>
+                <div class="plan-row"><span>1ra Cuota (c/Quebranto IVA)</span><span>${formatMoney(p.primera_cuota)}</span></div>
+                <div class="plan-row"><span>Plazo</span><span>${p.plazo} Cuotas</span></div>
+                <div class="plan-row"><span>TNA</span><span>${tnaText}</span></div>
+                <div class="plan-row"><span>Gasto otorgamiento (IVA 21%)</span><span>${formatMoney(p.quebranto_iva)}</span></div>
+                <div class="plan-row"><span>RCI cuota / ingresos</span><span>${p.rci_pct !== null && p.rci_pct !== undefined ? p.rci_pct.toFixed(1) + '%' : '--'}</span></div>
+                <div class="rci"><div class="rci-fill ${rciFillClass}" style="width: ${rciFillWidth}%;"></div></div>
+                <button class="plan-button" type="button">${isSelected ? '✓ Plan Seleccionado' : 'Seleccionar plan'}</button>
+            `;
+
+                card.addEventListener('click', () => {
+                    selectedPlanKey = p.plan_key;
+                    renderPlanCards(results, formValues);
+                    updateSidebarPlan(p);
+                });
+
+                container.appendChild(card);
+            });
+
+            updateSidebarPlan(selectedResult);
+
+            const alertBanner = document.getElementById('operationAlert');
+            if (selectedResult && selectedResult.errores && selectedResult.errores.length > 0) {
+                alertBanner.className = 'validation-banner danger';
+                alertBanner.textContent = 'Observación: ' + selectedResult.errores.join(' | ');
+            } else {
+                alertBanner.className = 'validation-banner';
+                alertBanner.textContent = '';
+            }
+        }
+
+        function updateSidebarPlan(p) {
+            if (!p) return;
+            const isUva = p.plan_tipo === 'uva';
+            document.getElementById('sumPlanType').textContent = isUva ? 'Tasa variable' : 'Tasa fija';
+            document.getElementById('sumPlanName').textContent = p.plan_nombre;
+            document.getElementById('summaryPayment').textContent = formatMoney(p.cuota_pura);
+            document.getElementById('sumFirstPayment').textContent = formatMoney(p.primera_cuota);
+            document.getElementById('sumTerm').textContent = `${p.plazo} cuotas`;
+            const tnaVal = (p.tna_pct !== undefined && p.tna_pct !== null) ? Number(p.tna_pct).toFixed(2) : (p.tna ? (p.tna * 100).toFixed(2) : '0.00');
+            document.getElementById('sumTna').textContent = `${tnaVal}%`;
+            document.getElementById('sumQuebranto').textContent = formatMoney(p.quebranto_iva);
+
+            let rciText = '--';
+            if (p.rci_pct !== null && p.rci_pct !== undefined) {
+                let desc = p.rci_estado === 'ok' ? 'Aprobado' : (p.rci_estado === 'alerta' ? 'Alerta comercial' : 'Rechazado');
+                rciText = `${p.rci_pct.toFixed(1)}% (${desc})`;
+            }
+            document.getElementById('sumRci').textContent = rciText;
+        }
+
+        // -------------------------------------------------------------------------
+        // BÚSQUEDA INFOAUTO PARA VEHÍCULO USADO
+        // -------------------------------------------------------------------------
+        function buscarInfoautoUsadoDebounced() {
+            clearTimeout(searchUsedDebounceTimer);
+            searchUsedDebounceTimer = setTimeout(() => {
+                ejecutarBusquedaInfoautoUsado();
+            }, 300);
+        }
+
+        async function ejecutarBusquedaInfoautoUsado() {
+            const q = document.getElementById('searchUsedCar').value.trim();
+            const dropdown = document.getElementById('searchUsedDropdown');
+
+            if (q.length < 2) {
+                dropdown.style.display = 'none';
+                return;
+            }
+
+            try {
+                const res = await fetch(`${BACKEND}/buscar?q=${encodeURIComponent(q)}`);
+                const data = await res.json();
+                const items = Array.isArray(data) ? data : (data.results || data.data || data.cars || []);
+
+                if (!items.length) {
+                    dropdown.innerHTML = `<div style="padding:10px;font-size:10px;color:#6B7280;">Sin resultados en Infoauto para "${q}"</div>`;
+                    dropdown.style.display = 'block';
+                    return;
+                }
+
+                dropdown.innerHTML = items.slice(0, 10).map(item => {
+                    const nombre = item.description || item.nombre || item.name || item.version || JSON.stringify(item);
+                    const codia = item.codia || item.id || item.code || '';
+                    return `
+                    <div class="search-item" onclick="seleccionarAutoUsadoInfoauto(${codia}, '${nombre.replace(/'/g, "\\'")}')">
+                        <span class="search-item-title">${nombre}</span>
+                        <span class="search-item-codia">CODIA ${codia}</span>
+                    </div>
+                `;
+                }).join("");
+
+                dropdown.style.display = 'block';
+            } catch (e) {
+                console.error("Error en búsqueda Infoauto usado:", e);
+            }
+        }
+
+        async function seleccionarAutoUsadoInfoauto(codia, nombre) {
+            document.getElementById('searchUsedDropdown').style.display = 'none';
+            document.getElementById('usedBrandModel').value = nombre;
+            document.getElementById('searchUsedCar').value = nombre;
+
+            try {
+                const res = await fetch(`${BACKEND}/precios/${codia}`);
+                const data = await res.json();
+                usedCarPricesByYear = {};
+
+                const selectYear = document.getElementById('usedYear');
+                selectYear.innerHTML = "";
+
+                if (Array.isArray(data) && data.length > 0) {
+                    data.sort((a, b) => (b.year || b.anio || 0) - (a.year || a.anio || 0)).forEach(item => {
+                        const y = item.year || item.anio;
+                        let p = Number(item.price || item.precio) || 0;
+                        if (p > 0 && p < 100000) p = p * 1000;
+                        if (y) {
+                            usedCarPricesByYear[y] = p;
+                            const opt = document.createElement('option');
+                            opt.value = y;
+                            opt.textContent = `${y} ($${p.toLocaleString('es-AR')})`;
+                            selectYear.appendChild(opt);
+                        }
+                    });
+                } else if (typeof data === 'object') {
+                    Object.entries(data).filter(([k]) => /^\d{4}$/.test(k)).sort((a, b) => b[0] - a[0]).forEach(([y, p]) => {
+                        let precioNum = Number(p) || 0;
+                        if (precioNum > 0 && precioNum < 100000) precioNum = precioNum * 1000;
+                        usedCarPricesByYear[y] = precioNum;
+                        const opt = document.createElement('option');
+                        opt.value = y;
+                        opt.textContent = `${y} ($${precioNum.toLocaleString('es-AR')})`;
+                        selectYear.appendChild(opt);
+                    });
+                }
+
+                cambiarAnioUsado();
+            } catch (e) {
+                console.error("Error al obtener precios del auto usado:", e);
+            }
+        }
+
+        function cambiarAnioUsado() {
+            const y = document.getElementById('usedYear').value;
+            if (usedCarPricesByYear[y]) {
+                const precioRevista = usedCarPricesByYear[y];
+                document.getElementById('usedRevistaValue').value = precioRevista.toLocaleString('es-AR');
+                document.getElementById('usedTradeInValue').value = Math.round(precioRevista * 0.80).toLocaleString('es-AR');
+            }
+            actualizarSimulacion();
+        }
+
+        // -------------------------------------------------------------------------
+        // BÚSQUEDA INFOAUTO PARA VEHÍCULO NUEVO
+        // -------------------------------------------------------------------------
+        function buscarInfoautoNuevoDebounced() {
+            clearTimeout(searchNewDebounceTimer);
+            searchNewDebounceTimer = setTimeout(() => {
+                ejecutarBusquedaInfoautoNuevo();
+            }, 300);
+        }
+
+        async function ejecutarBusquedaInfoautoNuevo() {
+            const q = document.getElementById('searchNewCar').value.trim();
+            const dropdown = document.getElementById('searchNewDropdown');
+
+            if (q.length < 2) {
+                dropdown.style.display = 'none';
+                return;
+            }
+
+            try {
+                const res = await fetch(`${BACKEND}/buscar?q=${encodeURIComponent(q)}`);
+                const data = await res.json();
+                const items = Array.isArray(data) ? data : (data.results || data.data || data.cars || []);
+
+                if (!items.length) {
+                    dropdown.innerHTML = `<div style="padding:10px;font-size:10px;color:#6B7280;">Sin resultados en Infoauto para "${q}"</div>`;
+                    dropdown.style.display = 'block';
+                    return;
+                }
+
+                dropdown.innerHTML = items.slice(0, 10).map(item => {
+                    const nombre = item.description || item.nombre || item.name || item.version || JSON.stringify(item);
+                    const codia = item.codia || item.id || item.code || '';
+                    return `
+                    <div class="search-item" onclick="seleccionarAutoNuevoInfoauto(${codia}, '${nombre.replace(/'/g, "\\'")}')">
+                        <span class="search-item-title">${nombre}</span>
+                        <span class="search-item-codia">CODIA ${codia}</span>
+                    </div>
+                `;
+                }).join("");
+
+                dropdown.style.display = 'block';
+            } catch (e) {
+                console.error("Error en búsqueda Infoauto nuevo:", e);
+            }
+        }
+
+        async function seleccionarAutoNuevoInfoauto(codia, nombre) {
+            document.getElementById('searchNewDropdown').style.display = 'none';
+            document.getElementById('newCarName').value = nombre;
+            document.getElementById('searchNewCar').value = nombre;
+            try {
+                const res = await fetch(`${BACKEND}/precios/${codia}`);
+                const data = await res.json();
+                let latestPrice = 0;
+                if (Array.isArray(data) && data.length > 0) {
+                    const sorted = [...data].sort((a, b) => (b.year || b.anio || 0) - (a.year || a.anio || 0));
+                    latestPrice = Number(sorted[0].price || sorted[0].precio) || 0;
+                } else if (typeof data === 'object') {
+                    const years = Object.keys(data).filter(k => /^\d{4}$/.test(k)).sort((a, b) => b - a);
+                    if (years.length) latestPrice = Number(data[years[0]]) || 0;
+                }
+                if (latestPrice > 0 && latestPrice < 100000) latestPrice = latestPrice * 1000;
+                if (latestPrice > 0) {
+                    document.getElementById('newCarPrice').value = latestPrice.toLocaleString('es-AR');
+                }
+            } catch (e) {
+                console.warn("No se pudo autocompletar precio de lista nuevo:", e);
+            }
+            actualizarSimulacion();
+        }
+
+        // -------------------------------------------------------------------------
+        // EXPORTACIÓN & ACCIONES
+        // -------------------------------------------------------------------------
+        function imprimirCotizacion() {
+            window.print();
+        }
+
+        function compartirWhatsapp() {
+            const name = document.getElementById('clientName').value || 'Cliente';
+            const newCar = document.getElementById('newCarName').value || 'Vehículo Nuevo';
+            const usedCar = document.getElementById('usedBrandModel').value || 'Vehículo Usado';
+            const financing = formatMoney(parseNumber(document.getElementById('opFinancingInput').value));
+            const cash = document.getElementById('operationCash').textContent;
+            const plan = document.getElementById('sumPlanName').textContent;
+            const term = document.getElementById('sumTerm').textContent;
+            const payment = document.getElementById('summaryPayment').textContent;
+            const firstPayment = document.getElementById('sumFirstPayment').textContent;
+
+            const texto = `Hola ${name}! Te comparto la simulación prendaria de Roma Automotores:\n\n` +
+                `🚗 Vehículo a comprar: ${newCar}\n` +
+                `🔄 Permuta Usado: ${usedCar}\n` +
+                `💰 Capital financiado: ${financing}\n` +
+                `💵 Efectivo a entregar en salón: ${cash}\n` +
+                `📋 Plan PSA: ${plan} (${term})\n` +
+                `💳 Cuota mensual pura: ${payment}\n` +
+                `📌 1ra Cuota (c/otorgamiento IVA): ${firstPayment}\n\n` +
+                `Quedamos a tu disposición en Roma Automotores!`;
+
+            const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(texto)}`;
+            window.open(url, '_blank');
+        }
+
+        function resetFormulario() {
+            document.getElementById('clientName').value = 'Renzo';
+            document.getElementById('clientSurname').value = 'Segovia';
+            document.getElementById('clientDni').value = '45.361.089';
+            document.getElementById('monthlyIncome').value = '1.000.000';
+            document.getElementById('usedBrandModel').value = 'Peugeot 208 Allure 1.6';
+            document.getElementById('usedYear').value = '2019';
+            document.getElementById('usedRevistaValue').value = '20.000.000';
+            document.getElementById('usedTradeInValue').value = '10.000.000';
+            document.getElementById('newCarName').value = 'Peugeot 208 Allure MT';
+            document.getElementById('newCarYear').value = '2026';
+            document.getElementById('newCarPrice').value = '23.000.000';
+            document.getElementById('newCarTransfer').value = '1.740.000';
+            document.getElementById('opFinancingInput').value = '8.000.000';
+            document.getElementById('plazoSelect').value = '24';
+            currentPlazo = 24;
+            selectedPlanKey = 'TRADICIONAL_VO';
+            actualizarSimulacion();
+        }
+    </script>
+
+</body>
+
+</html>
