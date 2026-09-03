@@ -27,7 +27,7 @@ if sys.platform == "win32":
 import requests
 from flask import Flask, jsonify, request, send_from_directory, render_template, redirect, url_for, session
 from flask_cors import CORS
-from auth import authenticate_user
+from auth import authenticate_user, get_user_profile, list_auth_users, create_auth_user, create_user_profile, delete_auth_user, update_auth_user,update_user_profile
 
 def _load_env():
     candidates = [
@@ -56,7 +56,7 @@ app = Flask(
     __name__,
     static_folder="login/static",
     static_url_path="/static",
-    template_folder="login/templates"
+    template_folder="templates"
 )
 app.secret_key = os.environ.get("FLASK_SECRET_KEY")
 CORS(app)
@@ -576,6 +576,7 @@ def login_page():
         return redirect(url_for("home"))
 
     if request.method == "POST":
+        print(">>> ENTRE AL POST DEL LOGIN <<<", flush=True)
         email = request.form.get("email") or request.form.get("username")
         password = request.form.get("password")
 
@@ -590,15 +591,22 @@ def login_page():
             response = authenticate_user(email, password)
 
             if response and response.user:
+                profile = get_user_profile(
+                    response.user.id,
+                    response.session.access_token,
+                    response.session.refresh_token)
+                
                 session["user"] = {
                     "id": response.user.id,
-                    "email": response.user.email
-                }
+                    "email": response.user.email,
+                    "nombre": profile["nombre"],
+                    "rol": profile["rol"]
+                    }
                 return redirect(url_for("home"))
 
-        except Exception:
+        except Exception as e:
             pass
-
+        
         return render_template(
             "login.html",
             error="Email o contraseña incorrectos",
@@ -613,15 +621,94 @@ def home():
     if "user" not in session:
         return redirect(url_for("login_page"))
 
-    return send_from_directory(".", "index.html")
-
+    return render_template(
+        "index.html",
+        usuario=session["user"]
+)
 
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect(url_for("login_page"))
 
+@app.route("/admin/usuarios", methods=["GET", "POST"])
+def admin_usuarios():
+    if "user" not in session:
+        return redirect(url_for("login_page"))
 
+    if session["user"].get("rol") != "administrador":
+        return "Acceso no autorizado", 403
+
+    if request.method == "POST":
+        nombre = request.form.get("nombre")
+        email = request.form.get("email")
+        password = request.form.get("password")
+        rol = request.form.get("rol")
+
+        nuevo_usuario = create_auth_user(email, password)
+
+        create_user_profile(
+            nuevo_usuario.id,
+            nombre,
+            rol
+        )
+
+        return redirect(url_for("admin_usuarios"))
+
+    usuarios = list_auth_users()
+
+    return render_template(
+        "admin_usuarios.html",
+        usuario=session["user"],
+        usuarios=usuarios
+    )
+@app.route("/admin/usuarios/eliminar/<user_id>", methods=["POST"])
+def eliminar_usuario(user_id):
+    if "user" not in session:
+        return redirect(url_for("login_page"))
+
+    if session["user"].get("rol") != "administrador":
+        return "Acceso no autorizado", 403
+
+    # Evita que el administrador se elimine a sí mismo
+    if session["user"]["id"] == user_id:
+        return "No podés eliminar tu propio usuario", 400
+
+    delete_auth_user(user_id)
+
+    return redirect(url_for("admin_usuarios"))
+
+@app.route("/admin/usuarios/editar/<user_id>", methods=["POST"])
+def editar_usuario(user_id):
+    if "user" not in session:
+        return redirect(url_for("login_page"))
+
+    if session["user"].get("rol") != "administrador":
+        return "Acceso no autorizado", 403
+
+    nombre = request.form.get("nombre")
+    email = request.form.get("email")
+    password = request.form.get("password")
+    rol = request.form.get("rol")
+
+    # Evita que un admin se quite a sí mismo su rol
+    if session["user"]["id"] == user_id and rol != "administrador":
+        return "No podés quitarte tu propio rol de administrador", 400
+
+    update_auth_user(
+        user_id,
+        email=email,
+        password=password
+    )
+
+    update_user_profile(
+        user_id,
+        nombre,
+        rol
+    )
+
+    return redirect(url_for("admin_usuarios"))
+   
 @app.route("/buscar")
 def buscar():
     q = request.args.get("q", "")
