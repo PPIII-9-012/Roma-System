@@ -3,10 +3,91 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <title>ROMA Automotores | Iniciar sesión</title>
+<style>
+      :root{
+    --navy-900:#0a1230;
+    --navy-800:#0d1840;
+    --navy-700:#111f52;
+    --red-600:#e02020;
+    --red-700:#c81818;
+    --ink:#0d1840;
+    --muted:#6b7280;
+    --border:#e5e7eb;
+    --bg-right:#f5f6f9;
+  }
+    *{box-sizing:border-box;}
+  html,body{
+    margin:0;
+    padding:0;
+    height:100%;
+    font-family:'Segoe UI', Helvetica, Arial, sans-serif;
+  }
+  body{
+    display:flex;
+    min-height:100vh;
+    background:var(--bg-right);
+  }
+  .left-panel{
+    position:relative;
+    flex:1 1 45%;
+    min-width:340px;
+    background:
+      linear-gradient(160deg, rgba(10,18,48,.55) 0%, rgba(10,18,48,.75) 45%, rgba(6,10,28,.95) 100%),
+      url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000"><rect width="800" height="1000" fill="%230a1230"/></svg>');
+    background-size:cover;
+    color:#fff;
+    padding:60px 64px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    overflow:hidden;
+  }
+  .left-panel::before{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:55%;
+    background:
+      radial-gradient(ellipse at 30% 100%, rgba(120,150,255,.10), transparent 60%),
+      linear-gradient(0deg, rgba(0,0,0,.5), transparent);
+    pointer-events:none;
+  }
+   .brand-top{
+    position:relative;
+    z-index:2;
+      }
+       .logo{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    margin-bottom:0;
+  }
+    .logo .mark{
+    font-size:44px;
+    font-weight:800;
+    letter-spacing:-1px;
+    line-height:1;
+    font-style:italic;
+    color:#fff;
+  }
+  .logo .sub{
+    font-size:12px;
+    letter-spacing:6px;
+    color:#c9cee0;
+    font-weight:500;
+    margin-left:2px;
+  }
+  .brand-mid{
+    position:relative;
+    z-index:2;
+    max-width:420px;
+  }
+</style>
+</head>
 <body>
- 
-  <!-- ===== LEFT PANEL ===== -->
   <div class="left-panel">
     <div class="brand-top">
       <div class="logo">
