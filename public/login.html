@@ -34,10 +34,10 @@
     position:relative;
     flex:1 1 45%;
     min-width:340px;
-    background:
-      linear-gradient(160deg, rgba(10,18,48,.55) 0%, rgba(10,18,48,.75) 45%, rgba(6,10,28,.95) 100%),
-      url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000"><rect width="800" height="1000" fill="%230a1230"/></svg>');
+    background-color:#0a234d;
+    background-image:url('login_img_auto.jpg');
     background-size:cover;
+    background-position:center bottom;
     color:#fff;
     padding:60px 64px;
     display:flex;
@@ -49,15 +49,14 @@
     content:"";
     position:absolute;
     left:0; right:0; bottom:0;
-    height:55%;
-    background:
-      radial-gradient(ellipse at 30% 100%, rgba(120,150,255,.10), transparent 60%),
-      linear-gradient(0deg, rgba(0,0,0,.5), transparent);
+    height:100%;
+    background:linear-gradient(180deg, rgba(5,18,43,.08), rgba(3,12,31,.22));
     pointer-events:none;
   }
    .brand-top{
     position:relative;
     z-index:2;
+    transform:translateY(72px);
       }
        .logo{
     display:flex;
@@ -81,7 +80,11 @@
     margin-left:2px;
   }
   .brand-mid{
-    position:relative;
+    position:absolute;
+    top:43%;
+    left:64px;
+    right:40px;
+    transform:translateY(-50%);
     z-index:2;
     max-width:420px;
   }
@@ -125,22 +128,12 @@
     margin-left:2px;
   }
   .car-image{
+    display:none;
     position:absolute;
-    z-index:1;
-    left:0;
-    right:0;
-    bottom:72px;
-    display:flex;
-    justify-content:center;
     pointer-events:none;
   }
   .car-image img{
-    display:block;
-    width:min(92%, 620px);
-    max-height:280px;
-    object-fit:contain;
-    object-position:center bottom;
-    filter:drop-shadow(0 18px 20px rgba(0,0,0,.45));
+    display:none;
   }
   .right-panel{
     flex:1 1 55%;
@@ -252,9 +245,9 @@
   @media (max-width: 820px){
     body{display:block;}
     .left-panel{min-width:0; min-height:0; padding:38px 28px 24px;}
+    .brand-mid{position:relative; top:auto; left:auto; right:auto; transform:none; margin-top:34px;}
+    .brand-top{transform:translateY(24px);}
     .brand-mid h1{font-size:30px;}
-    .car-image{position:relative; left:auto; right:auto; bottom:auto; justify-content:flex-end; margin-top:24px;}
-    .car-image img{width:58%; max-height:150px;}
     .brand-bottom{display:none;}
     .right-panel{min-width:0; min-height:auto; padding:32px 20px 28px;}
     .card{padding:34px 24px 30px;}
