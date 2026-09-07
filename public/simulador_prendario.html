@@ -477,6 +477,10 @@
         });
     });
 
+    document.getElementById('panelAdmimBtn').addEventListener('click', () => {
+        window.location.href = 'panel_administrativo.html';
+    });
+
     const planCards = document.querySelectorAll('.plan-card');
     planCards.forEach((planCard) => {
         planCard.addEventListener('click', () => {
