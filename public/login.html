@@ -56,13 +56,24 @@
    .brand-top{
     position:relative;
     z-index:2;
-    transform:translateY(72px);
+    transform:translateY(15px);
       }
        .logo{
     display:flex;
     flex-direction:column;
-    gap:6px;
+        align-items:center;
+        width:200px;
+        max-width:100%;
+        gap:2px;
+        margin-left:-38px;
     margin-bottom:0;
+  }
+  .logo img{
+    width:200px;
+    max-width:100%;
+    height:auto;
+    object-fit:contain;
+    display:block;
   }
     .logo .mark{
     font-size:44px;
@@ -73,11 +84,15 @@
     color:#fff;
   }
   .logo .sub{
-    font-size:12px;
-    letter-spacing:6px;
-    color:#c9cee0;
+    width:100%;
+    max-width:100%;
+    font-size:13px;
+    opacity:.7;
+    letter-spacing:4px;
     font-weight:500;
-    margin-left:2px;
+    color:#fff;
+    text-align:center;
+    transform:translate(10px, -12px);
   }
   .brand-mid{
     position:absolute;
@@ -160,6 +175,13 @@
     align-items:center;
     margin-bottom:28px;
   }
+  .card-logo img{
+    width:200px;
+    max-width:100%;
+    height:auto;
+    display:block;
+    filter:brightness(0);
+  }
   .card-logo .mark{
     color:var(--ink);
     font-size:32px;
@@ -169,10 +191,15 @@
     line-height:1;
   }
   .card-logo .sub{
-    color:#68718a;
-    font-size:9px;
+    width:200px;
+    max-width:100%;
+    color:var(--ink);
+    font-size:13px;
     letter-spacing:4px;
-    margin:5px -4px 0 0;
+    font-weight:500;
+    text-align:center;
+    margin-top:2px;
+    transform:translate(10px, -13px);
   }
   .card h2{
     color:var(--ink);
@@ -247,6 +274,7 @@
     .left-panel{min-width:0; min-height:0; padding:38px 28px 24px;}
     .brand-mid{position:relative; top:auto; left:auto; right:auto; transform:none; margin-top:34px;}
     .brand-top{transform:translateY(24px);}
+    .logo{margin-left:0;}
     .brand-mid h1{font-size:30px;}
     .brand-bottom{display:none;}
     .right-panel{min-width:0; min-height:auto; padding:32px 20px 28px;}
@@ -258,7 +286,7 @@
   <div class="left-panel">
     <div class="brand-top">
       <div class="logo">
-        <span class="mark">ROMA</span>
+        <img src="logotiporoma.png" alt="ROMA Automotores">
         <span class="sub">AUTOMOTORES</span>
       </div>
     </div>
@@ -278,17 +306,12 @@
     <div class="right-panel">
     <div class="card">
       <div class="card-logo">
-        <span class="mark">ROMA</span>
+        <img src="logotiporoma.png" alt="ROMA Automotores">
         <span class="sub">AUTOMOTORES</span>
       </div>
         <h2>Iniciar sesión</h2>
       <p class="subtext">Ingresá tus credenciales para continuar</p>
       <form method="POST" action="/">
-        {% if error %}
-      <div class="auth-error-banner" role="alert">
-      {{ error }}
-      </div>
-      {% endif %}
         <div class="field">
           <label for="email">Email</label>
           <div class="input-wrap">
