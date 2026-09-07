@@ -168,7 +168,11 @@
     flex-shrink:0;
     background:#0B2341;
     border-right:1px solid rgba(255,255,255,.12);
-    min-height:calc(100vh - 90px);
+    border-radius:0 14px 14px 0;
+    position:sticky;
+    top:90px;
+    height:calc(100vh - 90px);
+    align-self:flex-start;
     display:flex;
     flex-direction:column;
     justify-content:space-between;
@@ -647,7 +651,7 @@
               <h3>CARGAR NUEVA SEÑAL DE CRÉDITO</h3>
             <p>Arrastrá el archivo PDF aquí o hacé clic para subirlo</p>
             <div class="hint">La información será analizada automáticamente por el sistema</div>
-            <button class="btn-upload">
+            <button class="btn-upload" id="uploadBtn" type="button">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
               SELECCIONAR PDF
             </button>
@@ -671,7 +675,7 @@
                 <div class="status-sub">5 tramos detectados · 3 cambios encontrados · 0 errores</div>
               </div>
             </div>
-              <button class="btn-outline">
+              <button class="btn-outline" id="reanalyzeBtn" type="button">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
               REANALIZAR
             </button>
@@ -743,17 +747,17 @@
             </table>
                <div class="table-actions">
               <div class="table-actions-left">
-                <button class="btn-danger-outline">
+                <button class="btn-danger-outline" id="discardBtn" type="button">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>
                   DESCARTAR CAMBIOS
                 </button>
-                <button class="btn-danger-outline">
+                <button class="btn-danger-outline" id="detailBtn" type="button">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                   VISTA DETALLADA
                 </button>
               </div>
               <div class="table-actions-right">
-                <button class="btn-publish">
+                <button class="btn-publish" id="publishBtn" type="button">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                   PUBLICAR CAMBIOS
                 </button>
@@ -801,7 +805,7 @@
             <div class="summary-row"><span>Cambios encontrados</span><span class="val">3</span></div>
             <div class="summary-row"><span>Sin cambios</span><span class="val">2</span></div>
             <div class="summary-row"><span>Errores</span><span class="val">0</span></div>
-            <button class="btn-detail">
+            <button class="btn-detail" id="analysisDetailBtn" type="button">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
               VER DETALLE DEL ANÁLISIS
             </button>
@@ -812,7 +816,7 @@
             <div class="howto-item"><div class="num">2</div><p>El sistema analiza y extrae los datos.</p></div>
             <div class="howto-item"><div class="num">3</div><p>Revisá los cambios detectados.</p></div>
             <div class="howto-item" style="margin-bottom:16px;"><div class="num">4</div><p>Publicá para actualizar el simulador.</p></div>
-            <a href="#" class="guide-link">
+            <a href="#" class="guide-link" id="guideLink">
               Ver guía completa
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
             </a>
@@ -821,5 +825,95 @@
       </div>
     </main>
   </div>
+<script>
+  const uploadButton = document.getElementById('uploadBtn');
+  const reanalyzeButton = document.getElementById('reanalyzeBtn');
+  const statusTitle = document.querySelector('.status-title');
+  const statusSub = document.querySelector('.status-sub');
+  const fileName = document.querySelector('.file-name');
+  const fileDate = document.querySelector('.file-date');
+
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'application/pdf,.pdf';
+  fileInput.hidden = true;
+  document.body.appendChild(fileInput);
+
+  uploadButton.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    fileName.textContent = file.name;
+    fileDate.textContent = 'Listo para analizar';
+    statusTitle.textContent = 'Archivo cargado correctamente';
+    statusSub.textContent = 'Presioná REANALIZAR para procesar la nueva señal';
+    uploadButton.textContent = 'CAMBIAR PDF';
+  });
+
+  reanalyzeButton.addEventListener('click', () => {
+    reanalyzeButton.disabled = true;
+    reanalyzeButton.textContent = 'ANALIZANDO...';
+    statusTitle.textContent = 'Analizando archivo...';
+    statusSub.textContent = 'El sistema está leyendo la señal de crédito';
+
+    window.setTimeout(() => {
+      reanalyzeButton.disabled = false;
+      reanalyzeButton.textContent = 'REANALIZAR';
+      statusTitle.textContent = 'Análisis completado correctamente';
+      statusSub.textContent = '5 tramos detectados · 3 cambios encontrados · 0 errores';
+      fileDate.textContent = 'Analizado ahora';
+    }, 900);
+  });
+
+  document.querySelectorAll('.edit-btn').forEach((button) => {
+    button.addEventListener('click', () => {
+      const row = button.closest('tr');
+      const values = row.querySelectorAll('.change');
+      const editing = row.classList.toggle('editing');
+
+      values.forEach((value) => {
+        value.contentEditable = editing;
+        value.style.outline = editing ? '2px solid #2563eb' : '';
+        value.style.borderRadius = editing ? '4px' : '';
+        value.style.padding = editing ? '2px 4px' : '';
+      });
+      button.title = editing ? 'Guardar cambios' : 'Editar fila';
+    });
+  });
+
+  document.getElementById('discardBtn').addEventListener('click', () => {
+    if (!window.confirm('¿Descartar los cambios detectados?')) return;
+
+    document.querySelectorAll('.badge.changed').forEach((badge) => {
+      badge.className = 'badge nochange';
+      badge.textContent = 'Sin cambio';
+    });
+    document.querySelector('.status-sub').textContent = '5 tramos detectados · 0 cambios encontrados · 0 errores';
+  });
+
+  const scrollToTable = () => document.querySelector('.table-card').scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('detailBtn').addEventListener('click', scrollToTable);
+  document.getElementById('analysisDetailBtn').addEventListener('click', scrollToTable);
+
+  document.getElementById('publishBtn').addEventListener('click', () => {
+    const pendingPill = document.querySelector('.pill.orange');
+    if (pendingPill) {
+      pendingPill.className = 'pill green';
+      pendingPill.textContent = 'Publicada';
+    }
+    document.querySelector('.btn-publish').textContent = 'CAMBIOS PUBLICADOS';
+    document.querySelector('.publish-note').textContent = 'Los cambios ya están aplicados al simulador.';
+  });
+
+  document.getElementById('guideLink').addEventListener('click', (event) => {
+    event.preventDefault();
+    window.alert('Cargá un PDF, analizá los cambios y publicá la nueva señal.');
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    window.location.href = 'login.html';
+  });
+</script>
 </body>
 </html>
