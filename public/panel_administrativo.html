@@ -197,6 +197,12 @@
     font-weight:600;
     color:rgba(255,255,255,.8);
     margin-bottom:4px;
+    width:100%;
+    border:0;
+    background:transparent;
+    text-align:left;
+    font-family:inherit;
+    cursor:pointer;
   }
   .sidebar .nav-item svg{width:17px;height:17px;flex-shrink:0;}
   .sidebar .nav-item.active{
@@ -228,6 +234,50 @@
   .sidebar-footer .name{font-size:13.5px;font-weight:700;color:#fff;}
   .sidebar-footer .mail{font-size:11.5px;color:rgba(255,255,255,.65);}
   .sidebar-footer svg.chev{width:16px;height:16px;color:rgba(255,255,255,.65);}
+  .history-view{
+    flex:1;
+    min-width:0;
+    padding:32px 28px 60px;
+  }
+  .history-view[hidden]{display:none;}
+  .history-list{
+    display:grid;
+    gap:14px;
+  }
+  .history-item{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:18px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+  }
+  .history-file{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    min-width:0;
+  }
+  .history-file .icon-badge{flex-shrink:0;}
+  .history-file-name{font-size:14px;font-weight:700;color:var(--ink);}
+  .history-file-date{font-size:12.5px;color:var(--muted);margin-top:4px;}
+  .history-meta{
+    display:flex;
+    align-items:center;
+    gap:22px;
+    color:var(--muted);
+    font-size:12.5px;
+    white-space:nowrap;
+  }
+  .history-meta strong{color:var(--ink);font-size:14px;}
+  .history-item .btn-outline{flex-shrink:0;}
+  @media (max-width: 800px){
+    .history-view{padding:24px 18px 40px;}
+    .history-item{align-items:flex-start;flex-direction:column;}
+    .history-meta{width:100%;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  }
    .main{
     flex:1;
     min-width:0;
@@ -615,14 +665,14 @@
     <aside class="sidebar">
       <div>
            <div class="eyebrow">ADMINISTRACIÓN</div>
-        <div class="nav-item active">
+        <button class="nav-item active" id="currentSignalNav" type="button">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           Señal de crédito
-        </div>
-          <div class="nav-item">
+        </button>
+          <button class="nav-item" id="historyNav" type="button">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           Historial de señales
-        </div>
+        </button>
       </div>
          <div class="sidebar-footer">
         <div class="who">
@@ -637,7 +687,7 @@
            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
     </aside>
-      <main class="main">
+      <main class="main" id="currentSignalView">
       <h1 class="page-title">Señal de crédito</h1>
       <p class="page-sub">Cargá un nuevo archivo PDF con la señal de crédito. El sistema leerá la información y detectará los cambios automáticamente.</p>
    <div class="content-row">
@@ -825,8 +875,72 @@
         </div>
       </div>
     </main>
+    <section class="history-view" id="historyView" hidden>
+      <h1 class="page-title">Historial de señales</h1>
+      <p class="page-sub">Consultá las señales de crédito cargadas anteriormente.</p>
+      <div class="history-list">
+        <article class="history-item">
+          <div class="history-file">
+            <div class="icon-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div>
+              <div class="history-file-name">Señal_Crédito_Junio_2026.pdf</div>
+              <div class="history-file-date">Publicada el 01/06/2026</div>
+            </div>
+          </div>
+          <div class="history-meta"><span><strong>5</strong> tramos</span><span class="pill green">Publicada</span><button class="btn-outline history-detail" type="button">VER DETALLE</button></div>
+        </article>
+        <article class="history-item">
+          <div class="history-file">
+            <div class="icon-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div>
+              <div class="history-file-name">Señal_Crédito_Mayo_2026.pdf</div>
+              <div class="history-file-date">Publicada el 01/05/2026</div>
+            </div>
+          </div>
+          <div class="history-meta"><span><strong>5</strong> tramos</span><span class="pill green">Publicada</span><button class="btn-outline history-detail" type="button">VER DETALLE</button></div>
+        </article>
+        <article class="history-item">
+          <div class="history-file">
+            <div class="icon-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div>
+              <div class="history-file-name">Señal_Crédito_Abril_2026.pdf</div>
+              <div class="history-file-date">Publicada el 01/04/2026</div>
+            </div>
+          </div>
+          <div class="history-meta"><span><strong>5</strong> tramos</span><span class="pill green">Publicada</span><button class="btn-outline history-detail" type="button">VER DETALLE</button></div>
+        </article>
+      </div>
+    </section>
   </div>
 <script>
+  const currentSignalNav = document.getElementById('currentSignalNav');
+  const historyNav = document.getElementById('historyNav');
+  const currentSignalView = document.getElementById('currentSignalView');
+  const historyView = document.getElementById('historyView');
+
+  const showPanelView = (view) => {
+    const showHistory = view === 'history';
+    currentSignalView.hidden = showHistory;
+    historyView.hidden = !showHistory;
+    currentSignalNav.classList.toggle('active', !showHistory);
+    historyNav.classList.toggle('active', showHistory);
+  };
+
+  currentSignalNav.addEventListener('click', () => showPanelView('current'));
+  historyNav.addEventListener('click', () => showPanelView('history'));
+  document.querySelectorAll('.history-detail').forEach((button) => {
+    button.addEventListener('click', () => {
+      const file = button.closest('.history-item').querySelector('.history-file-name').textContent;
+      window.alert(`Detalle de ${file}: señal publicada y disponible para consulta.`);
+    });
+  });
+
   const uploadButton = document.getElementById('uploadBtn');
   const reanalyzeButton = document.getElementById('reanalyzeBtn');
   const statusTitle = document.querySelector('.status-title');
