@@ -251,6 +251,152 @@
     margin-bottom:24px;
     flex-wrap:wrap;
   }
+   .file-summary .file-info{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex:1;
+    min-width:220px;
+  }
+  .file-summary .icon-badge{
+    width:38px;height:38px;border-radius:10px;
+    background:var(--blue-50);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+    .file-summary .icon-badge svg{width:18px;height:18px;color:var(--blue-600);}
+  .file-summary .file-name{font-size:14px;font-weight:700;color:var(--ink);}
+  .file-summary .file-date{font-size:12.5px;color:var(--muted);}
+   .file-summary .status-info{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex:1.4;
+    min-width:280px;
+  }
+  .file-summary .icon-badge.green{background:var(--green-50);}
+  .file-summary .icon-badge.green svg{color:var(--green-600);}
+  .file-summary .status-title{font-size:14px;font-weight:700;color:var(--green-600);}
+  .file-summary .status-sub{font-size:12.5px;color:var(--muted);}
+  .btn-outline{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:9px 16px;
+    font-size:12.5px;
+    font-weight:700;
+    color:#374151;
+    letter-spacing:.3px;
+    white-space:nowrap;
+  }
+  .btn-outline:hover{background:#f9fafb;}
+  .btn-outline svg{width:15px;height:15px;}
+   .table-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:24px 24px 20px;
+  }
+    .table-card h3{
+    font-size:17px;
+    font-weight:700;
+    color:var(--ink);
+    margin:0 0 4px 0;
+    display:flex;
+    align-items:center;
+    gap:7px;
+  }
+   .table-card h3 svg{width:15px;height:15px;color:var(--muted-2);}
+  .table-card .table-sub{
+    font-size:13.5px;
+    color:var(--muted);
+    margin:0 0 18px 0;
+  }
+    table{
+    width:100%;
+    border-collapse:collapse;
+  }
+    thead th{
+    text-align:center;
+    font-size:12.5px;
+    font-weight:700;
+    color:#374151;
+    padding:10px 8px 6px;
+    border-bottom:1px solid var(--border);
+  }
+    thead th .col-sub{
+    display:block;
+    font-size:10.5px;
+    font-weight:600;
+    color:var(--muted-2);
+    margin-top:3px;
+  }
+   tbody td{
+    text-align:center;
+    font-size:13.5px;
+    color:#1f2937;
+    padding:14px 8px;
+    border-bottom:1px solid #f1f2f4;
+  }
+    tbody tr:last-child td{border-bottom:none;}
+  .change{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+  }
+   .change .new-val.up{color:var(--changed);font-weight:700;}
+  .change .new-val.down{color:var(--changed-warn);font-weight:700;}
+  .arrow{color:var(--muted-2);font-size:11px;}
+  .badge{
+    display:inline-block;
+    padding:4px 12px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:700;
+  }
+   .badge.nochange{background:#f3f4f6;color:#6b7280;}
+  .badge.changed{background:var(--green-50);color:var(--green-600);}
+   .edit-btn{
+    background:none;border:none;color:var(--muted-2);
+    display:inline-flex;padding:4px;
+  }
+  .edit-btn svg{width:15px;height:15px;}
+  .table-actions{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-top:22px;
+    flex-wrap:wrap;
+    gap:14px;
+  }
+    .table-actions-left{display:flex;gap:12px;}
+  .btn-danger-outline{
+    display:inline-flex;align-items:center;gap:8px;
+    background:#fff;border:1px solid var(--border);
+    color:#6b7280;border-radius:9px;padding:11px 18px;
+    font-size:12.5px;font-weight:700;letter-spacing:.3px;
+  }
+   .btn-danger-outline:hover{background:#f9fafb;}
+  .btn-danger-outline svg{width:15px;height:15px;}
+ 
+  .table-actions-right{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:6px;
+  }
+   .btn-publish{
+    display:inline-flex;align-items:center;gap:9px;
+    background:linear-gradient(180deg,#e02020,#c81818);
+    color:#fff;border:none;border-radius:9px;
+    padding:12px 22px;font-size:13.5px;font-weight:700;letter-spacing:.3px;
+  }
+  .btn-publish svg{width:15px;height:15px;}
+  .publish-note{font-size:12px;color:var(--muted-2);}
+ 
 </style>
 </head>
 <body>
