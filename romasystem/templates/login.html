@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
  <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="icon" type="image/x-icon" href="/static/logo.ico">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <title>ROMA Automotores | Iniciar sesión</title>
 <style>
@@ -58,12 +59,24 @@
     z-index:2;
     transform:translateY(72px);
       }
-       .logo{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-    margin-bottom:0;
-  }
+    .logo{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  width:200px;
+  max-width:100%;
+  gap:2px;
+  margin-left:-38px;
+  margin-bottom:0;
+}
+.logo img{
+  width:200px;
+  max-width:100%;
+  height:auto;
+  object-fit:contain;
+  display:block;
+}
+
     .logo .mark{
     font-size:44px;
     font-weight:800;
@@ -72,13 +85,17 @@
     font-style:italic;
     color:#fff;
   }
-  .logo .sub{
-    font-size:12px;
-    letter-spacing:6px;
-    color:#c9cee0;
-    font-weight:500;
-    margin-left:2px;
-  }
+ .logo .sub{
+  width:100%;
+  max-width:100%;
+  font-size:13px;
+  opacity:.7;
+  letter-spacing:4px;
+  font-weight:500;
+  color:#fff;
+  text-align:center;
+  transform:translate(10px, -12px);
+}
   .brand-mid{
     position:absolute;
     top:43%;
@@ -160,6 +177,14 @@
     align-items:center;
     margin-bottom:28px;
   }
+  .card-logo img{
+  width:200px;
+  max-width:100%;
+  height:auto;
+  display:block;
+  filter:brightness(0);
+}
+
   .card-logo .mark{
     color:var(--ink);
     font-size:32px;
@@ -169,11 +194,17 @@
     line-height:1;
   }
   .card-logo .sub{
-    color:#68718a;
-    font-size:9px;
-    letter-spacing:4px;
-    margin:5px -4px 0 0;
-  }
+  width:200px;
+  max-width:100%;
+  color:var(--ink);
+  font-size:13px;
+  letter-spacing:4px;
+  font-weight:500;
+  text-align:center;
+  margin-top:2px;
+  transform:translate(10px, -13px);
+}
+
   .card h2{
     color:var(--ink);
     font-size:25px;
@@ -246,11 +277,12 @@
     body{display:block;}
     .left-panel{min-width:0; min-height:0; padding:38px 28px 24px;}
     .brand-mid{position:relative; top:auto; left:auto; right:auto; transform:none; margin-top:34px;}
-    .brand-top{transform:translateY(24px);}
+    .brand-top {transform:translateY(15px);}
     .brand-mid h1{font-size:30px;}
     .brand-bottom{display:none;}
     .right-panel{min-width:0; min-height:auto; padding:32px 20px 28px;}
     .card{padding:34px 24px 30px;}
+    .logo{margin-left:0;}
   }
 </style>
 </head>
@@ -271,7 +303,7 @@
         <img src="login_img_auto.jpg" alt="Automóvil ROMA Automotores">
       </div>
      <div class="brand-bottom">
-      <span class="mark">ROMA</span>
+      <img src="/static/logotiporoma.png" alt="ROMA Automotores">
       <span class="sub">AUTOMOTORES</span>
     </div>
   </div>
