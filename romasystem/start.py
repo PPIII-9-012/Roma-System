@@ -22,7 +22,7 @@ PUERTO = int(os.environ.get("PORT", 5050))
 
 
 def instalar_dependencias():
-    paquetes = ["flask", "flask-cors", "requests"]
+    paquetes = ["flask", "flask-cors", "requests", "supabase", "pypdf"]
     print("[*] Verificando dependencias...")
     subprocess.check_call(
         [sys.executable, "-m", "pip", "install", *paquetes, "-q"],
@@ -57,12 +57,7 @@ def main():
     print("[*] Arrancando backend Flask...")
     backend_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "backend.py")
     proc = subprocess.Popen(
-        [sys.executable, backend_path],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        text=True,
-        encoding="utf-8",
-        errors="replace"
+    [sys.executable, "-u", backend_path]
     )
 
     # Esperar a que esté listo
@@ -73,10 +68,8 @@ def main():
     else:
         print("[ERROR] El backend no respondio a tiempo. Logs:\n")
 
-    # Mostrar logs del backend en tiempo real
     try:
-        for linea in proc.stdout:
-            print(f"  [backend] {linea}", end="")
+        proc.wait()
     except KeyboardInterrupt:
         print("\n\n[*] Cerrando...")
         proc.terminate()

@@ -675,6 +675,40 @@ def guardar_circular_psa(datos_circular, nombre_archivo, tasas, usuario_id):
         raise RuntimeError("No se pudo publicar la circular en Supabase.")
 
     return respuesta.data
+@app.route("/api/psa/vigente", methods=["GET"])
+def obtener_circular_psa_vigente():
+    if "user" not in session:
+        return jsonify({"error": "Debes iniciar sesión"}), 401
+
+    try:
+        supabase = get_admin_client()
+
+        respuesta = (
+            supabase
+            .table("circulares_psa")
+            .select("id,numero_circular,mes,anio,vigencia,nombre_archivo")
+            .order("vigencia", desc=True)
+            .order("id", desc=True)
+            .limit(1)
+            .execute()
+        )
+
+        if not respuesta.data:
+            return jsonify({
+                "ok": True,
+                "circular": None,
+            })
+
+        return jsonify({
+            "ok": True,
+            "circular": respuesta.data[0],
+        })
+
+    except Exception as e:
+        return jsonify({
+            "error": "No se pudo obtener la circular vigente",
+            "detalle": str(e),
+        }), 500
 
 @app.route("/api/psa/circular", methods=["POST"])
 def cargar_circular_psa():
