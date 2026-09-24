@@ -180,3 +180,14 @@ def preparar_tasas_para_supabase(planes):
             })
 
     return filas_supabase
+
+def buscar_pagina_financiacion_usados(paginas):
+    for pagina in paginas:
+        texto = pagina["texto"]
+
+        if "FINANCIACIÓN USADOS" in texto.upper():
+            return pagina
+
+    raise ValueError(
+        "No se encontró la sección FINANCIACIÓN USADOS en el PDF."
+    )

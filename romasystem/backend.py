@@ -46,6 +46,7 @@ from psa_pdf import (
     extraer_filas_tasas,
     agrupar_tasas_por_plan,
     preparar_tasas_para_supabase,
+    buscar_pagina_financiacion_usados,
 )
 def _load_env():
     candidates = [
@@ -656,6 +657,22 @@ def logout():
 
 def guardar_circular_psa(datos_circular, nombre_archivo, tasas, usuario_id):
     supabase = get_admin_client()
+    existente = (
+        supabase
+        .table("circulares_psa")
+        .select("id,numero_circular")
+        .eq("anio", datos_circular["anio"])
+        .eq("mes", datos_circular["mes"])
+        .limit(1)
+        .execute()
+        )
+
+    if existente.data:
+        raise ValueError(
+            f"Ya existe una circular publicada para "
+            f"{datos_circular['mes']}/{datos_circular['anio']} "
+            f"(circular {existente.data[0]['numero_circular']})."
+            )
 
     circular = {
         "numero_circular": datos_circular["numero_circular"],
@@ -723,9 +740,8 @@ def cargar_circular_psa():
 
         paginas = extraer_texto_pdf(ruta_temporal)
         datos_circular = extraer_datos_circular(paginas)
-        
-        texto_usados = paginas[5]["texto"]
-        filas_tasas = extraer_filas_tasas(texto_usados)
+        pagina_usados = buscar_pagina_financiacion_usados(paginas)
+        filas_tasas = extraer_filas_tasas(pagina_usados["texto"])
         planes = agrupar_tasas_por_plan(filas_tasas)
         tasas = preparar_tasas_para_supabase(planes)
 
@@ -774,7 +790,8 @@ def publicar_circular_psa():
         paginas = extraer_texto_pdf(ruta_temporal)
         datos_circular = extraer_datos_circular(paginas)
 
-        filas = extraer_filas_tasas(paginas[5]["texto"])
+        pagina_usados = buscar_pagina_financiacion_usados(paginas)
+        filas = extraer_filas_tasas(pagina_usados["texto"])
         planes = agrupar_tasas_por_plan(filas)
         tasas = preparar_tasas_para_supabase(planes)
 
