@@ -132,6 +132,14 @@ def agrupar_tasas_por_plan(filas):
         ("UVA_TRAD10", "UVA Tradicional 10%", "uva", 40_000_000, 5),
     ]
 
+    plazos_esperados = {
+        "PROMO_FIJA": [12, 18, 24, 36],
+        "TRADICIONAL_VO": [12, 18, 24, 36, 48, 60],
+        "TRADICIONAL_VO10": [12, 18, 24, 36, 48, 60],
+        "PROMO_UVA": [12, 24, 36],
+        "UVA_TRAD": [12, 24, 36, 48, 60],
+        "UVA_TRAD10": [12, 24, 36, 48, 60],
+    }
     cantidad_esperada = sum(item[4] for item in estructura)
 
     if len(filas) != cantidad_esperada:
@@ -145,6 +153,15 @@ def agrupar_tasas_por_plan(filas):
 
     for clave, nombre, tipo, max_prestamo, cantidad in estructura:
         tasas_plan = filas[posicion:posicion + cantidad]
+        plazos_encontrados = [tasa["plazo"] for tasa in tasas_plan]
+
+        if plazos_encontrados != plazos_esperados[clave]:
+            raise ValueError(
+                f"Los plazos del plan {clave} no coinciden con "
+                f"la estructura esperada. "
+                f"Esperados: {plazos_esperados[clave]}. "
+                f"Encontrados: {plazos_encontrados}."
+            )
 
         planes[clave] = {
             "nombre": nombre,
