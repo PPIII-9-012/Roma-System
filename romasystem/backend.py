@@ -963,6 +963,6 @@ if __name__ == "__main__":
             print(f"[WARN] Advertencia login Infoauto: {e}")
     threading.Thread(target=try_initial_login, daemon=True).start()
     print(f"[OK] Backend Roma Automotores listo en http://localhost:{PORT}")
-    app.run(debug=True, port=PORT, host="0.0.0.0")
+    app.run(debug=False, port=PORT, host="0.0.0.0", use_reloader=False)
 
 
