@@ -720,9 +720,6 @@ def cargar_circular_psa():
     if "user" not in session:
         return jsonify({"error": "Debes iniciar sesión"}), 401
 
-    if session["user"].get("rol") != "administrador":
-        return jsonify({"error": "Acceso no autorizado"}), 403
-
     archivo = request.files.get("pdf")
 
     if not archivo or not archivo.filename:
@@ -768,9 +765,6 @@ def cargar_circular_psa():
 def publicar_circular_psa():
     if "user" not in session:
         return jsonify({"error": "Debes iniciar sesión"}), 401
-
-    if session["user"].get("rol") != "administrador":
-        return jsonify({"error": "Acceso no autorizado"}), 403
 
     archivo = request.files.get("pdf")
 
