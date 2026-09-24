@@ -657,63 +657,24 @@ def logout():
 
 def guardar_circular_psa(datos_circular, nombre_archivo, tasas, usuario_id):
     supabase = get_admin_client()
-    existente = (
-        supabase
-        .table("circulares_psa")
-        .select("id,numero_circular")
-        .eq("anio", datos_circular["anio"])
-        .eq("mes", datos_circular["mes"])
-        .limit(1)
-        .execute()
-        )
 
-    if existente.data:
-        raise ValueError(
-            f"Ya existe una circular publicada para "
-            f"{datos_circular['mes']}/{datos_circular['anio']} "
-            f"(circular {existente.data[0]['numero_circular']})."
-            )
+    respuesta = supabase.rpc(
+        "publicar_circular_psa",
+        {
+            "p_numero_circular": datos_circular["numero_circular"],
+            "p_mes": datos_circular["mes"],
+            "p_anio": datos_circular["anio"],
+            "p_vigencia": datos_circular["vigencia"],
+            "p_nombre_archivo": nombre_archivo,
+            "p_cargado_por": usuario_id,
+            "p_tasas": tasas,
+        },
+    ).execute()
 
-    circular = {
-        "numero_circular": datos_circular["numero_circular"],
-        "mes": datos_circular["mes"],
-        "anio": datos_circular["anio"],
-        "vigencia": datos_circular["vigencia"],
-        "nombre_archivo": nombre_archivo,
-        "cargado_por": usuario_id,
-    }
+    if respuesta.data is None:
+        raise RuntimeError("No se pudo publicar la circular en Supabase.")
 
-    respuesta = (
-        supabase
-        .table("circulares_psa")
-        .insert(circular)
-        .execute()
-    )
-
-    if not respuesta.data:
-        raise RuntimeError("No se pudo guardar la circular en Supabase.")
-
-    circular_id = respuesta.data[0]["id"]
-
-    filas_tasas = []
-
-    for tasa in tasas:
-        fila = tasa.copy()
-        fila["circular_id"] = circular_id
-        filas_tasas.append(fila)
-
-    try:
-        supabase.table("tasas_psa").insert(filas_tasas).execute()
-
-    except Exception:
-        # Si fallan las tasas, eliminamos la circular recién creada.
-        # Por el ON DELETE CASCADE también se elimina cualquier tasa parcial.
-        supabase.table("circulares_psa").delete().eq(
-            "id", circular_id
-        ).execute()
-        raise
-
-    return circular_id
+    return respuesta.data
 
 @app.route("/api/psa/circular", methods=["POST"])
 def cargar_circular_psa():
