@@ -11,6 +11,7 @@ import os
 import sys
 import threading
 import time
+import tempfile
 import webbrowser
 from dataclasses import dataclass, field, asdict
 from datetime import date
@@ -27,8 +28,25 @@ if sys.platform == "win32":
 import requests
 from flask import Flask, jsonify, request, send_from_directory, render_template, redirect, url_for, session
 from flask_cors import CORS
-from auth import authenticate_user, get_user_profile, list_auth_users, create_auth_user, create_user_profile, delete_auth_user, update_auth_user,update_user_profile
+from auth import (
+    authenticate_user,
+    get_user_profile,
+    get_admin_client,
+    list_auth_users,
+    create_auth_user,
+    create_user_profile,
+    delete_auth_user,
+    update_auth_user,
+    update_user_profile,
+)
 
+from psa_pdf import (
+    extraer_texto_pdf,
+    extraer_datos_circular,
+    extraer_filas_tasas,
+    agrupar_tasas_por_plan,
+    preparar_tasas_para_supabase,
+)
 def _load_env():
     candidates = [
         os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"),
@@ -272,85 +290,9 @@ def proxy_endpoint(endpoint, params=None):
         data = r.text
     return jsonify(data), r.status_code
 
-
-
-
 # ---------------------------------------------------------------------------
-# TABLA OFICIAL PSA FINANCE JUNIO 2026
+# CONFIGURACIÓN DEL SIMULADOR
 # ---------------------------------------------------------------------------
-TABLA_PSA: dict = {
-    "PROMO_FIJA": {
-        "nombre": "Promo Fija Usados",
-        "tipo": "fijo",
-        "max_prestamo": 12_000_000,
-        "plazos": {
-            12: {"tna": 0.000, "factor": 83.33, "ce": 0.10},
-            18: {"tna": 0.199, "factor": 68.20, "ce": 0.10},
-            24: {"tna": 0.269, "factor": 59.04, "ce": 0.10},
-            36: {"tna": 0.329, "factor": 49.81, "ce": 0.10},
-        },
-    },
-    "TRADICIONAL_VO": {
-        "nombre": "Tradicional VO",
-        "tipo": "fijo",
-        "max_prestamo": None,
-        "plazos": {
-            12: {"tna": 0.475, "factor": 114.61, "ce": 0.025},
-            18: {"tna": 0.475, "factor": 87.04,  "ce": 0.010},
-            24: {"tna": 0.475, "factor": 73.62,  "ce": 0.010},
-            36: {"tna": 0.475, "factor": 60.89,  "ce": 0.000},
-            48: {"tna": 0.475, "factor": 55.17,  "ce": 0.000},
-            60: {"tna": 0.475, "factor": 52.17,  "ce": 0.000},
-        },
-    },
-    "TRADICIONAL_VO10": {
-        "nombre": "Tradicional VO 10%",
-        "tipo": "fijo",
-        "max_prestamo": None,
-        "plazos": {
-            12: {"tna": 0.235, "factor": 98.43, "ce": 0.10},
-            18: {"tna": 0.305, "factor": 75.26, "ce": 0.10},
-            24: {"tna": 0.345, "factor": 64.29, "ce": 0.10},
-            36: {"tna": 0.385, "factor": 53.98, "ce": 0.10},
-            48: {"tna": 0.395, "factor": 48.65, "ce": 0.10},
-            60: {"tna": 0.415, "factor": 47.02, "ce": 0.10},
-        },
-    },
-    "PROMO_UVA": {
-        "nombre": "Promo UVA VO",
-        "tipo": "uva",
-        "max_prestamo": 17_000_000,
-        "plazos": {
-            12: {"tna": 0.000, "factor": 83.33, "ce": 0.06},
-            24: {"tna": 0.069, "factor": 45.93, "ce": 0.06},
-            36: {"tna": 0.099, "factor": 33.95, "ce": 0.06},
-        },
-    },
-    "UVA_TRAD": {
-        "nombre": "UVA Tradicional VO",
-        "tipo": "uva",
-        "max_prestamo": 40_000_000,
-        "plazos": {
-            12: {"tna": 0.249, "factor": 99.35, "ce": 0.00},
-            24: {"tna": 0.249, "factor": 57.68, "ce": 0.00},
-            36: {"tna": 0.249, "factor": 44.06, "ce": 0.00},
-            48: {"tna": 0.249, "factor": 37.46, "ce": 0.00},
-            60: {"tna": 0.249, "factor": 33.65, "ce": 0.00},
-        },
-    },
-    "UVA_TRAD10": {
-        "nombre": "UVA Tradicional 10%",
-        "tipo": "uva",
-        "max_prestamo": 40_000_000,
-        "plazos": {
-            12: {"tna": 0.069, "factor": 87.69, "ce": 0.10},
-            24: {"tna": 0.159, "factor": 51.70, "ce": 0.10},
-            36: {"tna": 0.179, "factor": 39.23, "ce": 0.10},
-            48: {"tna": 0.189, "factor": 33.15, "ce": 0.10},
-            60: {"tna": 0.189, "factor": 29.19, "ce": 0.10},
-        },
-    },
-}
 
 IVA = 1.21          # IVA 21%
 RCI_MAX_FIJO = 0.50  # Límite cuota/ingreso fijos
@@ -423,6 +365,83 @@ def calcular_max_plazo(antiguedad: int) -> int:
         return 0
 
 
+def cargar_tabla_psa_desde_supabase():
+    supabase = get_admin_client()
+
+    # Buscamos la circular vigente más reciente
+    respuesta_circular = (
+        supabase
+        .table("circulares_psa")
+        .select("id")
+        .order("vigencia", desc=True)
+        .order("id", desc=True)
+        .limit(1)
+        .execute()
+    )
+
+    if not respuesta_circular.data:
+        raise RuntimeError("No hay ninguna circular PSA publicada.")
+
+    circular_id = respuesta_circular.data[0]["id"]
+
+    # Traemos las tasas pertenecientes a esa circular
+    respuesta_tasas = (
+        supabase
+        .table("tasas_psa")
+        .select(
+            "nombre_linea,categoria,monto_maximo,"
+            "plazo,tna,aporte_ce,cuota_por_1000"
+        )
+        .eq("circular_id", circular_id)
+        .execute()
+    )
+
+    tasas = respuesta_tasas.data or []
+
+    if not tasas:
+        raise RuntimeError("La circular vigente no tiene tasas cargadas.")
+
+    nombres = {
+        "PROMO_FIJA": "Promo Fija Usados",
+        "TRADICIONAL_VO": "Tradicional VO",
+        "TRADICIONAL_VO10": "Tradicional VO 10%",
+        "PROMO_UVA": "Promo UVA VO",
+        "UVA_TRAD": "UVA Tradicional VO",
+        "UVA_TRAD10": "UVA Tradicional 10%",
+    }
+
+    tabla = {}
+
+    for fila in tasas:
+        clave = fila["nombre_linea"]
+
+        if clave not in tabla:
+            tabla[clave] = {
+                "nombre": nombres.get(clave, clave),
+                "tipo": fila["categoria"],
+                "max_prestamo": (
+                    float(fila["monto_maximo"])
+                    if fila["monto_maximo"] is not None
+                    else None
+                ),
+                "plazos": {},
+            }
+
+        plazo = int(fila["plazo"])
+
+        tabla[clave]["plazos"][plazo] = {
+            # Supabase guarda 19.9 y el motor necesita 0.199
+            "tna": float(fila["tna"]) / 100,
+
+            # Supabase guarda 10.0 y el motor necesita 0.10
+            "ce": float(fila["aporte_ce"]) / 100,
+
+            # Este valor ya está en el formato que usa el cálculo
+            "factor": float(fila["cuota_por_1000"]),
+        }
+
+    return tabla
+
 def calcular_credito(
     plan_key:       str,
     plazo:          int,
@@ -434,13 +453,15 @@ def calcular_credito(
     anio_usado:     int = 0,
     precio_revista: float = 0.0,
     ingresos:       float = 0.0,
+    tabla_psa:      dict | None = None,
 ) -> ResultadoCredito:
     errores = []
+    if tabla_psa is None:
+        tabla_psa = cargar_tabla_psa_desde_supabase()
 
-    if plan_key not in TABLA_PSA:
-        raise ValueError(f"Plan '{plan_key}' no existe en TABLA_PSA.")
-
-    plan = TABLA_PSA[plan_key]
+    if plan_key not in tabla_psa:
+        raise ValueError(f"Plan '{plan_key}' no existe en la tabla PSA vigente.")
+    plan = tabla_psa[plan_key]
 
     if plazo not in plan["plazos"]:
         raise ValueError(
@@ -547,9 +568,10 @@ def calcular_todos_los_planes(
     precio_revista: float = 0.0,
     ingresos:       float = 0.0,
 ) -> list[dict]:
+    tabla_psa = cargar_tabla_psa_desde_supabase()
     resultados = []
-    for plan_key in TABLA_PSA:
-        for plazo in TABLA_PSA[plan_key]["plazos"]:
+    for plan_key in tabla_psa:
+        for plazo in tabla_psa[plan_key]["plazos"]:
             r = calcular_credito(
                 plan_key       = plan_key,
                 plazo          = plazo,
@@ -561,6 +583,7 @@ def calcular_todos_los_planes(
                 anio_usado     = anio_usado,
                 precio_revista = precio_revista,
                 ingresos       = ingresos,
+                tabla_psa      = tabla_psa,
             )
             resultados.append(asdict(r))
     return resultados
@@ -630,6 +653,156 @@ def home():
 def logout():
     session.clear()
     return redirect(url_for("login_page"))
+
+def guardar_circular_psa(datos_circular, nombre_archivo, tasas, usuario_id):
+    supabase = get_admin_client()
+
+    circular = {
+        "numero_circular": datos_circular["numero_circular"],
+        "mes": datos_circular["mes"],
+        "anio": datos_circular["anio"],
+        "vigencia": datos_circular["vigencia"],
+        "nombre_archivo": nombre_archivo,
+        "cargado_por": usuario_id,
+    }
+
+    respuesta = (
+        supabase
+        .table("circulares_psa")
+        .insert(circular)
+        .execute()
+    )
+
+    if not respuesta.data:
+        raise RuntimeError("No se pudo guardar la circular en Supabase.")
+
+    circular_id = respuesta.data[0]["id"]
+
+    filas_tasas = []
+
+    for tasa in tasas:
+        fila = tasa.copy()
+        fila["circular_id"] = circular_id
+        filas_tasas.append(fila)
+
+    try:
+        supabase.table("tasas_psa").insert(filas_tasas).execute()
+
+    except Exception:
+        # Si fallan las tasas, eliminamos la circular recién creada.
+        # Por el ON DELETE CASCADE también se elimina cualquier tasa parcial.
+        supabase.table("circulares_psa").delete().eq(
+            "id", circular_id
+        ).execute()
+        raise
+
+    return circular_id
+
+@app.route("/api/psa/circular", methods=["POST"])
+def cargar_circular_psa():
+    if "user" not in session:
+        return jsonify({"error": "Debes iniciar sesión"}), 401
+
+    if session["user"].get("rol") != "administrador":
+        return jsonify({"error": "Acceso no autorizado"}), 403
+
+    archivo = request.files.get("pdf")
+
+    if not archivo or not archivo.filename:
+        return jsonify({"error": "Debes seleccionar un PDF"}), 400
+
+    if not archivo.filename.lower().endswith(".pdf"):
+        return jsonify({"error": "El archivo debe ser un PDF"}), 400
+
+    ruta_temporal = None
+
+    try:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+            ruta_temporal = tmp.name
+            archivo.save(ruta_temporal)
+
+        paginas = extraer_texto_pdf(ruta_temporal)
+        datos_circular = extraer_datos_circular(paginas)
+        
+        texto_usados = paginas[5]["texto"]
+        filas_tasas = extraer_filas_tasas(texto_usados)
+        planes = agrupar_tasas_por_plan(filas_tasas)
+        tasas = preparar_tasas_para_supabase(planes)
+
+        return jsonify({
+            "ok": True,
+            "archivo": archivo.filename,
+            "circular": datos_circular,
+            "paginas": len(paginas),
+            "cantidad_tasas": len(tasas),
+            "tasas": tasas,
+        })
+
+    except Exception as e:
+        return jsonify({
+            "error": "No se pudo procesar la circular",
+            "detalle": str(e),
+        }), 400
+
+    finally:
+        if ruta_temporal and os.path.exists(ruta_temporal):
+            os.remove(ruta_temporal)
+
+@app.route("/api/psa/publicar", methods=["POST"])
+def publicar_circular_psa():
+    if "user" not in session:
+        return jsonify({"error": "Debes iniciar sesión"}), 401
+
+    if session["user"].get("rol") != "administrador":
+        return jsonify({"error": "Acceso no autorizado"}), 403
+
+    archivo = request.files.get("pdf")
+
+    if not archivo or not archivo.filename:
+        return jsonify({"error": "Debes seleccionar un PDF"}), 400
+
+    if not archivo.filename.lower().endswith(".pdf"):
+        return jsonify({"error": "El archivo debe ser un PDF"}), 400
+
+    ruta_temporal = None
+
+    try:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+            ruta_temporal = tmp.name
+            archivo.save(ruta_temporal)
+
+        paginas = extraer_texto_pdf(ruta_temporal)
+        datos_circular = extraer_datos_circular(paginas)
+
+        filas = extraer_filas_tasas(paginas[5]["texto"])
+        planes = agrupar_tasas_por_plan(filas)
+        tasas = preparar_tasas_para_supabase(planes)
+
+        circular_id = guardar_circular_psa(
+            datos_circular=datos_circular,
+            nombre_archivo=archivo.filename,
+            tasas=tasas,
+            usuario_id=session["user"]["id"],
+        )
+
+        return jsonify({
+            "ok": True,
+            "mensaje": "Circular publicada correctamente",
+            "circular_id": circular_id,
+            "numero_circular": datos_circular["numero_circular"],
+            "cantidad_tasas": len(tasas),
+        })
+
+    except Exception as e:
+        return jsonify({
+            "error": "No se pudo publicar la circular",
+            "detalle": str(e),
+        }), 400
+
+    finally:
+        if ruta_temporal and os.path.exists(ruta_temporal):
+            os.remove(ruta_temporal)
+
 
 @app.route("/admin/usuarios", methods=["GET", "POST"])
 def admin_usuarios():
@@ -743,8 +916,10 @@ def as_codia(codia):
 @app.route("/planes", methods=["GET"])
 def obtener_planes():
     """Devuelve la configuración y lista de planes PSA Finance."""
+    tabla_psa = cargar_tabla_psa_desde_supabase()
+
     return jsonify({
-        "planes": TABLA_PSA,
+        "planes": tabla_psa,
         "iva": IVA,
         "rci_max_fijo": RCI_MAX_FIJO,
         "rci_max_uva": RCI_MAX_UVA,
