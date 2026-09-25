@@ -895,6 +895,187 @@
                 grid-template-columns: 1fr;
             }
         }
+    /* =========================================================
+   RESUMEN DE SIMULACIÓN - IMPRESIÓN / PDF
+   ========================================================= */
+
+.print-quote {
+    display: none;
+}
+
+@page {
+    size: A4;
+    margin: 12mm;
+}
+
+@media print {
+    body > * {
+        display: none !important;
+    }
+
+    body > .print-quote {
+        display: block !important;
+    }
+
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #fff !important;
+        color: #172033;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .print-quote {
+        width: 100%;
+        font-size: 11px;
+        line-height: 1.35;
+    }
+
+    .print-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 14px;
+        margin-bottom: 16px;
+        border-bottom: 3px solid #c9252c;
+    }
+
+    .print-brand {
+        font-size: 28px;
+        line-height: 1;
+        font-weight: 900;
+        letter-spacing: 3px;
+        color: #c9252c;
+    }
+
+    .print-brand-sub {
+        margin-top: 3px;
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 5px;
+        color: #172033;
+    }
+
+    .print-header-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 4px;
+        text-align: right;
+    }
+
+    .print-header-info strong {
+        font-size: 14px;
+        color: #172033;
+    }
+
+    .print-header-info span {
+        font-size: 9px;
+        color: #6b7280;
+    }
+
+    .print-section {
+        margin-bottom: 13px;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .print-section h2 {
+        margin: 0 0 8px;
+        padding: 6px 9px;
+        background: #f1f3f6;
+        border-left: 3px solid #c9252c;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        color: #172033;
+    }
+
+    .print-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px 18px;
+        padding: 0 9px;
+    }
+
+    .print-grid > div {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .print-grid span,
+    .print-operation span {
+        font-size: 8.5px;
+        color: #6b7280;
+    }
+
+    .print-grid strong,
+    .print-operation strong {
+        font-size: 10.5px;
+        color: #172033;
+    }
+
+    .print-operation {
+        padding: 0 9px;
+    }
+
+    .print-operation > div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 0;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .print-cash {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 9px;
+        padding: 10px 12px;
+        background: #172033 !important;
+        color: #fff !important;
+        border-radius: 5px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .print-cash span {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: .5px;
+    }
+
+    .print-cash strong {
+        font-size: 16px;
+    }
+
+    .print-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 25px;
+        margin-top: 16px;
+        padding-top: 9px;
+        border-top: 1px solid #d1d5db;
+        color: #6b7280;
+        font-size: 7.5px;
+    }
+
+    .print-footer strong {
+        flex-shrink: 0;
+        color: #172033;
+        font-size: 9px;
+    }
+
+    .print-footer span {
+        max-width: 390px;
+        text-align: right;
+    }
+}
     </style>
 </head>
 
@@ -1719,8 +1900,97 @@
         // EXPORTACIÓN & ACCIONES
         // -------------------------------------------------------------------------
         function imprimirCotizacion() {
-            window.print();
-        }
+    const valor = (id) => {
+        const elemento = document.getElementById(id);
+        return elemento ? elemento.value : '';
+    };
+
+    const texto = (id) => {
+        const elemento = document.getElementById(id);
+        return elemento ? elemento.textContent.trim() : '';
+    };
+
+    // Fecha de generación
+    document.getElementById('printDate').textContent =
+        `Generado el ${new Date().toLocaleDateString('es-AR')}`;
+
+    // Cliente
+    document.getElementById('printClient').textContent =
+        `${valor('clientName')} ${valor('clientSurname')}`.trim();
+
+    document.getElementById('printDni').textContent =
+        valor('clientDni');
+
+    document.getElementById('printIncome').textContent =
+        texto('summaryIncome');
+
+    // Vehículo usado
+    document.getElementById('printUsedCar').textContent =
+        valor('usedBrandModel');
+
+    document.getElementById('printUsedYear').textContent =
+        valor('usedYear');
+
+    document.getElementById('printUsedReference').textContent =
+        texto('usedRevistaDisplay');
+
+    document.getElementById('printTradeIn').textContent =
+        texto('sumTradeIn');
+
+    // Vehículo nuevo
+    document.getElementById('printNewCar').textContent =
+        valor('newCarName');
+
+    document.getElementById('printNewYear').textContent =
+        valor('newCarYear');
+
+    document.getElementById('printNewPrice').textContent =
+        texto('sumNewCarPrice');
+
+    document.getElementById('printTransfer').textContent =
+        texto('sumTransferPrice');
+
+    // Operación
+    document.getElementById('printTotal').textContent =
+        texto('sumTotalPrice');
+
+    document.getElementById('printOperationTradeIn').textContent =
+        texto('sumTradeIn');
+
+    document.getElementById('printFinancing').textContent =
+        texto('summaryFinancing');
+
+    document.getElementById('printCash').textContent =
+        texto('summaryCash');
+
+    // Plan seleccionado
+    document.getElementById('printPlan').textContent =
+        texto('sumPlanName');
+
+    document.getElementById('printPlanType').textContent =
+        texto('sumPlanType');
+
+    document.getElementById('printTerm').textContent =
+        texto('sumTerm');
+
+    document.getElementById('printTna').textContent =
+        texto('sumTna');
+
+    document.getElementById('printPayment').textContent =
+        texto('summaryPayment');
+
+    document.getElementById('printFirstPayment').textContent =
+        texto('sumFirstPayment');
+
+    document.getElementById('printQuebranto').textContent =
+        texto('sumQuebranto');
+
+    document.getElementById('printRci').textContent =
+        texto('sumRci');
+
+    // Abrir impresión / Guardar como PDF
+    window.print();
+}
 
         function compartirWhatsapp() {
             const name = document.getElementById('clientName').value || 'Cliente';
@@ -1767,6 +2037,153 @@
             actualizarSimulacion();
         }
     </script>
+
+<div id="printQuote" class="print-quote">
+    <div class="print-header">
+        <div>
+            <div class="print-brand">ROMA</div>
+            <div class="print-brand-sub">AUTOMOTORES</div>
+        </div>
+
+        <div class="print-header-info">
+            <strong>RESUMEN DE SIMULACIÓN PRENDARIA</strong>
+            <span id="printDate"></span>
+        </div>
+    </div>
+
+    <div class="print-section">
+        <h2>Datos del cliente</h2>
+        <div class="print-grid">
+            <div>
+                <span>Nombre y apellido</span>
+                <strong id="printClient"></strong>
+            </div>
+            <div>
+                <span>DNI</span>
+                <strong id="printDni"></strong>
+            </div>
+            <div>
+                <span>Ingresos mensuales</span>
+                <strong id="printIncome"></strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="print-section">
+        <h2>Vehículo usado / Permuta</h2>
+        <div class="print-grid">
+            <div>
+                <span>Vehículo</span>
+                <strong id="printUsedCar"></strong>
+            </div>
+            <div>
+                <span>Año</span>
+                <strong id="printUsedYear"></strong>
+            </div>
+            <div>
+                <span>Valor InfoAuto / Revista</span>
+                <strong id="printUsedReference"></strong>
+            </div>
+            <div>
+                <span>Valor de toma</span>
+                <strong id="printTradeIn"></strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="print-section">
+        <h2>Vehículo nuevo</h2>
+        <div class="print-grid">
+            <div>
+                <span>Vehículo</span>
+                <strong id="printNewCar"></strong>
+            </div>
+            <div>
+                <span>Año</span>
+                <strong id="printNewYear"></strong>
+            </div>
+            <div>
+                <span>Precio</span>
+                <strong id="printNewPrice"></strong>
+            </div>
+            <div>
+                <span>Gastos de transferencia</span>
+                <strong id="printTransfer"></strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="print-section">
+        <h2>Resumen de la operación</h2>
+
+        <div class="print-operation">
+            <div>
+                <span>Precio total vehículo + transferencia</span>
+                <strong id="printTotal"></strong>
+            </div>
+            <div>
+                <span>Valor toma usado</span>
+                <strong id="printOperationTradeIn"></strong>
+            </div>
+            <div>
+                <span>Monto a financiar</span>
+                <strong id="printFinancing"></strong>
+            </div>
+        </div>
+
+        <div class="print-cash">
+            <span>EFECTIVO A ENTREGAR</span>
+            <strong id="printCash"></strong>
+        </div>
+    </div>
+
+    <div class="print-section">
+        <h2>Plan PSA Finance seleccionado</h2>
+
+        <div class="print-grid">
+            <div>
+                <span>Plan</span>
+                <strong id="printPlan"></strong>
+            </div>
+            <div>
+                <span>Tipo</span>
+                <strong id="printPlanType"></strong>
+            </div>
+            <div>
+                <span>Plazo</span>
+                <strong id="printTerm"></strong>
+            </div>
+            <div>
+                <span>TNA</span>
+                <strong id="printTna"></strong>
+            </div>
+            <div>
+                <span>Cuota mensual pura</span>
+                <strong id="printPayment"></strong>
+            </div>
+            <div>
+                <span>Primera cuota</span>
+                <strong id="printFirstPayment"></strong>
+            </div>
+            <div>
+                <span>Gasto de otorgamiento (c/IVA)</span>
+                <strong id="printQuebranto"></strong>
+            </div>
+            <div>
+                <span>Relación cuota / ingreso</span>
+                <strong id="printRci"></strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="print-footer">
+        <strong>ROMA Automotores</strong>
+        <span>
+            Simulación informativa sujeta a vigencia, aprobación crediticia
+            y condiciones comerciales de PSA Finance.
+        </span>
+    </div>
+</div>
 
 </body>
 
