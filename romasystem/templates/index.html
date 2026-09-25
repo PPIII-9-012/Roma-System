@@ -1155,14 +1155,18 @@
                     <div class="form-section-head"><span class="form-section-num">1</span><span
                             class="form-section-title">DATOS DEL CLIENTE</span></div>
                     <div class="field-row">
-                        <div class="field"><label>Nombre</label><input id="clientName" placeholder="Ej: Renzo"
-                                value="Renzo" oninput="actualizarSimulacion()"></div>
-                        <div class="field"><label>Apellido</label><input id="clientSurname" placeholder="Ej: Segovia"
-                                value="Segovia" oninput="actualizarSimulacion()"></div>
-                        <div class="field"><label>Número de documento</label><input id="clientDni"
-                                placeholder="Ej: 45.361.089" value="45.361.089" oninput="actualizarSimulacion()"></div>
+                        <div class="field"><label>Nombre</label>
+                           <input id="clientName" placeholder="Ej: Renzo"
+                           oninput="actualizarSimulacion()"></div>
+                        <div class="field"><label>Apellido</label>
+                            <input id="clientSurname" placeholder="Ej: Segovia"
+                            oninput="actualizarSimulacion()"></div>
+                        <div class="field"><label>Número de documento</label>
+                            <input id="clientDni"
+                                placeholder="Ej: 45.361.089"  
+                                oninput="actualizarSimulacion()"></div>
                         <div class="field"><label>Ingresos mensuales ($)</label><input id="monthlyIncome"
-                                inputmode="numeric" placeholder="Ej: 1.000.000" value="1.000.000"
+                                inputmode="numeric" placeholder="Ej: 1.000.000" 
                                 oninput="actualizarSimulacionDebounced()"></div>
                     </div>
                 </section>
@@ -1183,12 +1187,14 @@
                         <div class="used-fields">
                             <div class="field">
                                 <label>Modelo / Versión</label>
-                                <input id="usedBrandModel" value="Peugeot 208 Allure 1.6"
-                                    placeholder="Ej: Peugeot 208 Allure" oninput="actualizarSimulacion()">
+                                <input id="usedBrandModel" 
+                                    placeholder="Ej: Peugeot 208 Allure" 
+                                    oninput="actualizarSimulacion()">
                             </div>
                             <div class="field">
                                 <label>Año del Usado</label>
                                 <select id="usedYear" onchange="cambiarAnioUsado()">
+                                    <option value="" selected>Seleccionar año</option>
                                     <option value="2026">2026</option>
                                     <option value="2025">2025</option>
                                     <option value="2024">2024</option>
@@ -1196,7 +1202,7 @@
                                     <option value="2022">2022</option>
                                     <option value="2021">2021</option>
                                     <option value="2020">2020</option>
-                                    <option value="2019" selected>2019</option>
+                                    <option value="2019">2019</option>
                                     <option value="2018">2018</option>
                                     <option value="2017">2017</option>
                                     <option value="2016">2016</option>
@@ -1206,12 +1212,12 @@
                             </div>
                             <div class="field">
                                 <label>Valor Revista Infoauto ($)</label>
-                                <input id="usedRevistaValue" inputmode="numeric" value="20.000.000"
+                                <input id="usedRevistaValue" inputmode="numeric"
                                     placeholder="Ej: 20.000.000" oninput="actualizarSimulacionDebounced()">
                             </div>
                             <div class="field">
                                 <label>Precio Toma Agencia ($)</label>
-                                <input id="usedTradeInValue" inputmode="numeric" value="10.000.000"
+                                <input id="usedTradeInValue" inputmode="numeric" 
                                     placeholder="Aclarar precio toma" oninput="actualizarSimulacionDebounced()">
                             </div>
                         </div>
@@ -1238,22 +1244,22 @@
                     <div class="used-fields">
                         <div class="field">
                             <label>Modelo / Versión</label>
-                            <input id="newCarName" value="Peugeot 208 Allure MT" placeholder="Ej: Peugeot 208 Allure MT"
+                            <input id="newCarName" placeholder="Ej: Peugeot 208 Allure MT"
                                 oninput="actualizarSimulacion()">
                         </div>
                         <div class="field">
                             <label>Año</label>
-                            <input type="number" id="newCarYear" value="2026" min="2000" max="2030"
+                            <input type="number" id="newCarYear" min="2000" max="2030"
                                 placeholder="Ej: 2026" oninput="actualizarSimulacionDebounced()">
                         </div>
                         <div class="field">
                             <label>Precio de Lista ($)</label>
-                            <input id="newCarPrice" inputmode="numeric" value="23.000.000" placeholder="Ingresar precio"
+                            <input id="newCarPrice" inputmode="numeric"  placeholder="Ingresar precio"
                                 oninput="alCambiarPrecioNuevo()">
                         </div>
                         <div class="field">
                             <label>Gastos Transferencia / Papeles ($)</label>
-                            <input id="newCarTransfer" inputmode="numeric" value="1.740.000"
+                            <input id="newCarTransfer" inputmode="numeric"
                                 placeholder="Ingresar gastos" oninput="actualizarSimulacionDebounced()">
                         </div>
                     </div>
@@ -1274,7 +1280,7 @@
                         </div>
                         <div>
                             <div class="op-label">Capital a financiar ($)</div>
-                            <input id="opFinancingInput" inputmode="numeric" value="8.000.000" class="op-value negative"
+                            <input id="opFinancingInput" inputmode="numeric"  class="op-value negative"
                                 style="border: 1px solid #D9D9D9; padding: 2px 6px; border-radius: 4px; width: 120px;"
                                 oninput="actualizarSimulacionDebounced()">
                         </div>
@@ -1551,11 +1557,11 @@
 
         function obtenerValoresFormulario() {
             const income = parseNumber(document.getElementById('monthlyIncome').value);
-            const usedYear = parseInt(document.getElementById('usedYear').value) || 2019;
+            const usedYear = parseInt(document.getElementById('usedYear').value) || 0;
             const usedRevista = parseNumber(document.getElementById('usedRevistaValue').value);
             const usedTradeIn = parseNumber(document.getElementById('usedTradeInValue').value);
             const newPrice = parseNumber(document.getElementById('newCarPrice').value);
-            const newYear = parseInt(document.getElementById('newCarYear').value) || 2026;
+            const newYear = parseInt(document.getElementById('newCarYear').value) || 0;
             const newTransfer = parseNumber(document.getElementById('newCarTransfer').value);
             const financing = parseNumber(document.getElementById('opFinancingInput').value);
 
@@ -1579,37 +1585,87 @@
             const totalPrice = v.precio_nuevo + v.gastos_transf;
             const cashNeeded = Math.max(0, totalPrice - v.precio_toma - v.monto);
             const currentYear = new Date().getFullYear();
-            const antiquity = currentYear - v.anio_usado;
+            const antiquity = v.anio_usado ? currentYear - v.anio_usado : null;
 
-            document.getElementById('usedRevistaDisplay').textContent = formatMoney(v.precio_revista);
-            document.getElementById('usedAntiquityDisplay').textContent = `Infoauto · Antigüedad ${antiquity} año${antiquity !== 1 ? 's' : ''}`;
+            document.getElementById('usedRevistaDisplay').textContent =
+            v.precio_revista ? formatMoney(v.precio_revista) : '—';
 
-            document.getElementById('opTotalPrice').textContent = formatMoney(totalPrice);
-            document.getElementById('opUsedValue').textContent = formatMoney(v.precio_toma);
-            document.getElementById('operationCash').textContent = formatMoney(cashNeeded);
+            document.getElementById('usedAntiquityDisplay').textContent =
+            antiquity !== null
+            ? `Infoauto · Antigüedad ${antiquity} año${antiquity !== 1 ? 's' : ''}`
+            : 'Infoauto · Seleccioná un vehículo';
 
+            document.getElementById('opTotalPrice').textContent =
+    totalPrice ? formatMoney(totalPrice) : '—';
+
+document.getElementById('opUsedValue').textContent =
+    v.precio_toma ? formatMoney(v.precio_toma) : '—';
+
+document.getElementById('operationCash').textContent =
+    totalPrice ? formatMoney(cashNeeded) : '—';
             // Sidebar
-            const name = document.getElementById('clientName').value || 'Cliente';
-            const surname = document.getElementById('clientSurname').value || '';
-            const dni = document.getElementById('clientDni').value || '';
-            const usedCarName = document.getElementById('usedBrandModel').value || 'Usado';
-            const newCarName = document.getElementById('newCarName').value || 'Nuevo';
+            const name = document.getElementById('clientName').value.trim();
+            const surname = document.getElementById('clientSurname').value.trim();
+            const dni = document.getElementById('clientDni').value.trim();
+            const usedCarName = document.getElementById('usedBrandModel').value.trim();
+            const newCarName = document.getElementById('newCarName').value.trim();
 
-            document.getElementById('sumClientFullName').textContent = `${name} ${surname}`.trim();
-            document.getElementById('sumClientDni').textContent = dni ? `DNI: ${dni}` : '';
-            document.getElementById('summaryIncome').textContent = formatMoney(v.ingresos);
+            document.getElementById('sumClientFullName').textContent =
+    `${name} ${surname}`.trim() || '—';
 
-            document.getElementById('sumUsedCarTitle').textContent = `Usado: ${usedCarName} (${v.anio_usado})`;
-            document.getElementById('sumUsedCarValue').textContent = formatMoney(v.precio_toma);
-            document.getElementById('sumNewCarTitle').textContent = `Nuevo: ${newCarName} (${v.anio_nuevo})`;
-            document.getElementById('sumNewCarPrice').textContent = formatMoney(v.precio_nuevo);
-            document.getElementById('sumTransferPrice').textContent = formatMoney(v.gastos_transf);
+document.getElementById('sumClientDni').textContent =
+    dni ? `DNI: ${dni}` : '';
 
-            document.getElementById('sumTotalPrice').textContent = formatMoney(totalPrice);
-            document.getElementById('sumTradeIn').textContent = formatMoney(v.precio_toma);
-            document.getElementById('summaryFinancing').textContent = formatMoney(v.monto);
-            document.getElementById('summaryCash').textContent = formatMoney(cashNeeded);
+document.getElementById('summaryIncome').textContent =
+    v.ingresos ? formatMoney(v.ingresos) : '—';
 
+document.getElementById('sumUsedCarTitle').textContent =
+    usedCarName
+        ? `Usado: ${usedCarName}${v.anio_usado ? ` (${v.anio_usado})` : ''}`
+        : 'Usado: —';
+
+document.getElementById('sumUsedCarValue').textContent =
+    v.precio_toma ? formatMoney(v.precio_toma) : '—';
+
+document.getElementById('sumNewCarTitle').textContent =
+    newCarName
+        ? `Nuevo: ${newCarName}${v.anio_nuevo ? ` (${v.anio_nuevo})` : ''}`
+        : 'Nuevo: —';
+
+document.getElementById('sumNewCarPrice').textContent =
+    v.precio_nuevo ? formatMoney(v.precio_nuevo) : '—';
+
+document.getElementById('sumTransferPrice').textContent =
+    v.gastos_transf ? formatMoney(v.gastos_transf) : '—';
+
+            document.getElementById('sumTotalPrice').textContent =
+    totalPrice ? formatMoney(totalPrice) : '—';
+
+document.getElementById('sumTradeIn').textContent =
+    v.precio_toma ? formatMoney(v.precio_toma) : '—';
+
+document.getElementById('summaryFinancing').textContent =
+    v.monto ? formatMoney(v.monto) : '—';
+
+document.getElementById('summaryCash').textContent =
+    totalPrice ? formatMoney(cashNeeded) : '—';
+// Si todavía no hay una operación cargada, no calcular planes
+const operacionIncompleta =
+    !v.ingresos ||
+    !v.precio_nuevo ||
+    !v.monto;
+
+if (operacionIncompleta) {
+    simulationResults = [];
+
+    document.getElementById('plansContainer').innerHTML = `
+        <div style="grid-column: 1/-1; padding: 28px; text-align: center; color: #6B7280; font-size: 11px;">
+            Completá los datos de la operación para ver las opciones de financiamiento.
+        </div>
+    `;
+
+    return;
+}
             // 2. Consulta al motor prendario PSA
             try {
                 const res = await fetch(`${BACKEND}/simular-todos`, {

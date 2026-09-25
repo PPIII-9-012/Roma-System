@@ -9,6 +9,7 @@ import base64
 import json
 import os
 import sys
+import secrets
 import threading
 import time
 import tempfile
@@ -80,6 +81,7 @@ app = Flask(
 )
 app.secret_key = os.environ.get("FLASK_SECRET_KEY")
 CORS(app)
+APP_RUN_ID = secrets.token_hex(16)
 
 
 # ---------------------------------------------------------------------------
@@ -598,7 +600,10 @@ def calcular_todos_los_planes(
 @app.route("/", methods=["GET", "POST"])
 def login_page():
     if "user" in session:
-        return redirect(url_for("home"))
+        if session.get("app_run_id") == APP_RUN_ID:
+            return redirect(url_for("home"))
+
+        session.clear()
 
     if request.method == "POST":
         print(">>> ENTRE AL POST DEL LOGIN <<<", flush=True)
@@ -627,6 +632,7 @@ def login_page():
                     "nombre": profile["nombre"],
                     "rol": profile["rol"]
                     }
+                session["app_run_id"] = APP_RUN_ID
                 return redirect(url_for("home"))
 
         except Exception as e:
@@ -643,7 +649,8 @@ def login_page():
 
 @app.route("/home")
 def home():
-    if "user" not in session:
+    if "user" not in session or session.get("app_run_id") != APP_RUN_ID:
+        session.clear()
         return redirect(url_for("login_page"))
 
     return render_template(
@@ -653,7 +660,8 @@ def home():
     
 @app.route("/panel_administrativo.html")
 def panel_administrativo():
-    if "user" not in session:
+    if "user" not in session or session.get("app_run_id") != APP_RUN_ID:
+        session.clear()
         return redirect(url_for("login_page"))
 
     return render_template(
