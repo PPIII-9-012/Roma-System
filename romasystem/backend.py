@@ -720,7 +720,34 @@ def obtener_circular_psa_vigente():
             "error": "No se pudo obtener la circular vigente",
             "detalle": str(e),
         }), 500
+@app.route("/api/psa/historial", methods=["GET"])
+def obtener_historial_psa():
+    if "user" not in session:
+        return jsonify({"error": "Debes iniciar sesión"}), 401
 
+    try:
+        supabase = get_admin_client()
+
+        respuesta = (
+            supabase
+            .table("circulares_psa")
+            .select("id,numero_circular,mes,anio,vigencia,nombre_archivo,created_at")
+            .order("vigencia", desc=True)
+            .order("id", desc=True)
+            .execute()
+        )
+
+        return jsonify({
+            "ok": True,
+            "circulares": respuesta.data or [],
+        })
+
+    except Exception as e:
+        return jsonify({
+            "error": "No se pudo obtener el historial de circulares",
+            "detalle": str(e),
+        }), 500
+        
 @app.route("/api/psa/circular", methods=["POST"])
 def cargar_circular_psa():
     if "user" not in session:
