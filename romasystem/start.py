@@ -36,7 +36,11 @@ def esperar_backend(intentos=15):
     print(f"[*] Esperando que el backend levante en puerto {PUERTO}...", end="", flush=True)
     for _ in range(intentos):
         try:
-            urllib.request.urlopen(f"http://localhost:{PUERTO}/planes", timeout=2)
+            with urllib.request.urlopen(
+                f"http://localhost:{PUERTO}/",
+                timeout=2
+                ) as response:
+                response.read()
             print(" Listo!")
             return True
         except Exception:
@@ -63,7 +67,7 @@ def main():
     # Esperar a que esté listo
     if esperar_backend():
         print(f"[*] Abriendo la plataforma web en http://localhost:{PUERTO} ...\n")
-        webbrowser.open(f"http://localhost:{PUERTO}")
+        os.startfile(f"http://localhost:{PUERTO}")
         print("  Todo corriendo. Presiona Ctrl+C para apagar el servidor.\n")
     else:
         print("[ERROR] El backend no respondio a tiempo. Logs:\n")

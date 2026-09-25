@@ -16,6 +16,7 @@ import webbrowser
 from dataclasses import dataclass, field, asdict
 from datetime import date
 from typing import Optional
+import ast
 
 # Configurar stdout seguro para evitar problemas con codificación cp1252 en Windows
 if sys.platform == "win32":
@@ -649,7 +650,17 @@ def home():
         "index.html",
         usuario=session["user"]
 )
+    
+@app.route("/panel_administrativo.html")
+def panel_administrativo():
+    if "user" not in session:
+        return redirect(url_for("login_page"))
 
+    return render_template(
+        "panel_administrativo.html",
+        usuario=session["user"]
+    )
+    
 @app.route("/logout")
 def logout():
     session.clear()
@@ -749,7 +760,11 @@ def cargar_circular_psa():
     except Exception as e:
         return jsonify({
             "error": "No se pudo procesar la circular",
-            "detalle": str(e),
+            "detalle": (
+                e.args[0].get("message")
+                if e.args and isinstance(e.args[0], dict)
+                else str(e)
+),
         }), 400
 
     finally:
@@ -800,10 +815,20 @@ def publicar_circular_psa():
         })
 
     except Exception as e:
+        detalle = str(e)
+
+        try:
+            error_data = ast.literal_eval(detalle)
+
+            if isinstance(error_data, dict) and error_data.get("message"):
+                detalle = error_data["message"]
+        except (ValueError, SyntaxError):
+            pass
+
         return jsonify({
             "error": "No se pudo publicar la circular",
-            "detalle": str(e),
-        }), 400
+            "detalle": detalle,
+            }), 400
 
     finally:
         if ruta_temporal and os.path.exists(ruta_temporal):

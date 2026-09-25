@@ -234,6 +234,57 @@
   .sidebar-footer .name{font-size:13.5px;font-weight:700;color:#fff;}
   .sidebar-footer .mail{font-size:11.5px;color:rgba(255,255,255,.65);}
   .sidebar-footer svg.chev{width:16px;height:16px;color:rgba(255,255,255,.65);}
+  .sidebar-footer{
+  cursor:pointer;
+}
+
+.sidebar-footer:hover{
+  opacity:.9;
+}
+
+.sidebar-user-menu{
+  position:absolute;
+  left:16px;
+  right:16px;
+  bottom:76px;
+  background:#163454;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:12px;
+  padding:6px;
+  box-shadow:0 12px 30px rgba(0,0,0,.22);
+  z-index:20;
+}
+
+.sidebar-user-menu[hidden]{
+  display:none;
+}
+
+.sidebar-user-option{
+  display:block;
+  padding:11px 12px;
+  border-radius:8px;
+  color:rgba(255,255,255,.88);
+  font-size:12.5px;
+  font-weight:600;
+  text-decoration:none;
+  transition:background .15s ease, color .15s ease;
+}
+
+.sidebar-user-option:hover{
+  background:rgba(255,255,255,.10);
+  color:#fff;
+}
+
+.sidebar-user-logout{
+  margin-top:3px;
+  border-top:1px solid rgba(255,255,255,.12);
+  color:#ff6262;
+}
+
+.sidebar-user-logout:hover{
+  background:rgba(239,68,68,.12);
+  color:#ff7373;
+}
   .history-view{
     flex:1;
     min-width:0;
@@ -654,6 +705,111 @@
     font-size:13px;font-weight:700;color:var(--blue-600);
   }
   .guide-link svg{width:13px;height:13px;}
+
+  .roma-modal-overlay{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:rgba(8, 29, 53, .58);
+  backdrop-filter:blur(2px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.roma-modal-overlay[hidden]{
+  display:none;
+}
+
+.roma-modal{
+  width:100%;
+  max-width:430px;
+  background:#fff;
+  border-radius:16px;
+  padding:28px;
+  box-shadow:0 24px 70px rgba(0, 0, 0, .22);
+  text-align:center;
+}
+
+.roma-modal-icon{
+  width:48px;
+  height:48px;
+  margin:0 auto 16px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#eef4ff;
+  color:#2563eb;
+  font-size:22px;
+  font-weight:800;
+}
+
+.roma-modal-icon.success{
+  background:#eaf8ef;
+  color:#16a34a;
+}
+
+.roma-modal-icon.error{
+  background:#fef0f0;
+  color:#dc2626;
+}
+
+.roma-modal-icon.warning{
+  background:#fff5e6;
+  color:#d97706;
+}
+
+.roma-modal h3{
+  margin:0 0 8px;
+  color:var(--ink);
+  font-size:19px;
+}
+
+.roma-modal p{
+  margin:0;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.55;
+}
+
+.roma-modal-actions{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:24px;
+}
+
+.roma-modal-cancel,
+.roma-modal-confirm{
+  border-radius:9px;
+  padding:11px 20px;
+  font-size:12.5px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.roma-modal-cancel{
+  background:#fff;
+  border:1px solid var(--border);
+  color:#6b7280;
+}
+
+.roma-modal-confirm{
+  background:#e02020;
+  border:1px solid #e02020;
+  color:#fff;
+}
+
+.roma-modal-cancel:hover{
+  background:#f8f9fa;
+}
+
+.roma-modal-confirm:hover{
+  background:#c81818;
+}
+
   @media (max-width: 1100px){
     .content-row{flex-direction:column;}
     .aside-col{width:100%;flex-direction:row;flex-wrap:wrap;}
@@ -718,18 +874,29 @@
           Historial de señales
         </button>
       </div>
-         <div class="sidebar-footer">
+         <div class="sidebar-footer" id="userMenuBtn">
         <div class="who">
           <div class="avatar">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           </div>
           <div>
-              <div class="name">Administrador</div>
-            <div class="mail">admin@roma.com.ar</div>
+              <div class="name">{{ usuario.nombre }}</div>
+              <div class="mail">{{ usuario.rol|capitalize }}</div>
           </div>
         </div>
            <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
+      <div class="sidebar-user-menu" id="sidebarUserMenu" hidden>
+  {% if usuario.rol == "administrador" %}
+  <a href="/admin/usuarios" class="sidebar-user-option">
+    Administrar usuarios
+  </a>
+  {% endif %}
+
+  <a href="/logout" class="sidebar-user-option sidebar-user-logout">
+    Cerrar sesión
+  </a>
+</div>
     </aside>
       <main class="main" id="currentSignalView">
       <h1 class="page-title">Señal de crédito</h1>
@@ -804,13 +971,6 @@
   </table>
 </div>
                <div class="table-actions">
-              <div class="table-actions-left">
-
-                <button class="btn-danger-outline" id="detailBtn" type="button">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                  VISTA DETALLADA
-                </button>
-              </div>
               <div class="table-actions-right">
                 <button class="btn-publish" id="publishBtn" type="button">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -872,10 +1032,6 @@
               <span>Errores</span>
               <span class="val" id="summaryErrors">—</span>
             </div>
-            <button class="btn-detail" id="analysisDetailBtn" type="button">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-              VER DETALLE DEL ANÁLISIS
-            </button>
           </div>
                 <div class="card">
             <div class="eyebrow" style="margin-bottom:12px;">¿Cómo funciona?</div>
@@ -883,10 +1039,6 @@
             <div class="howto-item"><div class="num">2</div><p>El sistema analiza y extrae los datos.</p></div>
             <div class="howto-item"><div class="num">3</div><p>Revisá las tasas detectadas.</p></div>
             <div class="howto-item" style="margin-bottom:16px;"><div class="num">4</div><p>Publicá para actualizar el simulador.</p></div>
-            <a href="#" class="guide-link" id="guideLink">
-              Ver guía completa
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-            </a>
           </div>
         </div>
       </div>
@@ -934,9 +1086,35 @@
       </div>
     </section>
   </div>
+
+  <div class="roma-modal-overlay" id="romaModal" hidden>
+  <div class="roma-modal">
+    <div class="roma-modal-icon" id="romaModalIcon">!</div>
+
+    <h3 id="romaModalTitle">Aviso</h3>
+    <p id="romaModalMessage"></p>
+
+    <div class="roma-modal-actions">
+      <button class="roma-modal-cancel" id="romaModalCancel" type="button">
+        CANCELAR
+      </button>
+
+      <button class="roma-modal-confirm" id="romaModalConfirm" type="button">
+        ACEPTAR
+      </button>
+    </div>
+  </div>
+</div>
+
 <script>
   const currentSignalNav = document.getElementById('currentSignalNav');
   const historyNav = document.getElementById('historyNav');
+  const userMenuBtn = document.getElementById('userMenuBtn');
+const sidebarUserMenu = document.getElementById('sidebarUserMenu');
+userMenuBtn.addEventListener('click', () => {
+  sidebarUserMenu.hidden = !sidebarUserMenu.hidden;
+  console.log('Menú usuario:', sidebarUserMenu.hidden);
+});
   const currentSignalView = document.getElementById('currentSignalView');
   const historyView = document.getElementById('historyView');
 
@@ -951,9 +1129,14 @@
   currentSignalNav.addEventListener('click', () => showPanelView('current'));
   historyNav.addEventListener('click', () => showPanelView('history'));
   document.querySelectorAll('.history-detail').forEach((button) => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', async () => {
       const file = button.closest('.history-item').querySelector('.history-file-name').textContent;
-      window.alert(`Detalle de ${file}: señal publicada y disponible para consulta.`);
+      await mostrarModal({
+        title: 'Detalle de la circular',
+        message: `${file} fue publicada y está disponible para consulta.`,
+        type: 'info',
+        confirmText: 'ACEPTAR'
+      });
     });
   });
 
@@ -963,6 +1146,51 @@
   const statusSub = document.querySelector('.status-sub');
   const fileName = document.querySelector('.file-name');
   const fileDate = document.querySelector('.file-date');
+
+  const romaModal = document.getElementById('romaModal');
+const romaModalTitle = document.getElementById('romaModalTitle');
+const romaModalMessage = document.getElementById('romaModalMessage');
+const romaModalIcon = document.getElementById('romaModalIcon');
+const romaModalCancel = document.getElementById('romaModalCancel');
+const romaModalConfirm = document.getElementById('romaModalConfirm');
+
+function mostrarModal({
+  title,
+  message,
+  type = 'info',
+  confirmText = 'ACEPTAR',
+  showCancel = false
+}) {
+  return new Promise((resolve) => {
+    romaModalTitle.textContent = title;
+    romaModalMessage.textContent = message;
+
+    romaModalIcon.className = `roma-modal-icon ${type}`;
+
+    const icons = {
+      info: 'i',
+      success: '✓',
+      error: '×',
+      warning: '!'
+    };
+
+    romaModalIcon.textContent = icons[type] || 'i';
+    romaModalConfirm.textContent = confirmText;
+    romaModalCancel.hidden = !showCancel;
+    romaModal.hidden = false;
+
+    const cerrar = (resultado) => {
+      romaModal.hidden = true;
+      romaModalConfirm.onclick = null;
+      romaModalCancel.onclick = null;
+      resolve(resultado);
+    };
+
+    romaModalConfirm.onclick = () => cerrar(true);
+    romaModalCancel.onclick = () => cerrar(false);
+  });
+}
+
 
   async function cargarCircularVigente() {
   try {
@@ -1025,7 +1253,12 @@ cargarCircularVigente();
     const file = fileInput.files[0];
 
     if (!file) {
-      window.alert('Primero seleccioná un archivo PDF.');
+      await mostrarModal({
+  title: 'Falta seleccionar el PDF',
+  message: 'Seleccioná una circular de PSA Finance antes de iniciar el análisis.',
+  type: 'warning',
+  confirmText: 'ENTENDIDO'
+});
       return;
     }
 
@@ -1144,23 +1377,31 @@ document.getElementById('newSignalDate').textContent =
       button.title = editing ? 'Guardar cambios' : 'Editar fila';
     });
   });
-
-  const scrollToTable = () => document.querySelector('.table-card').scrollIntoView({ behavior: 'smooth' });
-  document.getElementById('detailBtn').addEventListener('click', scrollToTable);
-  document.getElementById('analysisDetailBtn').addEventListener('click', scrollToTable);
-
  document.getElementById('publishBtn').addEventListener('click', async () => {
     const file = fileInput.files[0];
     const publishButton = document.getElementById('publishBtn');
 
     if (!file) {
-      window.alert('Primero seleccioná y analizá un PDF.');
+      await mostrarModal({
+  title: 'Falta analizar la circular',
+  message: 'Seleccioná y analizá una circular antes de publicarla.',
+  type: 'warning',
+  confirmText: 'ENTENDIDO'
+});
       return;
     }
 
-    if (!window.confirm('¿Publicar esta circular y guardar sus tasas en el sistema?')) {
-      return;
-    }
+    const confirmado = await mostrarModal({
+  title: 'Publicar circular',
+  message: '¿Querés publicar esta circular y guardar sus tasas en el sistema?',
+  type: 'warning',
+  confirmText: 'PUBLICAR',
+  showCancel: true
+});
+
+if (!confirmado) {
+  return;
+}
 
     const formData = new FormData();
     formData.append('pdf', file);
@@ -1195,20 +1436,25 @@ document.getElementById('newSignalDate').textContent =
         `Circular ${data.numero_circular} publicada · ` +
         `${data.cantidad_tasas} tasas guardadas`;
 
-      window.alert('Circular publicada correctamente.');
+      await mostrarModal({
+  title: 'Circular publicada',
+  message: 'La circular y sus tasas se guardaron correctamente. El simulador ya está actualizado.',
+  type: 'success',
+  confirmText: 'ACEPTAR'
+});
 
     } catch (error) {
       publishButton.disabled = false;
       publishButton.textContent = 'PUBLICAR CAMBIOS';
 
-      window.alert(`Error al publicar: ${error.message}`);
+      await mostrarModal({
+  title: 'Circular ya registrada',
+  message: error.message,
+  type: 'error',
+  confirmText: 'ENTENDIDO'
+});
     }
 });
-
-  document.getElementById('guideLink').addEventListener('click', (event) => {
-    event.preventDefault();
-    window.alert('Cargá un PDF, analizá los cambios y publicá la nueva señal.');
-  });
 
   document.getElementById('logoutBtn').addEventListener('click', () => {
     window.location.href = '/logout';
