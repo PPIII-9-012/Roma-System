@@ -269,66 +269,29 @@
 
         .app {
             display: flex;
-            max-width: 1440px;
+            max-width: 1400px;
             margin: 0 auto;
+            padding: 0 24px;
+            gap: 28px;
             align-items: flex-start;
+            justify-content: center;
         }
 
         .main-col {
             flex: 1;
+            max-width: 920px;
             min-width: 0;
-            padding: 24px 24px 60px 40px;
+            padding: 24px 0 60px;
         }
 
         .side-col {
-            width: 320px;
+            width: 340px;
             flex-shrink: 0;
-            padding: 24px 40px 60px 0;
+            padding: 24px 0 60px;
             position: sticky;
             top: 90px;
         }
 
-        .progress-tabs {
-            background: #FFFFFF;
-            display: flex;
-            border-bottom: 1px solid #9CA3AF;
-            margin-bottom: 10px;
-        }
-
-        .progress-tab {
-            flex: 1;
-            min-width: 0;
-            min-height: 50px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 2px;
-            padding: 5px 8px;
-            background: #FFFFFF;
-            border: 0;
-            border-right: 1px solid #9CA3AF;
-            color: #6B7280;
-            cursor: pointer;
-            font-size: 11px;
-        }
-
-        .progress-tab:last-child {
-            border-right: 0;
-        }
-
-        .progress-tab.active {
-            color: #0B2341;
-            font-weight: 600;
-            border-bottom: 2px solid #0B2341;
-        }
-
-        .progress-tab img {
-            height: 22px;
-            width: auto;
-        }
-
-        .form-card,
         .summary-card {
             background: #FFFFFF;
             border-radius: 6px;
@@ -336,35 +299,148 @@
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
-        .form-section {
-            padding: 12px 16px 16px;
-            border-bottom: 8px solid #F1F3F4;
-            scroll-margin-top: 104px;
+        /* Acordeón de Pasos */
+        .accordion-card {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
-
-        .form-section-head {
+        .accordion-item {
+            background: #FFFFFF;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+            border: 1px solid #E5E7EB;
+            transition: all 0.3s ease;
+        }
+        .accordion-item.active {
+            border-color: #0B2341;
+            box-shadow: 0 4px 12px rgba(11, 35, 65, 0.08);
+        }
+        .accordion-item.locked {
+            opacity: 0.55;
+            background: #F9FAFB;
+        }
+        .accordion-header {
+            padding: 16px 20px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 10px;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+            background: #FFFFFF;
+            transition: background 0.2s;
         }
-
-        .form-section-num {
-            width: 20px;
-            height: 20px;
+        .accordion-item.locked .accordion-header {
+            cursor: not-allowed;
+            background: #F9FAFB;
+        }
+        .accordion-item.active .accordion-header {
+            background: #F8FAFC;
+            border-bottom: 1px solid #E5E7EB;
+        }
+        .accordion-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .accordion-num {
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
-            background: #0B2341;
+            background: #6B7280;
             color: #FFFFFF;
             display: grid;
             place-items: center;
-            font-size: 11px;
+            font-size: 12px;
+            font-weight: 700;
+            transition: background 0.2s;
+        }
+        .accordion-item.active .accordion-num {
+            background: #0B2341;
+        }
+        .accordion-item.completed .accordion-num {
+            background: #059669;
+        }
+        .accordion-title {
+            color: #0B2341;
+            font-size: 14px;
             font-weight: 700;
         }
-
-        .form-section-title {
-            color: #0B2341;
-            font-size: 13px;
-            font-weight: 700;
+        .accordion-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .accordion-summary-tag {
+            font-size: 11px;
+            color: #4B5563;
+            background: #F3F4F6;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+            max-width: 280px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .accordion-icon {
+            font-size: 12px;
+            color: #6B7280;
+            transition: transform 0.3s ease;
+        }
+        .accordion-item.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1), opacity 0.3s ease, padding 0.3s ease;
+            padding: 0 20px;
+        }
+        .accordion-item.active .accordion-body {
+            max-height: 1800px;
+            opacity: 1;
+            padding: 18px 20px 20px;
+            transition: max-height 0.5s ease-in-out, opacity 0.3s ease, padding 0.3s ease;
+        }
+        .step-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 1px solid #F3F4F6;
+        }
+        .btn-next-step {
+            background: #0B2341;
+            color: #FFFFFF;
+            border: 0;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+        }
+        .btn-next-step:hover {
+            background: #16365C;
+            transform: translateY(-1px);
+        }
+        .btn-prev-step {
+            background: #F3F4F6;
+            color: #4B5563;
+            border: 1px solid #D1D5DB;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-prev-step:hover {
+            background: #E5E7EB;
         }
 
         .field-row,
@@ -485,6 +561,31 @@
         .search-item-codia {
             font-size: 9px;
             color: #6B7280;
+        }
+
+        .search-loading-item {
+            padding: 10px 14px;
+            font-size: 11px;
+            color: #0B2341;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            background: #F8FAFC;
+        }
+
+        .search-spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid #CBD5E1;
+            border-top-color: #0B2341;
+            border-radius: 50%;
+            animation: searchSpin 0.7s linear infinite;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        @keyframes searchSpin {
+            to { transform: rotate(360deg); }
         }
 
         .op-grid {
@@ -1138,187 +1239,219 @@
 
     <div class="app">
         <div class="main-col">
-            <div class="progress-tabs">
-                <button class="progress-tab active" data-target="sec-cliente"><img src="cliente.png"
-                        alt=""><span>Cliente</span></button>
-                <button class="progress-tab" data-target="sec-usado"><img src="coche.png" alt=""><span>Vehículo
-                        usado</span></button>
-                <button class="progress-tab" data-target="sec-nuevo"><img src="coche.png" alt=""><span>Vehículo
-                        nuevo</span></button>
-                <button class="progress-tab" data-target="sec-opciones"><img src="linea.png" alt=""><span>Resumen y
-                        opciones</span></button>
-            </div>
-
-            <div class="form-card">
+            <div class="accordion-card">
                 <!-- 1. DATOS DEL CLIENTE -->
-                <section class="form-section" id="sec-cliente">
-                    <div class="form-section-head"><span class="form-section-num">1</span><span
-                            class="form-section-title">DATOS DEL CLIENTE</span></div>
-                    <div class="field-row">
-                        <div class="field"><label>Nombre</label>
-                           <input id="clientName" placeholder="Ej: Renzo"
-                           oninput="actualizarSimulacion()"></div>
-                        <div class="field"><label>Apellido</label>
-                            <input id="clientSurname" placeholder="Ej: Segovia"
-                            oninput="actualizarSimulacion()"></div>
-                        <div class="field"><label>Número de documento</label>
-                            <input id="clientDni"
-                                placeholder="Ej: 45.361.089"  
-                                oninput="actualizarSimulacion()"></div>
-                        <div class="field"><label>Ingresos mensuales ($)</label><input id="monthlyIncome"
-                                inputmode="numeric" placeholder="Ej: 1.000.000" 
-                                oninput="actualizarSimulacionDebounced()"></div>
+                <div class="accordion-item active" id="acc-item-1">
+                    <div class="accordion-header" onclick="toggleAccordion(1)">
+                        <div class="accordion-title-wrap">
+                            <span class="accordion-num" id="num-cliente">1</span>
+                            <span class="accordion-title">DATOS DEL CLIENTE</span>
+                        </div>
+                        <div class="accordion-meta">
+                            <span class="accordion-summary-tag" id="tag-cliente" style="display:none;"></span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
                     </div>
-                </section>
+                    <div class="accordion-body">
+                        <div class="field-row">
+                            <div class="field"><label>Nombre</label>
+                               <input id="clientName"
+                               oninput="validarPasosYActualizar()"></div>
+                            <div class="field"><label>Apellido</label>
+                                <input id="clientSurname"
+                                oninput="validarPasosYActualizar()"></div>
+                            <div class="field"><label>Número de documento</label>
+                                <input id="clientDni"
+                                    oninput="validarPasosYActualizar()"></div>
+                            <div class="field"><label>Ingresos mensuales ($)</label><input id="monthlyIncome"
+                                    inputmode="numeric"
+                                    oninput="validarPasosYActualizarDebounced()"></div>
+                        </div>
+                        <div class="step-actions">
+                            <button class="btn-next-step" type="button" onclick="irAlPaso(2)">Continuar a Vehículo Usado →</button>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- 2. VEHÍCULO USADO (PERMUTA) CON INFOAUTO -->
-                <section class="form-section" id="sec-usado">
-                    <div class="form-section-head"><span class="form-section-num">2</span><span
-                            class="form-section-title">VEHÍCULO USADO (PERMUTA)</span></div>
-
-                    <div class="search-wrap">
-                        <input class="search-input" id="searchUsedCar"
-                            placeholder="Buscar usado en Infoauto por modelo o versión (ej: 208, Corolla, Amarok, Gol...)"
-                            oninput="buscarInfoautoUsadoDebounced()">
-                        <div class="search-dropdown" id="searchUsedDropdown"></div>
+                <div class="accordion-item locked" id="acc-item-2">
+                    <div class="accordion-header" onclick="toggleAccordion(2)">
+                        <div class="accordion-title-wrap">
+                            <span class="accordion-num" id="num-usado">2</span>
+                            <span class="accordion-title">VEHÍCULO USADO (PERMUTA)</span>
+                        </div>
+                        <div class="accordion-meta">
+                            <span class="accordion-summary-tag" id="tag-usado" style="display:none;"></span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
                     </div>
+                    <div class="accordion-body">
+                        <div class="search-wrap">
+                            <input class="search-input" id="searchUsedCar"
+                                placeholder="Buscar usado en Infoauto por modelo o versión..."
+                                oninput="buscarInfoautoUsadoDebounced()">
+                            <div class="search-dropdown" id="searchUsedDropdown"></div>
+                        </div>
 
-                    <div class="used-layout">
+                        <div class="used-layout">
+                            <div class="used-fields">
+                                <div class="field">
+                                    <label>Modelo / Versión</label>
+                                    <input id="usedBrandModel" 
+                                        oninput="validarPasosYActualizar()">
+                                </div>
+                                <div class="field">
+                                    <label>Año del Usado</label>
+                                    <select id="usedYear" onchange="cambiarAnioUsado()">
+                                        <option value="" selected>Seleccionar año</option>
+                                        <option value="2026">2026</option>
+                                        <option value="2025">2025</option>
+                                        <option value="2024">2024</option>
+                                        <option value="2023">2023</option>
+                                        <option value="2022">2022</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2020">2020</option>
+                                        <option value="2019">2019</option>
+                                        <option value="2018">2018</option>
+                                        <option value="2017">2017</option>
+                                        <option value="2016">2016</option>
+                                        <option value="2015">2015</option>
+                                        <option value="2014">2014</option>
+                                    </select>
+                                </div>
+                                <div class="field">
+                                    <label>Valor Revista Infoauto ($)</label>
+                                    <input id="usedRevistaValue" inputmode="numeric"
+                                        oninput="alCambiarValorRevistaManual()">
+                                </div>
+                                <div class="field">
+                                    <label>Precio Toma Agencia ($)</label>
+                                    <input id="usedTradeInValue" inputmode="numeric" 
+                                        placeholder="Precio de toma" oninput="alCambiarTomaUsado()">
+                                </div>
+                            </div>
+                            <div class="infoauto-box">
+                                VALOR DE REVISTA
+                                <strong class="infoauto-value" id="usedRevistaDisplay">$ 20.000.000</strong>
+                                <small id="usedAntiquityDisplay">Infoauto · Antigüedad 7 años</small>
+                            </div>
+                        </div>
+                        <div class="step-actions">
+                            <button class="btn-prev-step" type="button" onclick="irAlPaso(1)">← Volver a Cliente</button>
+                            <button class="btn-next-step" type="button" onclick="irAlPaso(3)">Continuar a Vehículo Nuevo →</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. VEHÍCULO NUEVO / A COMPRAR CON FORMULARIO COMPLETO -->
+                <div class="accordion-item locked" id="acc-item-3">
+                    <div class="accordion-header" onclick="toggleAccordion(3)">
+                        <div class="accordion-title-wrap">
+                            <span class="accordion-num" id="num-nuevo">3</span>
+                            <span class="accordion-title">VEHÍCULO NUEVO / A COMPRAR</span>
+                        </div>
+                        <div class="accordion-meta">
+                            <span class="accordion-summary-tag" id="tag-nuevo" style="display:none;"></span>
+                            <span class="accordion-icon">▼</span>
+                        </div>
+                    </div>
+                    <div class="accordion-body">
+                        <div class="search-wrap">
+                            <input class="search-input" id="searchNewCar"
+                                placeholder="Buscar vehículo nuevo en Infoauto por modelo o versión..."
+                                oninput="buscarInfoautoNuevoDebounced()">
+                            <div class="search-dropdown" id="searchNewDropdown"></div>
+                        </div>
+
                         <div class="used-fields">
                             <div class="field">
                                 <label>Modelo / Versión</label>
-                                <input id="usedBrandModel" 
-                                    placeholder="Ej: Peugeot 208 Allure" 
-                                    oninput="actualizarSimulacion()">
+                                <input id="newCarName"
+                                    oninput="validarPasosYActualizar()">
                             </div>
                             <div class="field">
-                                <label>Año del Usado</label>
-                                <select id="usedYear" onchange="cambiarAnioUsado()">
-                                    <option value="" selected>Seleccionar año</option>
-                                    <option value="2026">2026</option>
-                                    <option value="2025">2025</option>
-                                    <option value="2024">2024</option>
-                                    <option value="2023">2023</option>
-                                    <option value="2022">2022</option>
-                                    <option value="2021">2021</option>
-                                    <option value="2020">2020</option>
-                                    <option value="2019">2019</option>
-                                    <option value="2018">2018</option>
-                                    <option value="2017">2017</option>
-                                    <option value="2016">2016</option>
-                                    <option value="2015">2015</option>
-                                    <option value="2014">2014</option>
-                                </select>
+                                <label>Año</label>
+                                <input type="number" id="newCarYear" min="2000" max="2030"
+                                    oninput="validarPasosYActualizarDebounced()">
                             </div>
                             <div class="field">
-                                <label>Valor Revista Infoauto ($)</label>
-                                <input id="usedRevistaValue" inputmode="numeric"
-                                    placeholder="Ej: 20.000.000" oninput="actualizarSimulacionDebounced()">
+                                <label>Precio de Lista ($)</label>
+                                <input id="newCarPrice" inputmode="numeric" placeholder="Precio de lista"
+                                    oninput="alCambiarPrecioNuevo()">
                             </div>
                             <div class="field">
-                                <label>Precio Toma Agencia ($)</label>
-                                <input id="usedTradeInValue" inputmode="numeric" 
-                                    placeholder="Aclarar precio toma" oninput="actualizarSimulacionDebounced()">
+                                <label>Gastos Transferencia / Papeles ($)</label>
+                                <input id="newCarTransfer" inputmode="numeric"
+                                    placeholder="Gastos de transferencia" oninput="alCambiarGastosTransferencia()">
                             </div>
                         </div>
-                        <div class="infoauto-box">
-                            VALOR DE REVISTA
-                            <strong class="infoauto-value" id="usedRevistaDisplay">$ 20.000.000</strong>
-                            <small id="usedAntiquityDisplay">Infoauto · Antigüedad 7 años</small>
+                        <div class="step-actions">
+                            <button class="btn-prev-step" type="button" onclick="irAlPaso(2)">← Volver a Usado</button>
+                            <button class="btn-next-step" type="button" onclick="irAlPaso(4)">Ver Resumen y Planes de Financiación →</button>
                         </div>
                     </div>
-                </section>
+                </div>
 
-                <!-- 3. VEHÍCULO NUEVO / A COMPRAR CON FORMULARIO COMPLETO -->
-                <section class="form-section" id="sec-nuevo">
-                    <div class="form-section-head"><span class="form-section-num">3</span><span
-                            class="form-section-title">VEHÍCULO NUEVO / A COMPRAR</span></div>
-
-                    <div class="search-wrap">
-                        <input class="search-input" id="searchNewCar"
-                            placeholder="Buscar vehículo nuevo en Infoauto (ej: 208, Cronos, Amarok, Corolla, Nivus...)"
-                            oninput="buscarInfoautoNuevoDebounced()">
-                        <div class="search-dropdown" id="searchNewDropdown"></div>
-                    </div>
-
-                    <div class="used-fields">
-                        <div class="field">
-                            <label>Modelo / Versión</label>
-                            <input id="newCarName" placeholder="Ej: Peugeot 208 Allure MT"
-                                oninput="actualizarSimulacion()">
+                <!-- 4. RESUMEN DE LA OPERACIÓN Y PLANES PSA -->
+                <div class="accordion-item locked" id="acc-item-4">
+                    <div class="accordion-header" onclick="toggleAccordion(4)">
+                        <div class="accordion-title-wrap">
+                            <span class="accordion-num" id="num-opciones">4</span>
+                            <span class="accordion-title">RESUMEN DE OPERACIÓN Y PLANES DE FINANCIACIÓN</span>
                         </div>
-                        <div class="field">
-                            <label>Año</label>
-                            <input type="number" id="newCarYear" min="2000" max="2030"
-                                placeholder="Ej: 2026" oninput="actualizarSimulacionDebounced()">
-                        </div>
-                        <div class="field">
-                            <label>Precio de Lista ($)</label>
-                            <input id="newCarPrice" inputmode="numeric"  placeholder="Ingresar precio"
-                                oninput="alCambiarPrecioNuevo()">
-                        </div>
-                        <div class="field">
-                            <label>Gastos Transferencia / Papeles ($)</label>
-                            <input id="newCarTransfer" inputmode="numeric"
-                                placeholder="Ingresar gastos" oninput="actualizarSimulacionDebounced()">
+                        <div class="accordion-meta">
+                            <span class="accordion-summary-tag" id="tag-opciones" style="display:none;"></span>
+                            <span class="accordion-icon">▼</span>
                         </div>
                     </div>
-                </section>
+                    <div class="accordion-body">
+                        <div class="op-grid">
+                            <div>
+                                <div class="op-label">Precio vehículo + transferencia</div>
+                                <div class="op-value" id="opTotalPrice">$24.740.000</div>
+                            </div>
+                            <div>
+                                <div class="op-label">Valor de toma (usado)</div>
+                                <div class="op-value negative" id="opUsedValue">$10.000.000</div>
+                            </div>
+                            <div>
+                                <div class="op-label">Capital a financiar ($)</div>
+                                <input id="opFinancingInput" inputmode="numeric" class="op-value negative"
+                                    style="border: 1px solid #D9D9D9; padding: 2px 6px; border-radius: 4px; width: 120px;"
+                                    oninput="userOverrodeFinancing = true; validarPasosYActualizarDebounced()">
+                            </div>
+                            <div class="cash-box">
+                                Efectivo a entregar
+                                <strong id="operationCash">$6.740.000</strong>
+                            </div>
+                        </div>
+                        <div class="validation-banner" id="operationAlert"></div>
 
-                <!-- 4. RESUMEN DE LA OPERACIÓN -->
-                <section class="form-section" id="sec-opciones">
-                    <div class="form-section-head"><span class="form-section-num">4</span><span
-                            class="form-section-title">RESUMEN DE LA OPERACIÓN</span></div>
-                    <div class="op-grid">
-                        <div>
-                            <div class="op-label">Precio vehículo + transferencia</div>
-                            <div class="op-value" id="opTotalPrice">$24.740.000</div>
+                        <div style="margin-top: 20px;">
+                            <div class="plans-control-row">
+                                <span style="font-size: 11px; color: #6B7280; font-weight: 600;">Seleccioná el plazo deseado para recalcular las cuotas:</span>
+                                <div class="plazo-selector-wrap">
+                                    <label for="plazoSelect">Plazo:</label>
+                                    <select id="plazoSelect" onchange="cambiarPlazoGlobal()">
+                                        <option value="12">12 Cuotas</option>
+                                        <option value="18">18 Cuotas</option>
+                                        <option value="24" selected>24 Cuotas</option>
+                                        <option value="36">36 Cuotas</option>
+                                        <option value="48">48 Cuotas</option>
+                                        <option value="60">60 Cuotas</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="plans-grid" id="plansContainer">
+                                <!-- Tarjetas de planes renderizadas dinámicamente -->
+                            </div>
                         </div>
-                        <div>
-                            <div class="op-label">Valor de toma (usado)</div>
-                            <div class="op-value negative" id="opUsedValue">$10.000.000</div>
-                        </div>
-                        <div>
-                            <div class="op-label">Capital a financiar ($)</div>
-                            <input id="opFinancingInput" inputmode="numeric"  class="op-value negative"
-                                style="border: 1px solid #D9D9D9; padding: 2px 6px; border-radius: 4px; width: 120px;"
-                                oninput="actualizarSimulacionDebounced()">
-                        </div>
-                        <div class="cash-box">
-                            Efectivo a entregar
-                            <strong id="operationCash">$6.740.000</strong>
+                        <div class="step-actions">
+                            <button class="btn-prev-step" type="button" onclick="irAlPaso(3)">← Volver a Vehículo Nuevo</button>
                         </div>
                     </div>
-                    <div class="validation-banner" id="operationAlert"></div>
-                </section>
-
-                <!-- 5. OPCIONES DE FINANCIAMIENTO PSA -->
-                <section class="form-section">
-                    <div class="form-section-head">
-                        <span class="form-section-num">5</span>
-                        <span class="form-section-title">OPCIONES DE FINANCIAMIENTO PSA FINANCE</span>
-                    </div>
-
-                    <div class="plans-control-row">
-                        <span style="font-size: 11px; color: #6B7280;">Seleccioná el plazo deseado para recalcular las
-                            cuotas:</span>
-                        <div class="plazo-selector-wrap">
-                            <label for="plazoSelect">Plazo:</label>
-                            <select id="plazoSelect" onchange="cambiarPlazoGlobal()">
-                                <option value="12">12 Cuotas</option>
-                                <option value="18">18 Cuotas</option>
-                                <option value="24" selected>24 Cuotas</option>
-                                <option value="36">36 Cuotas</option>
-                                <option value="48">48 Cuotas</option>
-                                <option value="60">60 Cuotas</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="plans-grid" id="plansContainer">
-                        <!-- Tarjetas de planes renderizadas dinámicamente -->
-                    </div>
-                </section>
+                </div>
             </div>
         </div>
 
@@ -1421,7 +1554,9 @@
     </div>
 
     <script>
-        const BACKEND = window.location.protocol.startsWith("http") ? window.location.origin : "http://localhost:5000";
+        const BACKEND = (window.location.protocol.startsWith("http") && (window.location.port === "5050" || window.location.port === ""))
+            ? window.location.origin
+            : "http://localhost:5050";
 
         let debounceTimer = null;
         let searchUsedDebounceTimer = null;
@@ -1433,6 +1568,8 @@
         let simulationResults = [];
 
         let usedCarPricesByYear = {};
+        let userOverrodeFinancing = false;
+        let userOverrodeTransfer = false;
 
         // Helper robusto para formatear y parsear números monetarios en formato argentino
         const formatMoney = (val) => '$' + Math.round(Number(val) || 0).toLocaleString('es-AR');
@@ -1445,6 +1582,7 @@
 
         document.addEventListener("DOMContentLoaded", async () => {
             setupTabsAndUI();
+            actualizarHabilitacionPasos();
             await cargarConfiguracionPlanes();
             await actualizarSimulacion();
         });
@@ -1484,18 +1622,6 @@
                 });
             });
 
-            const progressTabs = document.querySelectorAll('.progress-tab');
-            progressTabs.forEach((tab) => {
-                tab.addEventListener('click', () => {
-                    const section = document.getElementById(tab.dataset.target);
-                    if (section) {
-                        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                    progressTabs.forEach((item) => item.classList.remove('active'));
-                    tab.classList.add('active');
-                });
-            });
-
             // Formateo visual al salir de los inputs numéricos
             const numInputs = ['monthlyIncome', 'usedRevistaValue', 'usedTradeInValue', 'newCarPrice', 'newCarTransfer', 'opFinancingInput'];
             numInputs.forEach(id => {
@@ -1524,6 +1650,131 @@
             });
         }
 
+        // -------------------------------------------------------------------------
+        // ACORDEÓN INTERACTIVO Y VALIDACIÓN POR PASOS
+        // -------------------------------------------------------------------------
+        function toggleAccordion(stepNum) {
+            const item = document.getElementById(`acc-item-${stepNum}`);
+            if (!item || item.classList.contains('locked')) return;
+
+            const isCurrentlyActive = item.classList.contains('active');
+            for (let i = 1; i <= 4; i++) {
+                const el = document.getElementById(`acc-item-${i}`);
+                if (el) el.classList.remove('active');
+            }
+
+            if (!isCurrentlyActive) {
+                item.classList.add('active');
+                item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function irAlPaso(stepNum) {
+            actualizarHabilitacionPasos();
+            const item = document.getElementById(`acc-item-${stepNum}`);
+            if (item) {
+                item.classList.remove('locked');
+                for (let i = 1; i <= 4; i++) {
+                    const el = document.getElementById(`acc-item-${i}`);
+                    if (el) el.classList.remove('active');
+                }
+                item.classList.add('active');
+                item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        function actualizarHabilitacionPasos() {
+            const clientName = (document.getElementById('clientName')?.value || '').trim();
+            const clientSurname = (document.getElementById('clientSurname')?.value || '').trim();
+            const clientDni = (document.getElementById('clientDni')?.value || '').trim();
+            const clientIncome = parseNumber(document.getElementById('monthlyIncome')?.value);
+            
+            const paso1Completo = (clientName.length > 0 || clientSurname.length > 0 || clientDni.length > 0 || clientIncome > 0);
+
+            const item1 = document.getElementById('acc-item-1');
+            const num1 = document.getElementById('num-cliente');
+            const tag1 = document.getElementById('tag-cliente');
+
+            if (paso1Completo && item1) {
+                item1.classList.add('completed');
+                if (num1) num1.textContent = '✓';
+                if (tag1) {
+                    tag1.textContent = `${clientName} ${clientSurname}`.trim() + (clientDni ? ` · DNI: ${clientDni}` : '');
+                    tag1.style.display = 'inline-block';
+                }
+                document.getElementById('acc-item-2')?.classList.remove('locked');
+            } else if (item1) {
+                item1.classList.remove('completed');
+                if (num1) num1.textContent = '1';
+                if (tag1) tag1.style.display = 'none';
+            }
+
+            // Paso 2: Usado
+            const usedModel = (document.getElementById('usedBrandModel')?.value || '').trim();
+            const usedTradeIn = parseNumber(document.getElementById('usedTradeInValue')?.value);
+            const paso2Completo = (usedModel.length > 0 || usedTradeIn > 0);
+
+            const item2 = document.getElementById('acc-item-2');
+            const num2 = document.getElementById('num-usado');
+            const tag2 = document.getElementById('tag-usado');
+
+            if (paso2Completo && item2) {
+                item2.classList.add('completed');
+                if (num2) num2.textContent = '✓';
+                if (tag2) {
+                    tag2.textContent = `${usedModel || 'Usado'} · Toma: ${formatMoney(usedTradeIn)}`;
+                    tag2.style.display = 'inline-block';
+                }
+                document.getElementById('acc-item-3')?.classList.remove('locked');
+            } else if (item2) {
+                item2.classList.remove('completed');
+                if (num2) num2.textContent = '2';
+                if (tag2) tag2.style.display = 'none';
+            }
+
+            // Paso 3: Nuevo
+            const newCar = (document.getElementById('newCarName')?.value || '').trim();
+            const newPrice = parseNumber(document.getElementById('newCarPrice')?.value);
+            const paso3Completo = (newCar.length > 0 || newPrice > 0);
+
+            const item3 = document.getElementById('acc-item-3');
+            const num3 = document.getElementById('num-nuevo');
+            const tag3 = document.getElementById('tag-nuevo');
+
+            if (paso3Completo && item3) {
+                item3.classList.add('completed');
+                if (num3) num3.textContent = '✓';
+                if (tag3) {
+                    tag3.textContent = `${newCar || 'Nuevo'} · ${formatMoney(newPrice)}`;
+                    tag3.style.display = 'inline-block';
+                }
+                document.getElementById('acc-item-4')?.classList.remove('locked');
+            } else if (item3) {
+                item3.classList.remove('completed');
+                if (num3) num3.textContent = '3';
+                if (tag3) tag3.style.display = 'none';
+            }
+
+            // Paso 4: Resumen
+            const item4 = document.getElementById('acc-item-4');
+            const financing = parseNumber(document.getElementById('opFinancingInput')?.value);
+            if (financing > 0 && item4) {
+                item4.classList.add('completed');
+                const num4 = document.getElementById('num-opciones');
+                if (num4) num4.textContent = '✓';
+            }
+        }
+
+        function validarPasosYActualizar() {
+            actualizarHabilitacionPasos();
+            actualizarSimulacion();
+        }
+
+        function validarPasosYActualizarDebounced() {
+            actualizarHabilitacionPasos();
+            actualizarSimulacionDebounced();
+        }
+
         async function cargarConfiguracionPlanes() {
             try {
                 const res = await fetch(`${BACKEND}/planes`);
@@ -1539,13 +1790,47 @@
             actualizarSimulacion();
         }
 
-        function alCambiarPrecioNuevo() {
-            // Al tipear un nuevo precio de auto, sugerir automáticamente gastos de transferencia al 7.5% si no se editaron
-            const p = parseNumber(document.getElementById('newCarPrice').value);
-            if (p > 0) {
-                document.getElementById('newCarTransfer').value = Math.round(p * 0.075).toLocaleString('es-AR');
+        function alCambiarValorRevistaManual() {
+            const r = parseNumber(document.getElementById('usedRevistaValue').value);
+            if (r > 0) {
+                document.getElementById('usedTradeInValue').value = Math.round(r * 0.80).toLocaleString('es-AR');
             }
-            actualizarSimulacionDebounced();
+            recalcularFinanciamientoSugerido();
+            validarPasosYActualizarDebounced();
+        }
+
+        function alCambiarTomaUsado() {
+            recalcularFinanciamientoSugerido();
+            validarPasosYActualizarDebounced();
+        }
+
+        function alCambiarGastosTransferencia() {
+            userOverrodeTransfer = true;
+            recalcularFinanciamientoSugerido();
+            validarPasosYActualizarDebounced();
+        }
+
+        function recalcularFinanciamientoSugerido(forceUpdate = false) {
+            const newPrice = parseNumber(document.getElementById('newCarPrice').value);
+            const transfer = parseNumber(document.getElementById('newCarTransfer').value);
+            const usedTradeIn = parseNumber(document.getElementById('usedTradeInValue').value);
+            const financingInput = document.getElementById('opFinancingInput');
+
+            if (newPrice > 0 && (!userOverrodeFinancing || !financingInput.value || parseNumber(financingInput.value) === 0 || forceUpdate)) {
+                const saldoCalculado = Math.max(0, (newPrice + transfer) - usedTradeIn);
+                const montoFinal = saldoCalculado > 0 ? saldoCalculado : Math.round(newPrice * 0.50);
+                financingInput.value = montoFinal.toLocaleString('es-AR');
+            }
+        }
+
+        function alCambiarPrecioNuevo() {
+            const p = parseNumber(document.getElementById('newCarPrice').value);
+            const transferInput = document.getElementById('newCarTransfer');
+            if (!userOverrodeTransfer) {
+                transferInput.value = p > 0 ? Math.round(p * 0.075).toLocaleString('es-AR') : '';
+            }
+            recalcularFinanciamientoSugerido(true);
+            validarPasosYActualizarDebounced();
         }
 
         function actualizarSimulacionDebounced() {
@@ -1798,8 +2083,22 @@ if (operacionIncompleta) {
                 return;
             }
 
+            dropdown.innerHTML = `
+                <div class="search-loading-item">
+                    <span class="search-spinner"></span>
+                    <span class="search-loading-text">Buscando modelos en Infoauto...</span>
+                </div>
+            `;
+            dropdown.style.display = 'block';
+
+            let slowTimer = setTimeout(() => {
+                const txt = dropdown.querySelector('.search-loading-text');
+                if (txt) txt.textContent = 'La respuesta de Infoauto está demorando más de lo habitual...';
+            }, 3000);
+
             try {
                 const res = await fetch(`${BACKEND}/buscar?q=${encodeURIComponent(q)}`);
+                clearTimeout(slowTimer);
                 const data = await res.json();
                 const items = Array.isArray(data) ? data : (data.results || data.data || data.cars || []);
 
@@ -1809,27 +2108,35 @@ if (operacionIncompleta) {
                     return;
                 }
 
-                dropdown.innerHTML = items.slice(0, 10).map(item => {
-                    const nombre = item.description || item.nombre || item.name || item.version || JSON.stringify(item);
+                dropdown.innerHTML = items.slice(0, 15).map(item => {
+                    const brand = item.brand?.name ? item.brand.name + " " : "";
+                    const desc = item.description || item.nombre || item.name || item.version || "";
+                    const nombre = (brand + desc).trim();
                     const codia = item.codia || item.id || item.code || '';
+                    const pFrom = item.prices_from || 0;
+                    const pTo = item.prices_to || 0;
+                    const yearsBadge = (pFrom && pTo) ? `${pFrom}–${pTo}` : (pFrom ? `Desde ${pFrom}` : '');
                     return `
-                    <div class="search-item" onclick="seleccionarAutoUsadoInfoauto(${codia}, '${nombre.replace(/'/g, "\\'")}')">
+                    <div class="search-item" onclick="seleccionarAutoUsadoInfoauto(${codia}, '${nombre.replace(/'/g, "\\'")}', ${pFrom}, ${pTo})">
                         <span class="search-item-title">${nombre}</span>
-                        <span class="search-item-codia">CODIA ${codia}</span>
+                        <span class="search-item-codia">${yearsBadge ? yearsBadge + ' · ' : ''}CODIA ${codia}</span>
                     </div>
                 `;
                 }).join("");
 
                 dropdown.style.display = 'block';
             } catch (e) {
+                clearTimeout(slowTimer);
+                dropdown.innerHTML = `<div style="padding:10px;font-size:10px;color:#DC2626;">Error al consultar Infoauto</div>`;
                 console.error("Error en búsqueda Infoauto usado:", e);
             }
         }
 
-        async function seleccionarAutoUsadoInfoauto(codia, nombre) {
+        async function seleccionarAutoUsadoInfoauto(codia, nombre, pricesFrom, pricesTo) {
             document.getElementById('searchUsedDropdown').style.display = 'none';
             document.getElementById('usedBrandModel').value = nombre;
             document.getElementById('searchUsedCar').value = nombre;
+            document.getElementById('usedAntiquityDisplay').textContent = 'Infoauto · Consultando valores...';
 
             try {
                 const res = await fetch(`${BACKEND}/precios/${codia}`);
@@ -1839,12 +2146,14 @@ if (operacionIncompleta) {
                 const selectYear = document.getElementById('usedYear');
                 selectYear.innerHTML = "";
 
+                let hasPrices = false;
                 if (Array.isArray(data) && data.length > 0) {
                     data.sort((a, b) => (b.year || b.anio || 0) - (a.year || a.anio || 0)).forEach(item => {
                         const y = item.year || item.anio;
                         let p = Number(item.price || item.precio) || 0;
                         if (p > 0 && p < 100000) p = p * 1000;
                         if (y) {
+                            hasPrices = true;
                             usedCarPricesByYear[y] = p;
                             const opt = document.createElement('option');
                             opt.value = y;
@@ -1852,10 +2161,11 @@ if (operacionIncompleta) {
                             selectYear.appendChild(opt);
                         }
                     });
-                } else if (typeof data === 'object') {
+                } else if (typeof data === 'object' && data !== null && !data.error) {
                     Object.entries(data).filter(([k]) => /^\d{4}$/.test(k)).sort((a, b) => b[0] - a[0]).forEach(([y, p]) => {
                         let precioNum = Number(p) || 0;
                         if (precioNum > 0 && precioNum < 100000) precioNum = precioNum * 1000;
+                        if (precioNum > 0) hasPrices = true;
                         usedCarPricesByYear[y] = precioNum;
                         const opt = document.createElement('option');
                         opt.value = y;
@@ -1864,9 +2174,26 @@ if (operacionIncompleta) {
                     });
                 }
 
+                if (!hasPrices) {
+                    let startY = Number(pricesFrom) || 2010;
+                    let endY = Number(pricesTo) || new Date().getFullYear();
+                    if (startY > endY) [startY, endY] = [endY, startY];
+                    for (let y = endY; y >= startY; y--) {
+                        const opt = document.createElement('option');
+                        opt.value = y;
+                        opt.textContent = `${y} (Sin cotización oficial)`;
+                        selectYear.appendChild(opt);
+                    }
+                    document.getElementById('usedRevistaValue').value = '';
+                    document.getElementById('usedRevistaValue').placeholder = 'Ingresar valor manual';
+                    document.getElementById('usedTradeInValue').value = '';
+                    document.getElementById('usedTradeInValue').placeholder = 'Ingresar toma manual';
+                }
+
                 cambiarAnioUsado();
             } catch (e) {
                 console.error("Error al obtener precios del auto usado:", e);
+                validarPasosYActualizar();
             }
         }
 
@@ -1877,7 +2204,8 @@ if (operacionIncompleta) {
                 document.getElementById('usedRevistaValue').value = precioRevista.toLocaleString('es-AR');
                 document.getElementById('usedTradeInValue').value = Math.round(precioRevista * 0.80).toLocaleString('es-AR');
             }
-            actualizarSimulacion();
+            recalcularFinanciamientoSugerido();
+            validarPasosYActualizar();
         }
 
         // -------------------------------------------------------------------------
@@ -1899,8 +2227,22 @@ if (operacionIncompleta) {
                 return;
             }
 
+            dropdown.innerHTML = `
+                <div class="search-loading-item">
+                    <span class="search-spinner"></span>
+                    <span class="search-loading-text">Buscando modelos en Infoauto...</span>
+                </div>
+            `;
+            dropdown.style.display = 'block';
+
+            let slowTimer = setTimeout(() => {
+                const txt = dropdown.querySelector('.search-loading-text');
+                if (txt) txt.textContent = 'La respuesta de Infoauto está demorando más de lo habitual...';
+            }, 3000);
+
             try {
                 const res = await fetch(`${BACKEND}/buscar?q=${encodeURIComponent(q)}`);
+                clearTimeout(slowTimer);
                 const data = await res.json();
                 const items = Array.isArray(data) ? data : (data.results || data.data || data.cars || []);
 
@@ -1910,11 +2252,14 @@ if (operacionIncompleta) {
                     return;
                 }
 
-                dropdown.innerHTML = items.slice(0, 10).map(item => {
-                    const nombre = item.description || item.nombre || item.name || item.version || JSON.stringify(item);
+                dropdown.innerHTML = items.slice(0, 15).map(item => {
+                    const brand = item.brand?.name ? item.brand.name + " " : "";
+                    const desc = item.description || item.nombre || item.name || item.version || "";
+                    const nombre = (brand + desc).trim();
                     const codia = item.codia || item.id || item.code || '';
+                    const pTo = item.prices_to || new Date().getFullYear();
                     return `
-                    <div class="search-item" onclick="seleccionarAutoNuevoInfoauto(${codia}, '${nombre.replace(/'/g, "\\'")}')">
+                    <div class="search-item" onclick="seleccionarAutoNuevoInfoauto(${codia}, '${nombre.replace(/'/g, "\\'")}', ${pTo})">
                         <span class="search-item-title">${nombre}</span>
                         <span class="search-item-codia">CODIA ${codia}</span>
                     </div>
@@ -1923,33 +2268,51 @@ if (operacionIncompleta) {
 
                 dropdown.style.display = 'block';
             } catch (e) {
+                clearTimeout(slowTimer);
+                dropdown.innerHTML = `<div style="padding:10px;font-size:10px;color:#DC2626;">Error al consultar Infoauto</div>`;
                 console.error("Error en búsqueda Infoauto nuevo:", e);
             }
         }
 
-        async function seleccionarAutoNuevoInfoauto(codia, nombre) {
+        async function seleccionarAutoNuevoInfoauto(codia, nombre, yearTo) {
             document.getElementById('searchNewDropdown').style.display = 'none';
             document.getElementById('newCarName').value = nombre;
             document.getElementById('searchNewCar').value = nombre;
+            if (yearTo) {
+                document.getElementById('newCarYear').value = yearTo;
+            }
+            const priceInput = document.getElementById('newCarPrice');
+            if (priceInput) priceInput.placeholder = 'Consultando valor de lista...';
             try {
                 const res = await fetch(`${BACKEND}/precios/${codia}`);
                 const data = await res.json();
                 let latestPrice = 0;
+                let latestYear = yearTo || 0;
                 if (Array.isArray(data) && data.length > 0) {
                     const sorted = [...data].sort((a, b) => (b.year || b.anio || 0) - (a.year || a.anio || 0));
                     latestPrice = Number(sorted[0].price || sorted[0].precio) || 0;
-                } else if (typeof data === 'object') {
+                    latestYear = sorted[0].year || sorted[0].anio || latestYear;
+                } else if (typeof data === 'object' && data !== null && !data.error) {
                     const years = Object.keys(data).filter(k => /^\d{4}$/.test(k)).sort((a, b) => b - a);
-                    if (years.length) latestPrice = Number(data[years[0]]) || 0;
+                    if (years.length) {
+                        latestPrice = Number(data[years[0]]) || 0;
+                        latestYear = parseInt(years[0], 10) || latestYear;
+                    }
                 }
                 if (latestPrice > 0 && latestPrice < 100000) latestPrice = latestPrice * 1000;
                 if (latestPrice > 0) {
-                    document.getElementById('newCarPrice').value = latestPrice.toLocaleString('es-AR');
+                    priceInput.value = latestPrice.toLocaleString('es-AR');
                 }
+                if (latestYear > 0) {
+                    document.getElementById('newCarYear').value = latestYear;
+                }
+                alCambiarPrecioNuevo();
             } catch (e) {
                 console.warn("No se pudo autocompletar precio de lista nuevo:", e);
+                validarPasosYActualizar();
+            } finally {
+                if (priceInput) priceInput.placeholder = 'Precio de lista';
             }
-            actualizarSimulacion();
         }
 
         // -------------------------------------------------------------------------
@@ -2074,23 +2437,24 @@ if (operacionIncompleta) {
         }
 
         function resetFormulario() {
-            document.getElementById('clientName').value = 'Renzo';
-            document.getElementById('clientSurname').value = 'Segovia';
-            document.getElementById('clientDni').value = '45.361.089';
-            document.getElementById('monthlyIncome').value = '1.000.000';
-            document.getElementById('usedBrandModel').value = 'Peugeot 208 Allure 1.6';
-            document.getElementById('usedYear').value = '2019';
-            document.getElementById('usedRevistaValue').value = '20.000.000';
-            document.getElementById('usedTradeInValue').value = '10.000.000';
-            document.getElementById('newCarName').value = 'Peugeot 208 Allure MT';
+            document.getElementById('clientName').value = '';
+            document.getElementById('clientSurname').value = '';
+            document.getElementById('clientDni').value = '';
+            document.getElementById('monthlyIncome').value = '';
+            document.getElementById('usedBrandModel').value = '';
+            document.getElementById('usedYear').value = '';
+            document.getElementById('usedRevistaValue').value = '';
+            document.getElementById('usedTradeInValue').value = '';
+            document.getElementById('newCarName').value = '';
             document.getElementById('newCarYear').value = '2026';
-            document.getElementById('newCarPrice').value = '23.000.000';
-            document.getElementById('newCarTransfer').value = '1.740.000';
-            document.getElementById('opFinancingInput').value = '8.000.000';
+            document.getElementById('newCarPrice').value = '';
+            document.getElementById('newCarTransfer').value = '';
+            document.getElementById('opFinancingInput').value = '';
             document.getElementById('plazoSelect').value = '24';
             currentPlazo = 24;
             selectedPlanKey = 'TRADICIONAL_VO';
-            actualizarSimulacion();
+            irAlPaso(1);
+            validarPasosYActualizar();
         }
     </script>
 

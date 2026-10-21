@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración de Usuarios — Roma Automotores</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #F1F3F4;
+            color: #374151;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar principal Roma */
+        .navbar {
+            height: 90px;
+            background: #0B2341;
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .navbar-left,
+        .navbar-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-left {
+            gap: 14px;
+        }
+
+        .navbar-logo {
+            width: auto;
+            height: 65px;
+            display: block;
+        }
+
+        .navbar-brand {
+            font-size: 13px;
+            opacity: .7;
+            letter-spacing: 2px;
+            font-weight: 500;
+            color: #FFFFFF;
+        }
+
+        .navbar-divider {
+            width: 1px;
+            height: 22px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 0 6px;
+        }
+
+        .navbar-section-tag {
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .navbar-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: #FFFFFF;
+            opacity: 0.85;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 7px 14px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .navbar-back-btn:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.16);
+            border-color: rgba(255, 255, 255, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .navbar-back-btn svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+        }
+
+        /* Contenedor principal */
+        .app-container {
+            flex: 1;
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 36px 24px 60px;
+        }
+
+        /* Encabezado de la página */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0B2341;
+            letter-spacing: -0.3px;
+        }
+
+        .page-subtitle {
+            font-size: 12px;
+            color: #6B7280;
+            margin-top: 4px;
+        }
+
+        /* Botones generales */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: #0B2341;
+            color: #FFFFFF;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 1px solid #0B2341;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .btn-primary:hover {
+            background: #143760;
+            border-color: #143760;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(11, 35, 65, 0.18);
+        }
+
+        .btn-primary svg {
+            width: 15px;
+            height: 15px;
+            stroke: currentColor;
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: #FFFFFF;
+            color: #4B5563;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 1px solid #D1D5DB;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+
+        .btn-secondary:hover {
+            background: #F9FAFB;
+            color: #1F2937;
+            border-color: #9CA3AF;
+        }
+
+        /* Tarjeta de la tabla */
+        .table-card {
+            background: #FFFFFF;
+            border-radius: 8px;
+            border: 1px solid #E5E7EB;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+        }
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .users-table thead th {
+            background: #F8FAFC;
+            color: #64748B;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            padding: 12px 20px;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .users-table tbody td {
+            padding: 14px 20px;
+            border-bottom: 1px solid #F1F5F9;
+            color: #334155;
+            vertical-align: middle;
+        }
+
+        .users-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .users-table tbody tr {
+            transition: background 0.15s ease;
+        }
+
+        .users-table tbody tr:hover {
+            background: #F8FAFC;
+        }
+
+        .user-name-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #0B2341;
+        }
+
+        .user-avatar-circle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #EFF6FF;
+            color: #1D4ED8;
+            border: 1px solid #DBEAFE;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .user-avatar-circle svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+        }
+
+        .email-text {
+            color: #64748B;
+            font-size: 12px;
+        }
+
+        /* Badges de rol */
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+
+        .role-admin {
+            background: #EFF6FF;
+            color: #1D4ED8;
+            border: 1px solid #BFDBFE;
+        }
+
+        .role-vendedor {
+            background: #F0FDF4;
+            color: #15803D;
+            border: 1px solid #BBF7D0;
+        }
+
+        .role-default {
+            background: #F1F5F9;
+            color: #475569;
+            border: 1px solid #E2E8F0;
+        }
+
+        /* Botones de acción */
+        .action-cell {
+            text-align: right;
+            width: 90px;
+            white-space: nowrap;
+        }
+
+        .actions-wrapper {
+            display: inline-flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 6px;
+        }
+
+        .action-edit-btn,
+        .action-delete-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            border: 1px solid #E2E8F0;
+            background: #FFFFFF;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .action-edit-btn {
+            color: #64748B;
+        }
+
+        .action-edit-btn:hover {
+            color: #1D4ED8;
+            background: #EFF6FF;
+            border-color: #BFDBFE;
+            transform: scale(1.05);
+        }
+
+        .action-delete-btn {
+            color: #94A3B8;
+        }
+
+        .action-delete-btn:hover {
+            color: #DC2626;
+            background: #FEF2F2;
+            border-color: #FECACA;
+            transform: scale(1.05);
+        }
+
+        .action-edit-btn svg,
+        .action-delete-btn svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+        }
+
+        .action-btn-placeholder {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            visibility: hidden;
+            pointer-events: none;
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        /* Botón peligro (acción destructiva) */
+        .btn-danger {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: #DC2626;
+            color: #FFFFFF;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 1px solid #DC2626;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .btn-danger:hover {
+            background: #B91C1C;
+            border-color: #B91C1C;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(220, 38, 38, 0.2);
+        }
+
+        /* Modal Eliminar Usuario - detalles de contenido */
+        .modal-delete-body {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .modal-delete-text {
+            font-size: 13px;
+            color: #374151;
+            line-height: 1.5;
+        }
+
+        .modal-delete-text strong {
+            color: #0B2341;
+            font-weight: 600;
+        }
+
+        .modal-delete-warning {
+            font-size: 11px;
+            color: #94A3B8;
+            line-height: 1.4;
+        }
+
+        /* Estado vacío */
+        .empty-state {
+            padding: 48px 20px;
+            text-align: center;
+            color: #94A3B8;
+        }
+
+        .empty-state svg {
+            width: 36px;
+            height: 36px;
+            stroke: #CBD5E1;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            font-size: 12px;
+            color: #64748B;
+        }
+
+        /* Modal Crear Usuario */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(11, 35, 65, 0.45);
+            backdrop-filter: blur(3px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-card {
+            background: #FFFFFF;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            animation: modalPopIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalPopIn {
+            from {
+                opacity: 0;
+                transform: scale(0.96) translateY(-8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            padding: 18px 20px 14px;
+            border-bottom: 1px solid #F1F5F9;
+        }
+
+        .modal-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0B2341;
+        }
+
+        .modal-subtitle {
+            font-size: 11px;
+            color: #64748B;
+            margin-top: 3px;
+        }
+
+        .modal-close-btn {
+            background: transparent;
+            border: 0;
+            color: #94A3B8;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.15s ease, background 0.15s ease;
+        }
+
+        .modal-close-btn:hover {
+            color: #0B2341;
+            background: #F1F5F9;
+        }
+
+        .modal-close-btn svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+        }
+
+        .modal-body {
+            padding: 18px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            height: 34px;
+            padding: 6px 10px;
+            border: 1px solid #D1D5DB;
+            border-radius: 5px;
+            font-size: 12px;
+            font-family: inherit;
+            color: #1F2937;
+            background: #FFFFFF;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            border-color: #0B2341;
+            box-shadow: 0 0 0 2px rgba(11, 35, 65, 0.15);
+        }
+
+        .form-input:disabled,
+        .form-select:disabled {
+            background-color: #F8FAFC;
+            color: #64748B;
+            border-color: #E2E8F0;
+            cursor: not-allowed;
+            opacity: 0.85;
+        }
+
+        .form-help-text {
+            font-size: 11px;
+            color: #64748B;
+            margin-top: 3px;
+            line-height: 1.4;
+        }
+
+        .modal-footer {
+            padding: 14px 20px 18px;
+            background: #F8FAFC;
+            border-top: 1px solid #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Responsividad */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 20px;
+                height: 75px;
+            }
+
+            .navbar-logo {
+                height: 50px;
+            }
+
+            .app-container {
+                padding: 20px 16px 40px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 14px;
+            }
+
+            .btn-primary {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar superior -->
+    <header class="navbar">
+        <div class="navbar-left">
+            <img class="navbar-logo" src="logotiporoma.png" alt="Roma" onerror="this.src='/logotiporoma.png'">
+            <span class="navbar-brand">AUTOMOTORES</span>
+            <span class="navbar-divider"></span>
+            <span class="navbar-section-tag">Administración</span>
+        </div>
+        <div class="navbar-right">
+            <a href="/home" class="navbar-back-btn" title="Volver al simulador">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>Volver al simulador</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <main class="app-container">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Administración de usuarios</h1>
+                <p class="page-subtitle">Gestioná los usuarios con acceso al sistema Roma.</p>
+            </div>
+            <button type="button" class="btn-primary" id="openCreateModalBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span> Crear usuario</span>
+            </button>
+        </div>
+
+        <!-- Tarjeta con tabla de usuarios -->
+        <div class="table-card">
+            <div class="table-responsive">
+                <table class="users-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Rol</th>
+                            <th class="action-cell">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usuario_item in usuarios %}
+                        <tr>
+                            <td>
+                                <div class="user-name-cell">
+                                    <div class="user-avatar-circle">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                            stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="12" cy="7" r="4"></circle>
+                                        </svg>
+                                    </div>
+                                    <span>{{ usuario_item.nombre }}</span>
+                                </div>
+                            </td>
+                            <td class="email-text">{{ usuario_item.email }}</td>
+                            <td>
+                                {% if usuario_item.rol|lower == "administrador" %}
+                                <span class="role-badge role-admin">{{ usuario_item.rol|capitalize }}</span>
+                                {% elif usuario_item.rol|lower == "vendedor" %}
+                                <span class="role-badge role-vendedor">{{ usuario_item.rol|capitalize }}</span>
+                                {% else %}
+                                <span class="role-badge role-default">{{ usuario_item.rol|capitalize }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="action-cell">
+                                <div class="actions-wrapper">
+                                    <button type="button"
+                                        class="action-edit-btn js-edit-user-btn"
+                                        title="Editar usuario"
+                                        data-id="{{ usuario_item.id }}"
+                                        data-nombre="{{ usuario_item.nombre }}"
+                                        data-email="{{ usuario_item.email }}"
+                                        data-rol="{{ usuario_item.rol }}">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                        </svg>
+                                    </button>
+                                    {% if usuario_item.id != usuario.id %}
+                                    <form method="POST"
+                                        action="/admin/usuarios/eliminar/{{ usuario_item.id }}"
+                                        class="delete-user-form"
+                                        style="display:inline;">
+
+                                        <button type="button"
+                                            class="action-delete-btn js-delete-user-btn"
+                                            title="Eliminar usuario"
+                                            data-user-name="{{ usuario_item.nombre }}">
+
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="3 6 5 6 21 6"></polyline>
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                                            </svg>
+
+                                        </button>
+                                    </form>
+                                    {% else %}
+                                    <span class="action-btn-placeholder" aria-hidden="true"></span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4">
+                                <div class="empty-state">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="9" cy="7" r="4"></circle>
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                    </svg>
+                                    <p>No hay usuarios registrados actualmente en el sistema.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Crear Usuario -->
+    <div class="modal-overlay" id="createModal" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="modal-header">
+                <div>
+                    <h2 class="modal-title" id="modalTitle">Crear nuevo usuario</h2>
+                    <p class="modal-subtitle">Completá los datos para registrar un usuario en Roma.</p>
+                </div>
+
+                <button type="button" class="modal-close-btn" id="closeModalBtn" aria-label="Cerrar modal">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+                </button>
+            </div>
+
+            <form id="createUserForm" method="POST" action="/admin/usuarios">
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label class="form-label" for="userName">Nombre</label>
+                        <input type="text" id="userName" name="nombre" class="form-input"
+                            placeholder="Ej: Renzo Segovia" autocomplete="off" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="userEmail">Email</label>
+                        <input type="email" id="userEmail" name="email" class="form-input"
+                            placeholder="ejemplo@romaautomotores.com" autocomplete="off" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="userPassword">Contraseña</label>
+                        <input type="password" id="userPassword" name="password" class="form-input"
+                            placeholder="••••••••" autocomplete="new-password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="userRole">Rol</label>
+                        <select id="userRole" name="rol" class="form-select" required>
+                            <option value="administrador">Administrador</option>
+                            <option value="vendedor" selected>Vendedor</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" id="cancelModalBtn">
+                        Cancelar
+                    </button>
+
+                    <button type="submit" class="btn-primary" id="submitUserBtn">
+                        Crear usuario
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Editar Usuario -->
+    <div class="modal-overlay" id="editModal" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+            <div class="modal-header">
+                <div>
+                    <h2 class="modal-title" id="editModalTitle">Editar usuario</h2>
+                    <p class="modal-subtitle">Modificá los datos del usuario en Roma.</p>
+                </div>
+
+                <button type="button" class="modal-close-btn" id="closeEditModalBtn" aria-label="Cerrar modal">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <form id="editUserForm" method="POST" action="">
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label class="form-label" for="editUserName">Nombre</label>
+                        <input type="text" id="editUserName" name="nombre" class="form-input"
+                            placeholder="Ej: Renzo Segovia" autocomplete="off" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="editUserEmail">Email</label>
+                        <input type="email" id="editUserEmail" name="email" class="form-input"
+                            placeholder="ejemplo@romaautomotores.com" autocomplete="off" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="editUserRole">Rol</label>
+                        <select id="editUserRole" name="rol" class="form-select" required>
+                            <option value="administrador">Administrador</option>
+                            <option value="vendedor">Vendedor</option>
+                        </select>
+                        <input type="hidden" id="editUserRoleHidden" name="rol" value="administrador" disabled>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="editUserPassword">Nueva contraseña</label>
+                        <input type="password" id="editUserPassword" name="password" class="form-input"
+                            placeholder="••••••••" autocomplete="new-password">
+                        <p class="form-help-text">Dejá este campo vacío para mantener la contraseña actual.</p>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" id="cancelEditModalBtn">
+                        Cancelar
+                    </button>
+
+                    <button type="submit" class="btn-primary" id="submitEditUserBtn">
+                        Guardar cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Confirmar Eliminación de Usuario -->
+    <div class="modal-overlay" id="deleteModal" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle" style="max-width: 410px;">
+            <div class="modal-header">
+                <div>
+                    <h2 class="modal-title" id="deleteModalTitle">Eliminar usuario</h2>
+                </div>
+
+                <button type="button" class="modal-close-btn" id="closeDeleteModalBtn" aria-label="Cerrar modal">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-delete-body">
+                <p class="modal-delete-text" id="deleteModalMessage">
+                    ¿Seguro que querés eliminar este usuario?
+                </p>
+                <p class="modal-delete-warning">
+                    Esta acción no se puede deshacer.
+                </p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" id="cancelDeleteModalBtn">
+                    Cancelar
+                </button>
+
+                <button type="button" class="btn-danger" id="confirmDeleteBtn">
+                    Eliminar usuario
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript para interacción de los modales -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Modal Crear Usuario
+            const createModal = document.getElementById('createModal');
+            const openModalBtn = document.getElementById('openCreateModalBtn');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const cancelModalBtn = document.getElementById('cancelModalBtn');
+            const createUserForm = document.getElementById('createUserForm');
+
+            function openCreateModal() {
+                if (createModal) {
+                    createModal.classList.add('show');
+                    createModal.setAttribute('aria-hidden', 'false');
+                    const firstInput = document.getElementById('userName');
+                    if (firstInput) setTimeout(() => firstInput.focus(), 50);
+                }
+            }
+
+            function closeCreateModal() {
+                if (createModal) {
+                    createModal.classList.remove('show');
+                    createModal.setAttribute('aria-hidden', 'true');
+                    if (createUserForm) createUserForm.reset();
+                }
+            }
+
+            if (openModalBtn) openModalBtn.addEventListener('click', openCreateModal);
+            if (closeModalBtn) closeModalBtn.addEventListener('click', closeCreateModal);
+            if (cancelModalBtn) cancelModalBtn.addEventListener('click', closeCreateModal);
+
+            if (createModal) {
+                createModal.addEventListener('click', (e) => {
+                    if (e.target === createModal) closeCreateModal();
+                });
+            }
+
+            // Modal Editar Usuario
+            const editModal = document.getElementById('editModal');
+            const closeEditModalBtn = document.getElementById('closeEditModalBtn');
+            const cancelEditModalBtn = document.getElementById('cancelEditModalBtn');
+            const editUserForm = document.getElementById('editUserForm');
+            const editUserNameInput = document.getElementById('editUserName');
+            const editUserEmailInput = document.getElementById('editUserEmail');
+            const editUserRoleSelect = document.getElementById('editUserRole');
+            const editUserRoleHidden = document.getElementById('editUserRoleHidden');
+            const editUserPasswordInput = document.getElementById('editUserPassword');
+            const currentUserId = "{{ usuario.id }}";
+
+            function openEditModal(userData) {
+                if (!editModal || !editUserForm) return;
+
+                const userId = userData.id || '';
+                editUserForm.action = `/admin/usuarios/editar/${userId}`;
+
+                if (editUserNameInput) editUserNameInput.value = userData.nombre || '';
+                if (editUserEmailInput) editUserEmailInput.value = userData.email || '';
+
+                const isSelf = String(userId).trim() === String(currentUserId).trim();
+
+                if (editUserRoleSelect) {
+                    if (isSelf) {
+                        editUserRoleSelect.value = 'administrador';
+                        editUserRoleSelect.disabled = true;
+                        if (editUserRoleHidden) {
+                            editUserRoleHidden.value = 'administrador';
+                            editUserRoleHidden.disabled = false;
+                        }
+                    } else {
+                        editUserRoleSelect.disabled = false;
+                        const rol = (userData.rol || '').trim().toLowerCase();
+                        editUserRoleSelect.value = rol === 'administrador' ? 'administrador' : 'vendedor';
+                        if (editUserRoleHidden) {
+                            editUserRoleHidden.disabled = true;
+                        }
+                    }
+                }
+                if (editUserPasswordInput) editUserPasswordInput.value = '';
+
+                editModal.classList.add('show');
+                editModal.setAttribute('aria-hidden', 'false');
+                if (editUserNameInput) setTimeout(() => editUserNameInput.focus(), 50);
+            }
+
+            function closeEditModal() {
+                if (editModal) {
+                    editModal.classList.remove('show');
+                    editModal.setAttribute('aria-hidden', 'true');
+                    if (editUserForm) {
+                        editUserForm.reset();
+                        editUserForm.action = '';
+                    }
+                    if (editUserRoleSelect) {
+                        editUserRoleSelect.disabled = false;
+                    }
+                    if (editUserRoleHidden) {
+                        editUserRoleHidden.disabled = true;
+                    }
+                }
+            }
+
+            if (editUserForm) {
+                editUserForm.addEventListener('submit', () => {
+                    if (editUserRoleSelect && editUserRoleSelect.disabled) {
+                        editUserRoleSelect.disabled = false;
+                    }
+                });
+            }
+
+            document.querySelectorAll('.js-edit-user-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const userData = {
+                        id: btn.getAttribute('data-id') || '',
+                        nombre: btn.getAttribute('data-nombre') || '',
+                        email: btn.getAttribute('data-email') || '',
+                        rol: btn.getAttribute('data-rol') || ''
+                    };
+                    openEditModal(userData);
+                });
+            });
+
+            if (closeEditModalBtn) closeEditModalBtn.addEventListener('click', closeEditModal);
+            if (cancelEditModalBtn) cancelEditModalBtn.addEventListener('click', closeEditModal);
+
+            if (editModal) {
+                editModal.addEventListener('click', (e) => {
+                    if (e.target === editModal) closeEditModal();
+                });
+            }
+
+            // Modal Eliminar Usuario
+            const deleteModal = document.getElementById('deleteModal');
+            const closeDeleteModalBtn = document.getElementById('closeDeleteModalBtn');
+            const cancelDeleteModalBtn = document.getElementById('cancelDeleteModalBtn');
+            const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+            const deleteModalMessage = document.getElementById('deleteModalMessage');
+            let formToSubmit = null;
+
+            function escapeHtml(str) {
+                if (!str) return '';
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            function openDeleteModal(form, userName) {
+                formToSubmit = form;
+                if (deleteModalMessage) {
+                    if (userName && userName.trim()) {
+                        deleteModalMessage.innerHTML = `¿Seguro que querés eliminar a <strong>${escapeHtml(userName.trim())}</strong>?`;
+                    } else {
+                        deleteModalMessage.innerHTML = '¿Seguro que querés eliminar este usuario?';
+                    }
+                }
+                if (deleteModal) {
+                    deleteModal.classList.add('show');
+                    deleteModal.setAttribute('aria-hidden', 'false');
+                }
+            }
+
+            function closeDeleteModal() {
+                if (deleteModal) {
+                    deleteModal.classList.remove('show');
+                    deleteModal.setAttribute('aria-hidden', 'true');
+                }
+                formToSubmit = null;
+            }
+
+            document.querySelectorAll('.js-delete-user-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const form = btn.closest('form');
+                    const userName = btn.getAttribute('data-user-name') || '';
+                    if (form) {
+                        openDeleteModal(form, userName);
+                    }
+                });
+            });
+
+            if (closeDeleteModalBtn) closeDeleteModalBtn.addEventListener('click', closeDeleteModal);
+            if (cancelDeleteModalBtn) cancelDeleteModalBtn.addEventListener('click', closeDeleteModal);
+
+            if (confirmDeleteBtn) {
+                confirmDeleteBtn.addEventListener('click', () => {
+                    if (formToSubmit) {
+                        formToSubmit.submit();
+                    }
+                });
+            }
+
+            if (deleteModal) {
+                deleteModal.addEventListener('click', (e) => {
+                    if (e.target === deleteModal) closeDeleteModal();
+                });
+            }
+
+            // Cerrar modales con la tecla Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (deleteModal && deleteModal.classList.contains('show')) {
+                        closeDeleteModal();
+                    } else if (createModal && createModal.classList.contains('show')) {
+                        closeCreateModal();
+                    } else if (editModal && editModal.classList.contains('show')) {
+                        closeEditModal();
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

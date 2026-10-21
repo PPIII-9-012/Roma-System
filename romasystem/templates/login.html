@@ -346,12 +346,35 @@
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.15s ease;
+      transition: background-color 0.15s ease, opacity 0.15s ease;
       margin-top: 2px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
-    .btn-primary:hover {
+    .btn-primary:hover:not(:disabled) {
       background: var(--red-700);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.8;
+      cursor: not-allowed;
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     .divider {
@@ -483,7 +506,7 @@
         <h2>Iniciar sesión</h2>
         <p class="subtext">Ingresá tus credenciales para continuar</p>
 
-        <form method="POST" action="/">
+        <form method="POST" action="/" id="loginForm">
           {% if error %}
           <div class="auth-error-banner" role="alert">
             {{ error }}
@@ -518,21 +541,15 @@
             </div>
           </div>
 
-          <div class="row-forgot">
-            <a href="#">¿Olvidaste tu contraseña?</a>
-          </div>
 
-          <button type="submit" class="btn-primary">Iniciar sesión</button>
+
+
+          <button type="submit" class="btn-primary" id="loginSubmitBtn">
+            <span id="loginBtnText">Iniciar sesión</span>
+          </button>
         </form>
 
-        <div class="divider">o</div>
 
-        <button type="button" class="btn-secondary">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          </svg>
-          Acceso seguro
-        </button>
       </div>
     </div>
 
@@ -555,6 +572,18 @@
           eyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
         }
       }
+    }
+
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+      loginForm.addEventListener('submit', () => {
+        const btn = document.getElementById('loginSubmitBtn');
+        const text = document.getElementById('loginBtnText');
+        if (btn && text) {
+          btn.disabled = true;
+          text.innerHTML = '<span class="spinner"></span> Verificando credenciales...';
+        }
+      });
     }
   </script>
 </body>
