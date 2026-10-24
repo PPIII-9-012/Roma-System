@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="icon" type="image/x-icon" href="logo.ico">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>ROMA Automotores | Señal de crédito</title>
+<style>
+      :root{
+    --navy-900:#0a1230;
+    --navy-800:#0d1840;
+    --blue-600:#2563eb;
+    --blue-50:#eff4ff;
+    --red-600:#e02020;
+    --green-600:#16a34a;
+    --green-50:#eafaf0;
+    --orange-500:#f59e0b;
+    --orange-50:#fff4e5;
+    --ink:#0d1840;
+    --text:#1f2937;
+    --muted:#6b7280;
+    --muted-2:#9aa2b5;
+    --border:#e5e7eb;
+    --bg:#f5f6f8;
+    --changed:#16a34a;
+    --changed-warn:#c98a00;
+  }
+    *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);font-family:'Segoe UI', Helvetica, Arial, sans-serif;color:var(--text);}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;}
+
+    .topbar{
+    height:64px;
+    background:var(--navy-900);
+    display:flex;
+    align-items:center;
+    padding:0 28px;
+    color:#fff;
+    position:sticky;
+    top:0;
+    z-index:50;
+  }
+    .topbar .brand{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    margin-right:48px;
+  }
+  .topbar .brand .mark{
+    font-size:22px;
+    font-weight:800;
+    font-style:italic;
+    letter-spacing:-0.5px;
+  }
+  .topbar .brand .sub{
+    font-size:11px;
+    letter-spacing:3px;
+    color:#c9cee0;
+    font-weight:600;
+  }
+   .topbar nav{
+    display:flex;
+    gap:36px;
+    flex:1;
+    height:100%;
+  }
+  .topbar nav a{
+    display:flex;
+    align-items:center;
+    height:100%;
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:.3px;
+    color:#aeb5cc;
+    position:relative;
+  }
+  .topbar nav a.active{
+    color:#fff;
+  }
+  .topbar nav a.active::after{
+    content:"";
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:3px;
+    background:var(--red-600);
+    border-radius:2px 2px 0 0;
+  }
+  .topbar .user{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:13.5px;
+    font-weight:600;
+    color:#fff;
+  }
+  .topbar .user .avatar{
+    width:28px;height:28px;border-radius:50%;
+    background:#2a3560;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .topbar .user svg{width:16px;height:16px;color:#c9cee0;}
+  .navbar{
+    height:90px;
+    background:#0B2341;
+    color:#FFFFFF;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 40px;
+    position:sticky;
+    top:0;
+    z-index:50;
+    font-family:'Inter', system-ui, sans-serif;
+  }
+  .navbar-left,
+  .navbar-links,
+  .navbar-logout{display:flex;align-items:center;}
+  .navbar-left{gap:14px;}
+  .navbar-links{gap:36px;}
+  .navbar-logo{width:auto;height:70px;display:block;}
+  .navbar-brand{font-size:13px;opacity:.7;letter-spacing:2px;font-weight:500;}
+  .navbar-brand,
+  .navbar-link,
+  .navbar-logout{color:#FFFFFF;}
+  .navbar-link{
+    font-size:14px;
+    opacity:.55;
+    text-decoration:none;
+    padding-bottom:4px;
+    letter-spacing:.2px;
+    transition:all .3s ease;
+    position:relative;
+    background:transparent;
+    border:0;
+    cursor:pointer;
+  }
+  .navbar-link:hover{opacity:.85;transform:scale(1.2);}
+  .navbar-link.active{opacity:1;}
+  .navbar-link.active::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:-10px;
+    height:3px;
+    background:#a52222;
+    transform:scale(1.2);
+  }
+  .navbar-logout{
+    gap:6px;
+    font-size:13px;
+    opacity:.6;
+    transition:all .3s ease;
+    background:transparent;
+    border:0;
+    cursor:pointer;
+  }
+  .navbar-logout:hover{opacity:1;transform:scale(1.2);}
+  .logout-logo{width:auto;height:18px;display:block;}
+    .layout{
+    display:flex;
+    align-items:flex-start;
+  }
+   .sidebar{
+    width:236px;
+    flex-shrink:0;
+    background:#0B2341;
+    border-right:1px solid rgba(255,255,255,.12);
+    border-radius:0 14px 14px 0;
+    position:sticky;
+    top:90px;
+    height:calc(100vh - 90px);
+    align-self:flex-start;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    padding:24px 16px;
+  }
+    .sidebar .eyebrow{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:1.5px;
+    color:rgba(255,255,255,.65);
+    padding:0 8px;
+    margin-bottom:14px;
+  }
+  .sidebar .nav-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:11px 12px;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:600;
+    color:rgba(255,255,255,.8);
+    margin-bottom:4px;
+    width:100%;
+    border:0;
+    background:transparent;
+    text-align:left;
+    font-family:inherit;
+    cursor:pointer;
+  }
+  .sidebar .nav-item svg{width:17px;height:17px;flex-shrink:0;}
+  .sidebar .nav-item.active{
+    background:rgba(255,255,255,.12);
+    color:#fff;
+  }
+    .sidebar .nav-item:not(.active):hover{
+    background:rgba(255,255,255,.08);
+  }
+    .sidebar-footer{
+    border-top:1px solid rgba(255,255,255,.12);
+    padding-top:16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+   .sidebar-footer .who{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .sidebar-footer .avatar{
+    width:34px;height:34px;border-radius:50%;
+    background:rgba(255,255,255,.16);
+    display:flex;align-items:center;justify-content:center;
+    color:rgba(255,255,255,.8);
+  }
+    .sidebar-footer .avatar svg{width:18px;height:18px;}
+  .sidebar-footer .name{font-size:13.5px;font-weight:700;color:#fff;}
+  .sidebar-footer .mail{font-size:11.5px;color:rgba(255,255,255,.65);}
+  .sidebar-footer svg.chev{width:16px;height:16px;color:rgba(255,255,255,.65);}
+  .sidebar-footer{
+  cursor:pointer;
+}
+
+.sidebar-footer:hover{
+  opacity:.9;
+}
+
+.sidebar-user-menu{
+  position:absolute;
+  left:16px;
+  right:16px;
+  bottom:76px;
+  background:#163454;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:12px;
+  padding:6px;
+  box-shadow:0 12px 30px rgba(0,0,0,.22);
+  z-index:20;
+}
+
+.sidebar-user-menu[hidden]{
+  display:none;
+}
+
+.sidebar-user-option{
+  display:block;
+  padding:11px 12px;
+  border-radius:8px;
+  color:rgba(255,255,255,.88);
+  font-size:12.5px;
+  font-weight:600;
+  text-decoration:none;
+  transition:background .15s ease, color .15s ease;
+}
+
+.sidebar-user-option:hover{
+  background:rgba(255,255,255,.10);
+  color:#fff;
+}
+
+.sidebar-user-logout{
+  margin-top:3px;
+  border-top:1px solid rgba(255,255,255,.12);
+  color:#ff6262;
+}
+
+.sidebar-user-logout:hover{
+  background:rgba(239,68,68,.12);
+  color:#ff7373;
+}
+  .history-view{
+    flex:1;
+    min-width:0;
+    padding:32px 28px 60px;
+  }
+  .history-view[hidden]{display:none;}
+  .history-list{
+    display:grid;
+    gap:14px;
+  }
+  .history-item{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:18px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+  }
+  .history-file{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    min-width:0;
+  }
+  .history-file .icon-badge{flex-shrink:0;}
+  .history-file-name{font-size:14px;font-weight:700;color:var(--ink);}
+  .history-file-date{font-size:12.5px;color:var(--muted);margin-top:4px;}
+  .history-meta{
+    display:flex;
+    align-items:center;
+    gap:22px;
+    color:var(--muted);
+    font-size:12.5px;
+    white-space:nowrap;
+  }
+  .history-meta strong{color:var(--ink);font-size:14px;}
+  .history-item .btn-outline{flex-shrink:0;}
+  @media (max-width: 800px){
+    .history-view{padding:24px 18px 40px;}
+    .history-item{align-items:flex-start;flex-direction:column;}
+    .history-meta{width:100%;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  }
+   .main{
+    flex:1;
+    min-width:0;
+    padding:32px 28px 60px;
+  }
+   .page-title{
+    font-size:26px;
+    font-weight:700;
+    color:var(--ink);
+    margin:0 0 8px 0;
+  }
+   .page-sub{
+    font-size:14px;
+    color:var(--muted);
+    margin:0 0 22px 0;
+  }
+  .content-row{
+    display:flex;
+    gap:24px;
+    align-items:flex-start;
+  }
+    .content-col{
+    flex:1;
+    min-width:0;
+  }
+   .aside-col{
+    width:300px;
+    flex-shrink:0;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+  }
+  .upload-box{
+    border:2px dashed #c7d2e6;
+    border-radius:14px;
+    background:#fff;
+    padding:48px 24px;
+    text-align:center;
+    margin-bottom:20px;
+  }
+  .upload-box .pdf-icon{
+    width:56px;
+    margin:0 auto 18px;
+    display:block;
+  }
+    .upload-box h3{
+    font-size:15px;
+    font-weight:700;
+    letter-spacing:.5px;
+    color:var(--ink);
+    margin:0 0 10px 0;
+  }
+   .upload-box p{
+    font-size:13.5px;
+    color:var(--muted);
+    margin:0 0 4px 0;
+  }
+    .upload-box .hint{
+    font-size:12.5px;
+    color:var(--muted-2);
+    margin-bottom:22px;
+  }
+   .btn-upload{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    background:var(--blue-600);
+    color:#fff;
+    border:none;
+    border-radius:9px;
+    padding:12px 22px;
+    font-size:13.5px;
+    font-weight:700;
+    letter-spacing:.3px;
+  }
+  .btn-upload:hover{background:#1d4fd1;}
+  .btn-upload svg{width:16px;height:16px;}
+    .file-summary{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:16px 20px;
+    display:flex;
+    align-items:center;
+    gap:20px;
+    margin-bottom:24px;
+    flex-wrap:wrap;
+  }
+   .file-summary .file-info{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex:1;
+    min-width:220px;
+  }
+  .file-summary .icon-badge{
+    width:38px;height:38px;border-radius:10px;
+    background:var(--blue-50);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+    .file-summary .icon-badge svg{width:18px;height:18px;color:var(--blue-600);}
+  .file-summary .file-name{font-size:14px;font-weight:700;color:var(--ink);}
+  .file-summary .file-date{font-size:12.5px;color:var(--muted);}
+   .file-summary .status-info{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex:1.4;
+    min-width:280px;
+  }
+  .file-summary .icon-badge.green{background:var(--green-50);}
+  .file-summary .icon-badge.green svg{color:var(--green-600);}
+  .file-summary .status-title{font-size:14px;font-weight:700;color:var(--green-600);}
+  .file-summary .status-sub{font-size:12.5px;color:var(--muted);}
+  .btn-outline{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:9px 16px;
+    font-size:12.5px;
+    font-weight:700;
+    color:#374151;
+    letter-spacing:.3px;
+    white-space:nowrap;
+  }
+  .btn-outline:hover{background:#f9fafb;}
+  .btn-outline svg{width:15px;height:15px;}
+   .table-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:24px 24px 20px;
+  }
+    .table-card h3{
+    font-size:17px;
+    font-weight:700;
+    color:var(--ink);
+    margin:0 0 4px 0;
+    display:flex;
+    align-items:center;
+    gap:7px;
+  }
+  .table-card h3 svg{width:15px;height:15px;color:var(--muted-2);}
+  .table-card .table-sub{
+    font-size:13.5px;
+    color:var(--muted);
+    margin:0 0 18px 0;
+  }
+  .rates-table-wrapper{
+  width:100%;
+  max-height:480px;
+  overflow:auto;
+  border:1px solid #eef0f2;
+  border-radius:10px;
+}
+
+.rates-table{
+  min-width:850px;
+}
+
+.rates-table thead{
+  position:sticky;
+  top:0;
+  z-index:2;
+  background:#f8f9fa;
+}
+
+.rates-table thead th{
+  padding:12px 14px;
+  white-space:nowrap;
+}
+
+.rates-table tbody td{
+  padding:13px 14px;
+  white-space:nowrap;
+}
+
+.rates-table tbody tr:hover{
+  background:#fafafa;
+}
+
+.rates-table .plan-name{
+  text-align:left;
+  font-weight:700;
+  color:var(--ink);
+}
+
+.rates-empty-row td{
+  padding:38px 20px !important;
+  text-align:center;
+  color:var(--muted);
+}
+    table{
+    width:100%;
+    border-collapse:collapse;
+  }
+    thead th{
+    text-align:center;
+    font-size:12.5px;
+    font-weight:700;
+    color:#374151;
+    padding:10px 8px 6px;
+    border-bottom:1px solid var(--border);
+  }
+    thead th .col-sub{
+    display:block;
+    font-size:10.5px;
+    font-weight:600;
+    color:var(--muted-2);
+    margin-top:3px;
+  }
+   tbody td{
+    text-align:center;
+    font-size:13.5px;
+    color:#1f2937;
+    padding:14px 8px;
+    border-bottom:1px solid #f1f2f4;
+  }
+    tbody tr:last-child td{border-bottom:none;}
+  .change{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+  }
+   .change .new-val.up{color:var(--changed);font-weight:700;}
+  .change .new-val.down{color:var(--changed-warn);font-weight:700;}
+  .arrow{color:var(--muted-2);font-size:11px;}
+  .badge{
+    display:inline-block;
+    padding:4px 12px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:700;
+  }
+   .badge.nochange{background:#f3f4f6;color:#6b7280;}
+  .badge.changed{background:var(--green-50);color:var(--green-600);}
+   .edit-btn{
+    background:none;border:none;color:var(--muted-2);
+    display:inline-flex;padding:4px;
+  }
+  .edit-btn svg{width:15px;height:15px;}
+  .table-actions{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-top:22px;
+    flex-wrap:wrap;
+    gap:14px;
+  }
+    .table-actions-left{display:flex;gap:12px;}
+  .btn-danger-outline{
+    display:inline-flex;align-items:center;gap:8px;
+    background:#fff;border:1px solid var(--border);
+    color:#6b7280;border-radius:9px;padding:11px 18px;
+    font-size:12.5px;font-weight:700;letter-spacing:.3px;
+  }
+   .btn-danger-outline:hover{background:#f9fafb;}
+  .btn-danger-outline svg{width:15px;height:15px;}
+ 
+  .table-actions-right{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:6px;
+  }
+   .btn-publish{
+    display:inline-flex;align-items:center;gap:9px;
+    background:linear-gradient(180deg,#e02020,#c81818);
+    color:#fff;border:none;border-radius:9px;
+    padding:12px 22px;font-size:13.5px;font-weight:700;letter-spacing:.3px;
+  }
+  .btn-publish svg{width:15px;height:15px;}
+  .publish-note{font-size:12px;color:var(--muted-2);}
+   .card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:20px;
+  }
+    .card .eyebrow{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:1px;
+    color:var(--muted-2);
+    margin-bottom:6px;
+  }
+    .card .big-val{
+    font-size:19px;
+    font-weight:700;
+    color:var(--ink);
+    margin-bottom:8px;
+  }
+    .status-dot{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--green-600);
+  }
+    .status-dot::before{
+    content:"";
+    width:7px;height:7px;border-radius:50%;
+    background:var(--green-600);
+  }
+   .status-block{
+    display:flex;
+    gap:12px;
+    padding:14px 0;
+  }
+    .status-block + .status-block{border-top:1px solid #f1f2f4;}
+  .status-icon{
+    width:34px;height:34px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+   .status-icon.green{background:var(--green-50);color:var(--green-600);}
+  .status-icon.orange{background:var(--orange-50);color:var(--orange-500);}
+  .status-icon svg{width:17px;height:17px;}
+  .status-block .label{
+    font-size:11px;font-weight:700;letter-spacing:.5px;color:var(--muted-2);
+    margin-bottom:3px;
+  }
+    .status-block .title{font-size:14.5px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+  .pill{
+    display:inline-block;
+    font-size:11.5px;font-weight:700;
+    padding:3px 10px;border-radius:20px;
+    margin-bottom:5px;
+  }
+    .pill.green{background:var(--green-50);color:var(--green-600);}
+  .pill.orange{background:var(--orange-50);color:#b8760a;}
+  .status-block .date{font-size:12px;color:var(--muted);}
+   .summary-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:9px 0;
+    font-size:13.5px;
+    color:#374151;
+  }
+   .summary-row .val{font-weight:700;color:var(--ink);}
+  .btn-detail{
+    width:100%;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    background:var(--blue-50);
+    color:var(--blue-600);
+    border:none;border-radius:9px;
+    padding:11px;
+    font-size:12.5px;font-weight:700;letter-spacing:.3px;
+    margin-top:8px;
+  }
+  .btn-detail svg{width:15px;height:15px;}
+  .howto-item{
+    display:flex;gap:12px;
+    margin-bottom:14px;
+  }
+    .howto-item .num{
+    width:22px;height:22px;border-radius:50%;
+    background:var(--blue-50);color:var(--blue-600);
+    font-size:12px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .howto-item p{
+    font-size:13px;color:#374151;margin:0;line-height:1.4;
+  }
+    .guide-link{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:13px;font-weight:700;color:var(--blue-600);
+  }
+  .guide-link svg{width:13px;height:13px;}
+
+  .roma-modal-overlay{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:rgba(8, 29, 53, .58);
+  backdrop-filter:blur(2px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.roma-modal-overlay[hidden]{
+  display:none;
+}
+
+.roma-modal{
+  width:100%;
+  max-width:430px;
+  background:#fff;
+  border-radius:16px;
+  padding:28px;
+  box-shadow:0 24px 70px rgba(0, 0, 0, .22);
+  text-align:center;
+}
+
+.roma-modal-icon{
+  width:48px;
+  height:48px;
+  margin:0 auto 16px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#eef4ff;
+  color:#2563eb;
+  font-size:22px;
+  font-weight:800;
+}
+
+.roma-modal-icon.success{
+  background:#eaf8ef;
+  color:#16a34a;
+}
+
+.roma-modal-icon.error{
+  background:#fef0f0;
+  color:#dc2626;
+}
+
+.roma-modal-icon.warning{
+  background:#fff5e6;
+  color:#d97706;
+}
+
+.roma-modal h3{
+  margin:0 0 8px;
+  color:var(--ink);
+  font-size:19px;
+}
+
+.roma-modal p{
+  margin:0;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.55;
+}
+
+.roma-modal-actions{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:24px;
+}
+
+.roma-modal-cancel,
+.roma-modal-confirm{
+  border-radius:9px;
+  padding:11px 20px;
+  font-size:12.5px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.roma-modal-cancel{
+  background:#fff;
+  border:1px solid var(--border);
+  color:#6b7280;
+}
+
+.roma-modal-confirm{
+  background:#e02020;
+  border:1px solid #e02020;
+  color:#fff;
+}
+
+.roma-modal-cancel:hover{
+  background:#f8f9fa;
+}
+
+.roma-modal-confirm:hover{
+  background:#c81818;
+}
+
+  @media (max-width: 1100px){
+    .content-row{flex-direction:column;}
+    .aside-col{width:100%;flex-direction:row;flex-wrap:wrap;}
+    .aside-col .card{flex:1;min-width:260px;}
+  }
+  @media (max-width: 900px){
+    .navbar{
+      height:auto;
+      min-height:90px;
+      flex-wrap:wrap;
+      gap:14px 20px;
+      padding:14px 24px;
+    }
+    .navbar-links{
+      order:3;
+      width:100%;
+      justify-content:center;
+    }
+    .navbar-link.active::after{bottom:-4px;}
+  }
+  @media (max-width: 800px){
+    .sidebar{display:none;}
+    .navbar-links{gap:20px;overflow-x:auto;}
+  }
+  @media (max-width: 560px){
+    .navbar{align-items:center;padding:12px 16px;}
+    .navbar-logo{height:50px;}
+    .navbar-brand{font-size:11px;letter-spacing:1px;}
+    .navbar-links{gap:12px;}
+    .navbar-link{font-size:11px;letter-spacing:0;text-align:center;}
+    .navbar-logout{font-size:11px;}
+    .logout-logo{height:16px;}
+  } 
+ 
+</style>
+</head>
+<body>
+<div class="navbar">
+    <div class="navbar-left">
+        <img class="navbar-logo" src="logotiporoma.png" alt="Roma">
+        <span class="navbar-brand">AUTOMOTORES</span>
+    </div>
+    <div class="navbar-links">
+        <button class="navbar-link" type="button" id="simuladorBtn" onclick="window.location.href='/home'">SIMULADOR FINANCIERO</button>
+        <button class="navbar-link active" type="button" id="panelAdmimBtn">PANEL ADMINISTRATIVO</button>
+    </div>
+    <button class="navbar-logout" type="button" id="logoutBtn">
+        <img class="logout-logo" src="cerrarsesion.png" alt="">
+        <span>CERRAR SESIÓN</span>
+    </button>
+</div>
+    <div class="layout">
+    <aside class="sidebar">
+      <div>
+           <div class="eyebrow">ADMINISTRACIÓN</div>
+        <button class="nav-item active" id="currentSignalNav" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Señal de crédito
+        </button>
+          <button class="nav-item" id="historyNav" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Historial de señales
+        </button>
+      </div>
+         <div class="sidebar-footer" id="userMenuBtn">
+        <div class="who">
+          <div class="avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div>
+              <div class="name">{{ usuario.nombre }}</div>
+              <div class="mail">{{ usuario.rol|capitalize }}</div>
+          </div>
+        </div>
+           <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="sidebar-user-menu" id="sidebarUserMenu" hidden>
+  {% if usuario.rol == "administrador" %}
+  <a href="/admin/usuarios" class="sidebar-user-option">
+    Administrar usuarios
+  </a>
+  {% endif %}
+
+  <a href="/logout" class="sidebar-user-option sidebar-user-logout">
+    Cerrar sesión
+  </a>
+</div>
+    </aside>
+      <main class="main" id="currentSignalView">
+      <h1 class="page-title">Señal de crédito</h1>
+      <p class="page-sub">Cargá un nuevo archivo PDF con la señal de crédito. El sistema leerá la información y detectará los cambios automáticamente.</p>
+   <div class="content-row">
+        <div class="content-col">
+      <div class="upload-box">
+            <svg class="pdf-icon" viewBox="0 0 48 48" fill="none">
+              <path d="M12 4h16l10 10v26a2 2 0 0 1-2 2H12a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" fill="#eef4ff" stroke="#2563eb" stroke-width="1.5"/>
+              <path d="M28 4v10h10" fill="#dbe6ff" stroke="#2563eb" stroke-width="1.5"/>
+              <rect x="12" y="24" width="20" height="12" rx="2" fill="#2563eb"/>
+              <text x="22" y="33" font-family="Arial" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">PDF</text>
+            </svg>
+              <h3>CARGAR NUEVA SEÑAL DE CRÉDITO</h3>
+            <p>Arrastrá el archivo PDF aquí o hacé clic para subirlo</p>
+            <div class="hint">La información será analizada automáticamente por el sistema</div>
+            <button class="btn-upload" id="uploadBtn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              SELECCIONAR PDF
+            </button>
+          </div>
+              <div class="file-summary">
+            <div class="file-info">
+              <div class="icon-badge">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  </div>
+              <div>
+                <div class="file-name">Señal_Crédito_Julio_2026.pdf</div>
+                <div class="file-date">Analizado el 21/06/2026 14:32</div>
+              </div>
+            </div>
+               <div class="status-info">
+              <div class="icon-badge green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div>
+                    <div class="status-title">Análisis completado correctamente</div>
+                <div class="status-sub">Seleccioná una circular PDF para comenzar el análisis</div>
+              </div>
+            </div>
+              <button class="btn-outline" id="reanalyzeBtn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              REANALIZAR
+            </button>
+          </div>
+             <div class="table-card">
+            <h3>Tasas detectadas
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            </h3>
+            <p class="table-sub">Revisá las tasas extraídas de la circular antes de publicarlas en el simulador.</p>
+              <div class="rates-table-wrapper">
+  <table class="rates-table">
+    <thead>
+      <tr>
+        <th>Plan</th>
+        <th>Tipo</th>
+        <th>Plazo</th>
+        <th>TNA</th>
+        <th>Aporte CE</th>
+        <th>Cuota por $1.000</th>
+        <th>Monto máximo</th>
+      </tr>
+    </thead>
+
+    <tbody id="ratesTableBody">
+      <tr class="rates-empty-row">
+        <td colspan="7">
+          Analizá una circular para visualizar las tasas detectadas.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+               <div class="table-actions">
+              <div class="table-actions-right">
+                <button class="btn-publish" id="publishBtn" type="button">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  PUBLICAR CAMBIOS
+                </button>
+                <div class="publish-note">Los cambios se aplicarán al simulador en vivo.</div>
+              </div>
+            </div>
+          </div>
+ 
+        </div>
+     <div class="aside-col">
+          <div class="card">
+            <div class="eyebrow">SEÑAL VIGENTE</div>
+<div class="big-val" id="currentSignalMain">—</div>
+<span class="status-dot">Publicada</span>
+          </div>
+             <div class="card">
+            <div class="eyebrow" style="margin-bottom:12px;">Estado de la señal</div>
+ 
+            <div class="status-block">
+              <div class="status-icon green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div>
+                <div class="label">SEÑAL VIGENTE</div>
+<div class="title" id="currentSignalTitle">—</div>
+<span class="pill green">Publicada</span>
+<div class="date" id="currentSignalDate">—</div>
+              </div>
+            </div>
+                 <div class="status-block">
+              <div class="status-icon orange">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </div>
+              <div>
+                <div class="label">NUEVA SEÑAL</div>
+<div class="title" id="newSignalTitle">Sin analizar</div>
+<span class="pill orange">Pendiente de publicar</span>
+<div class="date" id="newSignalDate">Seleccioná y analizá una circular</div>
+              </div>
+            </div>
+          </div>
+              <div class="card">
+            <div class="eyebrow" style="margin-bottom:6px;">Resumen del análisis</div>
+            <div class="summary-row">
+              <span>Tasas detectadas</span>
+              <span class="val" id="summaryRates">—</span>
+            </div>
+            <div class="summary-row">
+              <span>Planes detectados</span>
+              <span class="val" id="summaryPlans">—</span>
+            </div>
+            <div class="summary-row">
+              <span>Páginas analizadas</span>
+              <span class="val" id="summaryPages">—</span>
+            </div>
+            <div class="summary-row">
+              <span>Errores</span>
+              <span class="val" id="summaryErrors">—</span>
+            </div>
+          </div>
+                <div class="card">
+            <div class="eyebrow" style="margin-bottom:12px;">¿Cómo funciona?</div>
+            <div class="howto-item"><div class="num">1</div><p>Subí el PDF con la nueva señal.</p></div>
+            <div class="howto-item"><div class="num">2</div><p>El sistema analiza y extrae los datos.</p></div>
+            <div class="howto-item"><div class="num">3</div><p>Revisá las tasas detectadas.</p></div>
+            <div class="howto-item" style="margin-bottom:16px;"><div class="num">4</div><p>Publicá para actualizar el simulador.</p></div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <section class="history-view" id="historyView" hidden>
+      <h1 class="page-title">Historial de señales</h1>
+      <p class="page-sub">Consultá las señales de crédito cargadas anteriormente.</p>
+      <div class="history-list" id="historyList">
+  <div class="history-empty">
+    Cargando historial de señales...
+  </div>
+</div>
+    </section>
+  </div>
+
+  <div class="roma-modal-overlay" id="romaModal" hidden>
+  <div class="roma-modal">
+    <div class="roma-modal-icon" id="romaModalIcon">!</div>
+
+    <h3 id="romaModalTitle">Aviso</h3>
+    <p id="romaModalMessage"></p>
+
+    <div class="roma-modal-actions">
+      <button class="roma-modal-cancel" id="romaModalCancel" type="button">
+        CANCELAR
+      </button>
+
+      <button class="roma-modal-confirm" id="romaModalConfirm" type="button">
+        ACEPTAR
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const currentSignalNav = document.getElementById('currentSignalNav');
+  const historyNav = document.getElementById('historyNav');
+  const userMenuBtn = document.getElementById('userMenuBtn');
+const sidebarUserMenu = document.getElementById('sidebarUserMenu');
+userMenuBtn.addEventListener('click', () => {
+  sidebarUserMenu.hidden = !sidebarUserMenu.hidden;
+  console.log('Menú usuario:', sidebarUserMenu.hidden);
+});
+  const currentSignalView = document.getElementById('currentSignalView');
+  const historyView = document.getElementById('historyView');
+
+  const showPanelView = (view) => {
+    const showHistory = view === 'history';
+    currentSignalView.hidden = showHistory;
+    historyView.hidden = !showHistory;
+    currentSignalNav.classList.toggle('active', !showHistory);
+    historyNav.classList.toggle('active', showHistory);
+  };
+
+  currentSignalNav.addEventListener('click', () => showPanelView('current'));
+  historyNav.addEventListener('click', async () => {
+  showPanelView('history');
+  await cargarHistorial();
+});
+ const historyList = document.getElementById('historyList');
+
+async function cargarHistorial() {
+  try {
+    const response = await fetch('/api/psa/historial');
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.detalle || data.error || 'No se pudo cargar el historial');
+    }
+
+    const circulares = data.circulares || [];
+
+    if (circulares.length === 0) {
+      historyList.innerHTML = `
+        <div class="history-empty">
+          Todavía no hay señales publicadas.
+        </div>
+      `;
+      return;
+    }
+
+    historyList.innerHTML = circulares.map((circular) => {
+      const nombre = circular.nombre_archivo || `Circular ${circular.numero_circular}`;
+      const periodo = `${String(circular.mes).padStart(2, '0')}/${circular.anio}`;
+
+      return `
+        <article class="history-item">
+          <div class="history-file">
+            <div class="icon-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+            </div>
+
+            <div>
+              <div class="history-file-name">${nombre}</div>
+              <div class="history-file-date">Período ${periodo}</div>
+            </div>
+          </div>
+
+          <div class="history-meta">
+            <span class="pill green">Publicada</span>
+          </div>
+        </article>
+      `;
+    }).join('');
+
+  } catch (error) {
+    historyList.innerHTML = `
+      <div class="history-empty">
+        No se pudo cargar el historial.
+      </div>
+    `;
+    console.error('Error al cargar historial PSA:', error);
+  }
+}
+
+  const uploadButton = document.getElementById('uploadBtn');
+  const reanalyzeButton = document.getElementById('reanalyzeBtn');
+  const statusTitle = document.querySelector('.status-title');
+  const statusSub = document.querySelector('.status-sub');
+  const fileName = document.querySelector('.file-name');
+  const fileDate = document.querySelector('.file-date');
+
+  const romaModal = document.getElementById('romaModal');
+const romaModalTitle = document.getElementById('romaModalTitle');
+const romaModalMessage = document.getElementById('romaModalMessage');
+const romaModalIcon = document.getElementById('romaModalIcon');
+const romaModalCancel = document.getElementById('romaModalCancel');
+const romaModalConfirm = document.getElementById('romaModalConfirm');
+
+function mostrarModal({
+  title,
+  message,
+  type = 'info',
+  confirmText = 'ACEPTAR',
+  showCancel = false
+}) {
+  return new Promise((resolve) => {
+    romaModalTitle.textContent = title;
+    romaModalMessage.textContent = message;
+
+    romaModalIcon.className = `roma-modal-icon ${type}`;
+
+    const icons = {
+      info: 'i',
+      success: '✓',
+      error: '×',
+      warning: '!'
+    };
+
+    romaModalIcon.textContent = icons[type] || 'i';
+    romaModalConfirm.textContent = confirmText;
+    romaModalCancel.hidden = !showCancel;
+    romaModal.hidden = false;
+
+    const cerrar = (resultado) => {
+      romaModal.hidden = true;
+      romaModalConfirm.onclick = null;
+      romaModalCancel.onclick = null;
+      resolve(resultado);
+    };
+
+    romaModalConfirm.onclick = () => cerrar(true);
+    romaModalCancel.onclick = () => cerrar(false);
+  });
+}
+
+
+  async function cargarCircularVigente() {
+  try {
+    const response = await fetch('/api/psa/vigente');
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.detalle || data.error);
+    }
+
+    if (!data.circular) {
+      document.getElementById('currentSignalMain').textContent = 'Sin circular';
+      document.getElementById('currentSignalTitle').textContent = 'Sin circular';
+      document.getElementById('currentSignalDate').textContent = 'Todavía no hay una circular publicada';
+      return;
+    }
+
+    const meses = [
+      'Enero', 'Febrero', 'Marzo', 'Abril',
+      'Mayo', 'Junio', 'Julio', 'Agosto',
+      'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ];
+
+    const circular = data.circular;
+    const periodo = `${meses[circular.mes - 1]} ${circular.anio}`;
+
+    document.getElementById('currentSignalMain').textContent = periodo;
+    document.getElementById('currentSignalTitle').textContent = periodo;
+
+    const [anio, mes, dia] = circular.vigencia.split('-');
+    document.getElementById('currentSignalDate').textContent =
+      `Desde el ${dia}/${mes}/${anio}`;
+
+  } catch (error) {
+    console.error('Error al cargar la circular vigente:', error);
+  }
+}
+
+cargarCircularVigente();
+
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'application/pdf,.pdf';
+  fileInput.hidden = true;
+  document.body.appendChild(fileInput);
+
+  uploadButton.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    fileName.textContent = file.name;
+    fileDate.textContent = 'Listo para analizar';
+    statusTitle.textContent = 'Archivo cargado correctamente';
+    statusSub.textContent = 'Presioná REANALIZAR para procesar la nueva señal';
+    uploadButton.textContent = 'CAMBIAR PDF';
+  });
+
+ reanalyzeButton.addEventListener('click', async () => {
+    const file = fileInput.files[0];
+
+    if (!file) {
+      await mostrarModal({
+  title: 'Falta seleccionar el PDF',
+  message: 'Seleccioná una circular de PSA Finance antes de iniciar el análisis.',
+  type: 'warning',
+  confirmText: 'ENTENDIDO'
+});
+      return;
+    }
+
+    reanalyzeButton.disabled = true;
+    reanalyzeButton.textContent = 'ANALIZANDO...';
+    statusTitle.textContent = 'Analizando archivo...';
+    statusSub.textContent = 'El sistema está leyendo la circular de PSA Finance';
+
+    const formData = new FormData();
+    formData.append('pdf', file);
+
+    try {
+      const response = await fetch('/api/psa/circular', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.detalle || data.error || 'No se pudo analizar el PDF');
+      }
+
+      statusTitle.textContent = 'Análisis completado correctamente';
+      statusSub.textContent =
+      `Circular ${data.circular.numero_circular} · ` +
+      `${data.circular.mes}/${data.circular.anio} · ` +
+      `${data.cantidad_tasas} tasas detectadas · ` +
+      `${data.paginas} páginas`;
+
+      const ratesTableBody = document.getElementById('ratesTableBody');
+
+ratesTableBody.innerHTML = '';
+
+const nombresPlanes = {
+  PROMO_FIJA: 'Promo Fija Usados',
+  TRADICIONAL_VO: 'Tradicional VO',
+  TRADICIONAL_VO10: 'Tradicional VO 10%',
+  PROMO_UVA: 'Promo UVA VO',
+  UVA_TRAD: 'UVA Tradicional VO',
+  UVA_TRAD10: 'UVA Tradicional 10%'
+};
+
+data.tasas.forEach((tasa) => {
+  const row = document.createElement('tr');
+
+  const montoMaximo = tasa.monto_maximo != null
+    ? `$ ${Number(tasa.monto_maximo).toLocaleString('es-AR')}`
+    : 'Sin tope';
+
+  row.innerHTML = `
+    <td class="plan-name">${nombresPlanes[tasa.nombre_linea] || tasa.nombre_linea}</td>
+    <td>${tasa.categoria === 'uva' ? 'UVA' : 'Fija'}</td>
+    <td>${tasa.plazo} meses</td>
+    <td><strong>${Number(tasa.tna).toLocaleString('es-AR')}%</strong></td>
+    <td>${Number(tasa.aporte_ce).toLocaleString('es-AR')}%</td>
+    <td>$ ${Number(tasa.cuota_por_1000).toLocaleString('es-AR')}</td>
+    <td>${montoMaximo}</td>
+  `;
+
+  ratesTableBody.appendChild(row);
+});
+
+const planesDetectados = new Set(
+  data.tasas.map((tasa) => tasa.nombre_linea)
+).size;
+
+document.getElementById('summaryRates').textContent = data.cantidad_tasas;
+document.getElementById('summaryPlans').textContent = planesDetectados;
+document.getElementById('summaryPages').textContent = data.paginas;
+document.getElementById('summaryErrors').textContent = '0';
+
+      fileDate.textContent = 'Analizado ahora';
+
+      const meses = [
+  'Enero', 'Febrero', 'Marzo', 'Abril',
+  'Mayo', 'Junio', 'Julio', 'Agosto',
+  'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+];
+
+const periodoNuevo =
+  `${meses[data.circular.mes - 1]} ${data.circular.anio}`;
+
+const ahora = new Date();
+
+document.getElementById('newSignalTitle').textContent = periodoNuevo;
+
+document.getElementById('newSignalDate').textContent =
+  `Analizada el ${ahora.toLocaleDateString('es-AR')} ` +
+  `${ahora.toLocaleTimeString('es-AR', {
+    hour: '2-digit',
+    minute: '2-digit'
+  })}`;
+
+    } catch (error) {
+      statusTitle.textContent = 'Error al analizar el archivo';
+      statusSub.textContent = error.message;
+    } finally {
+      reanalyzeButton.disabled = false;
+      reanalyzeButton.textContent = 'REANALIZAR';
+    }
+});
+
+  document.querySelectorAll('.edit-btn').forEach((button) => {
+    button.addEventListener('click', () => {
+      const row = button.closest('tr');
+      const values = row.querySelectorAll('.change');
+      const editing = row.classList.toggle('editing');
+
+      values.forEach((value) => {
+        value.contentEditable = editing;
+        value.style.outline = editing ? '2px solid #2563eb' : '';
+        value.style.borderRadius = editing ? '4px' : '';
+        value.style.padding = editing ? '2px 4px' : '';
+      });
+      button.title = editing ? 'Guardar cambios' : 'Editar fila';
+    });
+  });
+ document.getElementById('publishBtn').addEventListener('click', async () => {
+    const file = fileInput.files[0];
+    const publishButton = document.getElementById('publishBtn');
+
+    if (!file) {
+      await mostrarModal({
+  title: 'Falta analizar la circular',
+  message: 'Seleccioná y analizá una circular antes de publicarla.',
+  type: 'warning',
+  confirmText: 'ENTENDIDO'
+});
+      return;
+    }
+
+    const confirmado = await mostrarModal({
+  title: 'Publicar circular',
+  message: '¿Querés publicar esta circular y guardar sus tasas en el sistema?',
+  type: 'warning',
+  confirmText: 'PUBLICAR',
+  showCancel: true
+});
+
+if (!confirmado) {
+  return;
+}
+
+    const formData = new FormData();
+    formData.append('pdf', file);
+
+    publishButton.disabled = true;
+    publishButton.textContent = 'PUBLICANDO...';
+
+    try {
+      const response = await fetch('/api/psa/publicar', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.detalle || data.error || 'No se pudo publicar la circular'
+        );
+      }
+
+      const pendingPill = document.querySelector('.pill.orange');
+
+      if (pendingPill) {
+        pendingPill.className = 'pill green';
+        pendingPill.textContent = 'Publicada';
+      }
+
+      publishButton.textContent = 'CAMBIOS PUBLICADOS';
+
+      document.querySelector('.publish-note').textContent =
+        `Circular ${data.numero_circular} publicada · ` +
+        `${data.cantidad_tasas} tasas guardadas`;
+
+      await mostrarModal({
+  title: 'Circular publicada',
+  message: 'La circular y sus tasas se guardaron correctamente. El simulador ya está actualizado.',
+  type: 'success',
+  confirmText: 'ACEPTAR'
+});
+
+    } catch (error) {
+      publishButton.disabled = false;
+      publishButton.textContent = 'PUBLICAR CAMBIOS';
+
+      await mostrarModal({
+  title: 'Circular ya registrada',
+  message: error.message,
+  type: 'error',
+  confirmText: 'ENTENDIDO'
+});
+    }
+});
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    window.location.href = '/logout';
+  });
+</script>
+</body>
+</html>

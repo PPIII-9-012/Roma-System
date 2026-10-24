@@ -20,12 +20,18 @@ from typing import Optional
 import ast
 
 # Configurar stdout seguro para evitar problemas con codificación cp1252 en Windows
-if sys.platform == "win32":
+if sys.platform == "win32" and not getattr(sys, "frozen", False):
     import io
-    if hasattr(sys.stdout, "buffer"):
-        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
-    if hasattr(sys.stderr, "buffer"):
-        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
+    if hasattr(sys.stdout, "buffer") and not getattr(sys.stdout, "closed", False):
+        try:
+            sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
+        except Exception:
+            pass
+    if hasattr(sys.stderr, "buffer") and not getattr(sys.stderr, "closed", False):
+        try:
+            sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
+        except Exception:
+            pass
 
 import requests
 from flask import Flask, jsonify, request, send_from_directory, render_template, redirect, url_for, session
@@ -50,8 +56,13 @@ from psa_pdf import (
     preparar_tasas_para_supabase,
     buscar_pagina_financiacion_usados,
 )
+BASE_DIR = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+EXE_DIR = os.path.dirname(sys.executable) if getattr(sys, 'frozen', False) else BASE_DIR
+
 def _load_env():
     candidates = [
+        os.path.join(EXE_DIR, ".env"),
+        os.path.join(BASE_DIR, ".env"),
         os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"),
         os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".env"),
         os.path.join(os.getcwd(), ".env"),
@@ -75,13 +86,22 @@ _load_env()
 
 app = Flask(
     __name__,
-    static_folder="login/static",
-    static_url_path="/static",
-    template_folder="templates"
+    template_folder=os.path.join(BASE_DIR, "templates"),
+    static_folder=os.path.join(BASE_DIR, "login", "static"),
+    static_url_path="/static"
 )
-app.secret_key = os.environ.get("FLASK_SECRET_KEY")
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "roma_secret_key_prod_2026")
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.jinja_env.auto_reload = True
 CORS(app)
 APP_RUN_ID = secrets.token_hex(16)
+
+@app.after_request
+def add_no_cache_headers(response):
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 
 # ---------------------------------------------------------------------------
@@ -535,9 +555,9 @@ def calcular_credito(
         rci        = None
         rci_estado = "sin_datos"
 
-    # 5. Efectivo en salón
-    efectivo_salon = (precio_nuevo + gastos_transf) - precio_toma - monto
-    efectivo_salon = max(efectivo_salon, 0)
+    # 5. Efectivo en salón (Saldo vehículo + 1ra Cuota completa c/quebranto IVA)
+    saldo_auto     = max(0.0, (precio_nuevo + gastos_transf) - precio_toma - monto)
+    efectivo_salon = saldo_auto + primera_cuota
 
     return ResultadoCredito(
         plan_key         = plan_key,
@@ -606,7 +626,6 @@ def login_page():
         session.clear()
 
     if request.method == "POST":
-        print(">>> ENTRE AL POST DEL LOGIN <<<", flush=True)
         email = request.form.get("email") or request.form.get("username")
         password = request.form.get("password")
 
@@ -892,7 +911,7 @@ def admin_usuarios():
             rol
         )
 
-        return redirect(url_for("admin_usuarios"))
+        return redirect(url_for("admin_usuarios", status="created"))
 
     usuarios = list_auth_users()
 
@@ -915,7 +934,7 @@ def eliminar_usuario(user_id):
 
     delete_auth_user(user_id)
 
-    return redirect(url_for("admin_usuarios"))
+    return redirect(url_for("admin_usuarios", status="deleted"))
 
 @app.route("/admin/usuarios/editar/<user_id>", methods=["POST"])
 def editar_usuario(user_id):
@@ -946,7 +965,7 @@ def editar_usuario(user_id):
         rol
     )
 
-    return redirect(url_for("admin_usuarios"))
+    return redirect(url_for("admin_usuarios", status="updated"))
    
 @app.route("/buscar")
 def buscar():
@@ -1044,7 +1063,7 @@ def serve_static(filename):
     if filename.startswith("."):
         return "", 404
 
-    return send_from_directory(".", filename)
+    return send_from_directory(BASE_DIR, filename)
 
 
 PORT = int(os.environ.get("PORT", 5050))

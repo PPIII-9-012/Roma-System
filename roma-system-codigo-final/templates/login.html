@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" type="image/x-icon" href="/static/logo.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>ROMA Automotores | Iniciar sesión</title>
+  <style>
+    :root {
+      --navy-900: #06112c;
+      --navy-800: #0b1739;
+      --navy-700: #101f4c;
+      --red-600: #e02020;
+      --red-700: #c81818;
+      --text-dark: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --card-border: #eef1f6;
+      --bg-light: #f8f9fc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ==========================================================================
+       PANEL IZQUIERDO (Branding & Background)
+       ========================================================================== */
+    .left-panel {
+      position: relative;
+      flex: 0 0 44%;
+      min-width: 380px;
+      background-color: var(--navy-900);
+      background-image: url('/static/login_img_auto.jpg');
+      background-size: cover;
+      background-position: left bottom;
+      background-repeat: no-repeat;
+      color: #ffffff;
+      padding: 68px 64px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      overflow: hidden;
+    }
+
+    .left-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(5, 14, 36, 0.94) 0%,
+        rgba(5, 14, 36, 0.88) 40%,
+        rgba(5, 14, 36, 0.68) 68%,
+        rgba(4, 11, 28, 0.40) 100%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .left-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 76px;
+      max-width: 440px;
+    }
+
+    .brand-top {
+      display: flex;
+    }
+
+    .logo-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+      user-select: none;
+    }
+
+    .logo-hero .mark {
+      font-size: 40px;
+      font-weight: 800;
+      font-style: italic;
+      letter-spacing: -0.5px;
+      line-height: 1;
+      color: #ffffff;
+    }
+
+    .logo-hero .sub {
+      font-size: 11px;
+      letter-spacing: 5.5px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.85);
+      text-transform: uppercase;
+      line-height: 1;
+      margin-top: 3px;
+    }
+
+    .brand-mid {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .brand-mid h1 {
+      font-size: 34px;
+      line-height: 1.18;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 0 0 18px 0;
+      letter-spacing: -0.5px;
+    }
+
+    .accent-line {
+      width: 44px;
+      height: 3.5px;
+      background: var(--red-600);
+      border-radius: 2px;
+      margin-bottom: 20px;
+    }
+
+    .brand-mid p {
+      font-size: 14.5px;
+      line-height: 1.55;
+      color: #c0cbe2;
+      margin: 0;
+      max-width: 300px;
+      font-weight: 400;
+    }
+
+    /* ==========================================================================
+       PANEL DERECHO (Tarjeta de Autenticación)
+       ========================================================================== */
+    .right-panel {
+      flex: 1 1 56%;
+      min-width: 360px;
+      min-height: 100vh;
+      background: radial-gradient(circle at 50% 35%, #ffffff 0%, #f4f6fb 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 48px 32px 28px;
+    }
+
+    .right-panel-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 430px;
+      background: #ffffff;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 42px 40px 36px;
+      box-shadow: 0 12px 36px rgba(12, 24, 60, 0.05), 0 2px 6px rgba(12, 24, 60, 0.02);
+    }
+
+    .card-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 26px;
+      user-select: none;
+    }
+
+    .card-logo .mark {
+      color: var(--navy-800);
+      font-size: 32px;
+      font-weight: 800;
+      font-style: italic;
+      letter-spacing: -0.5px;
+      line-height: 1;
+    }
+
+    .card-logo .sub {
+      color: var(--navy-800);
+      font-size: 10px;
+      letter-spacing: 4.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-top: 4px;
+      line-height: 1;
+      text-align: center;
+    }
+
+    .card h2 {
+      color: var(--navy-800);
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.25;
+      margin: 0 0 6px;
+      text-align: center;
+      letter-spacing: -0.3px;
+    }
+
+    .subtext {
+      color: var(--text-muted);
+      font-size: 13.5px;
+      margin: 0 0 24px;
+      text-align: center;
+      font-weight: 400;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .auth-error-banner {
+      background: #fef2f2;
+      border: 1px solid #fee2e2;
+      color: #b91c1c;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      text-align: center;
+      margin-bottom: 2px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field label {
+      color: var(--text-dark);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .icon-left {
+      position: absolute;
+      left: 14px;
+      width: 17px;
+      height: 17px;
+      color: #94a3b8;
+      pointer-events: none;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      height: 44px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--text-dark);
+      font-family: inherit;
+      font-size: 13.5px;
+      padding: 0 40px;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .input-wrap input::placeholder {
+      color: #94a3b8;
+    }
+
+    .input-wrap input:focus {
+      border-color: var(--red-600);
+      box-shadow: 0 0 0 3px rgba(224, 32, 32, 0.12);
+    }
+
+    .toggle-pass {
+      position: absolute;
+      right: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      padding: 6px;
+      color: #94a3b8;
+      background: transparent;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .toggle-pass:hover {
+      color: #64748b;
+    }
+
+    .toggle-pass svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .row-forgot {
+      text-align: right;
+      margin-top: -6px;
+    }
+
+    .row-forgot a {
+      color: #2563eb;
+      font-size: 12.5px;
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .row-forgot a:hover {
+      text-decoration: underline;
+    }
+
+    .btn-primary {
+      width: 100%;
+      height: 44px;
+      border-radius: 8px;
+      border: none;
+      background: var(--red-600);
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.15s ease, opacity 0.15s ease;
+      margin-top: 2px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--red-700);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.8;
+      cursor: not-allowed;
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #94a3b8;
+      font-size: 12px;
+      margin: 18px 0;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      flex: 1;
+      background: var(--border-color);
+    }
+
+    .btn-secondary {
+      width: 100%;
+      height: 42px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: #ffffff;
+      color: #334155;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 500;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      cursor: default;
+    }
+
+    .btn-secondary svg {
+      width: 16px;
+      height: 16px;
+      color: #64748b;
+    }
+
+    .footer-note {
+      color: #94a3b8;
+      font-size: 12px;
+      margin: 24px 0 0;
+      text-align: center;
+    }
+
+    /* ==========================================================================
+       RESPONSIVE DESIGN
+       ========================================================================== */
+    @media (max-width: 900px) {
+      body {
+        flex-direction: column;
+      }
+
+      .left-panel {
+        flex: 0 0 auto;
+        min-width: 100%;
+        min-height: 380px;
+        padding: 44px 32px 36px;
+      }
+
+      .left-content {
+        gap: 40px;
+      }
+
+      .right-panel {
+        flex: 1 1 auto;
+        min-width: 100%;
+        min-height: auto;
+        padding: 36px 20px 28px;
+      }
+
+      .card {
+        padding: 34px 24px 28px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .left-panel {
+        padding: 36px 20px 30px;
+      }
+
+      .brand-mid h1 {
+        font-size: 28px;
+      }
+
+      .brand-mid p {
+        font-size: 13.5px;
+      }
+
+      .card {
+        border-radius: 12px;
+        padding: 28px 18px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- PANEL IZQUIERDO: Branding y Bienvenida sobre Imagen de Fondo -->
+  <div class="left-panel">
+    <div class="left-content">
+      <div class="brand-top">
+        <div class="logo-hero">
+          <span class="mark">ROMA</span>
+          <span class="sub">AUTOMOTORES</span>
+        </div>
+      </div>
+
+      <div class="brand-mid">
+        <h1>Bienvenido a<br>Administración</h1>
+        <div class="accent-line"></div>
+        <p>Gestioná la señal de crédito del simulador de forma simple, segura y eficiente.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL DERECHO: Tarjeta de Iniciar Sesión -->
+  <div class="right-panel">
+    <div class="right-panel-content">
+      <div class="card">
+        <div class="card-logo">
+          <span class="mark">ROMA</span>
+          <span class="sub">AUTOMOTORES</span>
+        </div>
+
+        <h2>Iniciar sesión</h2>
+        <p class="subtext">Ingresá tus credenciales para continuar</p>
+
+        <form method="POST" action="/" id="loginForm">
+          {% if error %}
+          <div class="auth-error-banner" role="alert">
+            {{ error }}
+          </div>
+          {% endif %}
+
+          <div class="field">
+            <label for="email">Usuario</label>
+            <div class="input-wrap">
+              <svg class="icon-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <input type="text" id="email" name="email" value="{{ email or '' }}" placeholder="Ingresá tu usuario" autocomplete="username" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="contrasena">Contraseña</label>
+            <div class="input-wrap">
+              <svg class="icon-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <input type="password" id="contrasena" name="password" placeholder="Ingresá tu contraseña" autocomplete="current-password" required>
+              <button type="button" class="toggle-pass" onclick="togglePassword()" aria-label="Mostrar contraseña">
+                <svg id="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+
+
+
+          <button type="submit" class="btn-primary" id="loginSubmitBtn">
+            <span id="loginBtnText">Iniciar sesión</span>
+          </button>
+        </form>
+
+
+      </div>
+    </div>
+
+    <p class="footer-note">© 2026 ROMA Automotores. Todos los derechos reservados.</p>
+  </div>
+
+  <script>
+    function togglePassword() {
+      const passInput = document.getElementById('contrasena');
+      const eyeIcon = document.getElementById('eye-icon');
+      if (!passInput) return;
+      if (passInput.type === 'password') {
+        passInput.type = 'text';
+        if (eyeIcon) {
+          eyeIcon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';
+        }
+      } else {
+        passInput.type = 'password';
+        if (eyeIcon) {
+          eyeIcon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+        }
+      }
+    }
+
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+      loginForm.addEventListener('submit', () => {
+        const btn = document.getElementById('loginSubmitBtn');
+        const text = document.getElementById('loginBtnText');
+        if (btn && text) {
+          btn.disabled = true;
+          text.innerHTML = '<span class="spinner"></span> Verificando credenciales...';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
