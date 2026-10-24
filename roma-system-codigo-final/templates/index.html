@@ -1566,6 +1566,7 @@
         let selectedPlanKey = "TRADICIONAL_VO";
         let currentPlazo = 24;
         let simulationResults = [];
+        let ultimaSimulacionId = 0;
 
         let usedCarPricesByYear = {};
         let userOverrodeFinancing = false;
@@ -1864,6 +1865,7 @@
         }
 
         async function actualizarSimulacion() {
+            const simulacionId = ++ultimaSimulacionId;
             const v = obtenerValoresFormulario();
 
             // 1. Cálculos directos
@@ -1959,6 +1961,7 @@ if (operacionIncompleta) {
                     body: JSON.stringify(v)
                 });
                 const data = await res.json();
+                if (simulacionId !== ultimaSimulacionId) return;
                 simulationResults = data.resultados || [];
                 renderPlanCards(simulationResults, v);
             } catch (e) {
