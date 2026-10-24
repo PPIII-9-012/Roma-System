@@ -1944,6 +1944,7 @@ const operacionIncompleta =
 
 if (operacionIncompleta) {
     simulationResults = [];
+    updateSidebarPlan(null);
 
     document.getElementById('plansContainer').innerHTML = `
         <div style="grid-column: 1/-1; padding: 28px; text-align: center; color: #6B7280; font-size: 11px;">
@@ -2048,7 +2049,17 @@ if (operacionIncompleta) {
         }
 
         function updateSidebarPlan(p) {
-            if (!p) return;
+            if (!p) {
+                document.getElementById('sumPlanType').textContent = '—';
+                document.getElementById('sumPlanName').textContent = 'Sin plan seleccionado';
+                document.getElementById('summaryPayment').textContent = '—';
+                document.getElementById('sumFirstPayment').textContent = '—';
+                document.getElementById('sumTerm').textContent = '—';
+                document.getElementById('sumTna').textContent = '—';
+                document.getElementById('sumQuebranto').textContent = '—';
+                document.getElementById('sumRci').textContent = '—';
+                return;
+            }
             const isUva = p.plan_tipo === 'uva';
             document.getElementById('sumPlanType').textContent = isUva ? 'Tasa variable' : 'Tasa fija';
             document.getElementById('sumPlanName').textContent = p.plan_nombre;
